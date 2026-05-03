@@ -5,7 +5,7 @@ import Header from "./components/form/Header";
 import InvoiceSettings from "./components/tab/InvoiceSettings";
 import BrandSettings from "./components/tab/BrandSettings";
 import PrintSettings from "./components/tab/PrintSettings";
-import { useLocalStorage } from "./hooks/UseLocalStorage";
+import { useLocalStorage } from "../hooks/UseLocalStorage";
 import InvoicePreview from "./components/InvoicePreview";
 
 export default function Home() {

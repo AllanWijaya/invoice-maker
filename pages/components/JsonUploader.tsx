@@ -52,6 +52,7 @@ export default function JsonUploader({
           }
         }
       } catch (err) {
+        console.log(err);
         alert("Gagal parsing file JSON");
       }
     };
