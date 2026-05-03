@@ -6,7 +6,7 @@ import {
   calculateTax,
   calculateTotal,
   formatCurrency,
-} from "../lib/Helper";
+} from "../../lib/Helper";
 
 interface InvoicePreviewProps {
   previewRef: React.RefObject<HTMLDivElement | null>;

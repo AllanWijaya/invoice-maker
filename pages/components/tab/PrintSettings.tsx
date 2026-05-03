@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { calculateTotal, formatCurrency } from "@/pages/lib/Helper";
+import { calculateTotal, formatCurrency } from "@/lib/Helper";
 import { BrandData, InvoiceData } from "../../types/invoice";
 
 interface PrintSettingsProps {
