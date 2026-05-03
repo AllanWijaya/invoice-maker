@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { forwardRef } from "react";
-import { BrandData, InvoiceData } from "../types/invoice";
+import { BrandData, InvoiceData } from "../../types/invoice";
 import {
   calculateSubtotal,
   calculateTax,
@@ -15,7 +15,28 @@ interface InvoicePreviewProps {
 }
 
 const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
-  ({ invoiceData, brandData, previewRef }) => {
+  ({
+    invoiceData = {
+      invoiceNo: "",
+      date: "",
+      clientName: "",
+      clientEmail: "",
+      clientAddress: "",
+      items: [],
+      notes: "",
+    },
+    brandData = {
+      logo: "",
+      companyName: "",
+      companyAddress: "",
+      companyPhone: "",
+      companyEmail: "",
+      footerText: "",
+      taxRate: 0,
+      accentColor: "#0d6efd",
+    },
+    previewRef,
+  }) => {
     return (
       <div
         className="card border-0 shadow-sm sticky-top"

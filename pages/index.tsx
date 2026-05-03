@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import { InvoiceData, BrandData, InvoiceItem } from "./types/invoice";
+import { InvoiceData, BrandData, InvoiceItem } from "../types/invoice";
 import Header from "./components/form/Header";
 import InvoiceSettings from "./components/tab/InvoiceSettings";
 import BrandSettings from "./components/tab/BrandSettings";

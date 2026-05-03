@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { InvoiceItem } from "../types/invoice";
+import { InvoiceItem } from "../../types/invoice";
 
 interface JsonUploaderProps {
   onLoadItems: (items: InvoiceItem[]) => void;

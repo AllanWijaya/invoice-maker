@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { InvoiceData, SavedInvoice } from "../types/invoice";
+import { InvoiceData, SavedInvoice } from "../../types/invoice";
 
 interface LoadSavedInvoicesProps {
   onLoadInvoice: (data: InvoiceData) => void;

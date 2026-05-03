@@ -1,11 +1,22 @@
-import { InvoiceData, InvoiceItem } from "../types/invoice";
+import { InvoiceData, InvoiceItem } from "../../types/invoice";
 
 interface InvoiceFormProps {
   onUpdate: (data: InvoiceData) => void;
   data: InvoiceData;
 }
 
-export default function InvoiceForm({ onUpdate, data }: InvoiceFormProps) {
+export default function InvoiceForm({
+  onUpdate,
+  data = {
+    invoiceNo: "",
+    date: "",
+    clientName: "",
+    clientEmail: "",
+    clientAddress: "",
+    items: [],
+    notes: "",
+  },
+}: InvoiceFormProps) {
   const addItem = () => {
     const newItem: InvoiceItem = {
       id: Date.now(),

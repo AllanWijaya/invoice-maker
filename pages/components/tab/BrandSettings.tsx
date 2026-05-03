@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { BrandData } from "@/pages/types/invoice";
+import { BrandData } from "@/types/invoice";
 
 interface BrandSettingsProps {
   brandData: BrandData;
@@ -10,11 +10,27 @@ interface BrandSettingsProps {
 }
 
 export default function BrandSettings({
-  brandData,
+  brandData = {
+    logo: "",
+    companyName: "",
+    companyAddress: "",
+    companyPhone: "",
+    companyEmail: "",
+    footerText: "",
+    taxRate: 0,
+    accentColor: "#0d6efd",
+  },
   setBrandData,
   removeLogo,
   handleLogoUpload,
-  colorOptions,
+  colorOptions = [
+    { name: "Biru", value: "#0d6efd" },
+    { name: "Hijau", value: "#198754" },
+    { name: "Merah", value: "#dc3545" },
+    { name: "Ungu", value: "#6f42c1" },
+    { name: "Oranye", value: "#fd7e14" },
+    { name: "Hitam", value: "#212529" },
+  ],
 }: BrandSettingsProps) {
   return (
     <>

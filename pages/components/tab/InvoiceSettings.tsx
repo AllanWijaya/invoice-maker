@@ -1,4 +1,4 @@
-import { InvoiceData, InvoiceItem } from "@/pages/types/invoice";
+import { InvoiceData, InvoiceItem } from "@/types/invoice";
 
 interface InvoiceSettingsProps {
   invoiceData: InvoiceData;
@@ -15,7 +15,15 @@ interface InvoiceSettingsProps {
 }
 
 export default function InvoiceSettings({
-  invoiceData,
+  invoiceData = {
+    invoiceNo: "",
+    date: "",
+    clientName: "",
+    clientEmail: "",
+    clientAddress: "",
+    items: [],
+    notes: "",
+  },
   setInvoiceData,
   addItem,
   removeItem,

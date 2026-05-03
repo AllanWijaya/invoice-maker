@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { InvoiceData } from "../types/invoice";
+import { InvoiceData } from "../../types/invoice";
 
 interface InvoiceSaverProps {
   invoiceData: InvoiceData;

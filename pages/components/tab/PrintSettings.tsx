@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { calculateTotal, formatCurrency } from "@/lib/Helper";
-import { BrandData, InvoiceData } from "../../types/invoice";
+import { BrandData, InvoiceData } from "../../../types/invoice";
 
 interface PrintSettingsProps {
   brandData: BrandData;
@@ -10,8 +10,25 @@ interface PrintSettingsProps {
 }
 
 export default function PrintSettings({
-  brandData,
-  invoiceData,
+  brandData = {
+    logo: "",
+    companyName: "",
+    companyAddress: "",
+    companyPhone: "",
+    companyEmail: "",
+    footerText: "",
+    taxRate: 0,
+    accentColor: "#0d6efd",
+  },
+  invoiceData = {
+    invoiceNo: "",
+    date: "",
+    clientName: "",
+    clientEmail: "",
+    clientAddress: "",
+    items: [],
+    notes: "",
+  },
   handlePrint,
 }: PrintSettingsProps) {
   return (
