@@ -19,6 +19,7 @@ export default function InvoiceForm({
 }: InvoiceFormProps) {
   const addItem = () => {
     const newItem: InvoiceItem = {
+      no: data.items.length + 1,
       id: Date.now(),
       description: "",
       quantity: 1,

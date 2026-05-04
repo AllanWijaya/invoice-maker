@@ -33,6 +33,7 @@ export default function JsonUploader({
           if (Array.isArray(jsonData)) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const itemsWithIds = jsonData.map((item: any, index: number) => ({
+              no: index + 1,
               description: item.description || "",
               quantity: item.quantity || 1,
               price: item.price || 0,
