@@ -38,14 +38,17 @@ export default function Home() {
       footerText: "Terima kasih atas kepercayaan Anda",
       taxRate: 11,
       accentColor: "#0d6efd",
+      jenisTransaksi: "non-ppn",
     },
   );
 
   const addItem = () => {
     const newItem: InvoiceItem = {
       id: Date.now(),
+      no: invoiceData.items.length + 1,
       description: "",
       quantity: 1,
+      unit: "",
       price: 0,
     };
     setInvoiceData({ ...invoiceData, items: [...invoiceData.items, newItem] });
@@ -86,6 +89,7 @@ export default function Home() {
             if (Array.isArray(items)) {
               const itemsWithIds = items.map(
                 (item: InvoiceItem, index: number) => ({
+                  ...item,
                   description: item.description || "",
                   quantity: item.quantity || 1,
                   price: item.price || 0,
@@ -254,7 +258,7 @@ export default function Home() {
       />
       <main className="container py-4">
         <div className="row g-4">
-          <div className="col-md-5">
+          <div className="col-md-4">
             <div className="card border-0 shadow-sm">
               <div className="card-header bg-white border-bottom p-0">
                 <ul className="nav nav-tabs card-header-tabs" role="tablist">
@@ -332,7 +336,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="col-md-7">
+          <div className="col-md-8">
             <InvoicePreview
               previewRef={previewRef}
               brandData={brandData}

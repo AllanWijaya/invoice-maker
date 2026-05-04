@@ -19,6 +19,7 @@ export default function BrandSettings({
     footerText: "",
     taxRate: 0,
     accentColor: "#0d6efd",
+    jenisTransaksi: "non-ppn",
   },
   setBrandData,
   removeLogo,
@@ -186,6 +187,26 @@ export default function BrandSettings({
           <small className="text-muted">Contoh: 11 untuk PPN 11%</small>
         </div>
         <div className="col-md-6 mb-3">
+          <label className="form-label fw-semibold">Jenis Transaksi</label>
+          <select
+            className="form-control"
+            value={brandData.jenisTransaksi}
+            onChange={(e) =>
+              setBrandData({
+                ...brandData,
+                jenisTransaksi: e.target.value as
+                  | "non-ppn"
+                  | "include-ppn"
+                  | "exclude-ppn",
+              })
+            }
+          >
+            <option value="non-ppn">Non PPN</option>
+            <option value="include-ppn">Include PPN</option>
+            <option value="exclude-ppn">Exclude PPN</option>
+          </select>
+        </div>
+        <div className="col-md-12 mb-3">
           <label className="form-label fw-semibold">Warna Aksen</label>
           <div className="d-flex flex-wrap gap-2">
             {colorOptions.map((color) => (

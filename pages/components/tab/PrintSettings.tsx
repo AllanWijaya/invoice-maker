@@ -19,6 +19,7 @@ export default function PrintSettings({
     footerText: "",
     taxRate: 0,
     accentColor: "#0d6efd",
+    jenisTransaksi: "non-ppn",
   },
   invoiceData = {
     invoiceNo: "",
@@ -60,7 +61,11 @@ export default function PrintSettings({
                 <small className="text-muted">
                   Total:{" "}
                   {formatCurrency(
-                    calculateTotal(invoiceData.items, brandData.taxRate),
+                    calculateTotal(
+                      invoiceData.items,
+                      brandData.taxRate,
+                      brandData.jenisTransaksi,
+                    ),
                   )}
                 </small>
               </div>

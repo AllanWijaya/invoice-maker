@@ -26,11 +26,11 @@
   }
 
   .bg-light {
-    background-color: white !important;
+    background-color: white;
   }
 
   .shadow-sm {
-    box-shadow: none !important;
+    box-shadow: none;
   }
 }
 
@@ -63,4 +63,9 @@
 
 .btn:hover {
   transform: translateY(-1px);
+}
+
+.custom-text {
+  color: #212529 !important;
+  font-size: 14px !important;
 }

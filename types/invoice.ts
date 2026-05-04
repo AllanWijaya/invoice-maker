@@ -1,8 +1,10 @@
 export interface InvoiceItem {
   id: number;
+  no: number;
   description: string;
   quantity: number;
   price: number;
+  unit?: string;
 }
 
 export interface InvoiceData {
@@ -13,6 +15,7 @@ export interface InvoiceData {
   clientAddress: string;
   items: InvoiceItem[];
   notes: string;
+  best_regards?: string;
 }
 
 export interface SavedInvoice extends InvoiceData {
@@ -28,4 +31,5 @@ export interface BrandData {
   footerText: string;
   taxRate: number; // PPN dalam persen
   accentColor: string;
+  jenisTransaksi: "non-ppn" | "include-ppn" | "exclude-ppn";
 }

@@ -135,7 +135,7 @@ export default function InvoiceSettings({
                 <th>Deskripsi</th>
                 <th style={{ width: "70" }}>Qty</th>
                 <th style={{ width: "100" }}>Harga</th>
-                <th style={{ width: "30" }}></th>
+                <th style={{ width: "30" }}>Satuan</th>
               </tr>
             </thead>
             <tbody>
@@ -180,6 +180,16 @@ export default function InvoiceSettings({
                       }
                     />
                   </td>
+                  <td>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      value={item.unit}
+                      onChange={(e) =>
+                        updateItem(item.id, "unit", e.target.value)
+                      }
+                    />
+                  </td>
                   <td className="text-center">
                     <button
                       onClick={() => removeItem(item.id)}
@@ -199,6 +209,24 @@ export default function InvoiceSettings({
       </div>
 
       <hr className="my-3" />
+
+      <div className="mb-3">
+        <label className="form-label small text-muted text-uppercase fw-semibold">
+          Hormat Kami
+        </label>
+        <textarea
+          className="form-control form-control-sm"
+          rows={2}
+          value={invoiceData.best_regards || ""}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              best_regards: e.target.value,
+            })
+          }
+          placeholder="Hormat kami..."
+        />
+      </div>
 
       <div className="mb-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
