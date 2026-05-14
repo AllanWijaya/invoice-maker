@@ -25,6 +25,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
       clientAddress: "",
       items: [],
       notes: "",
+      toClient: null,
     },
     brandData = {
       logo: "",
@@ -77,8 +78,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     >
                       {brandData.companyName || "INVOICE"}
                     </h2>
-                    <p className="custom-text">{brandData.companyAddress}</p>
-                    <br />
+                    <p className="custom-text mb-0">
+                      {brandData.companyAddress}
+                    </p>
                     <p className="custom-text">
                       {brandData.companyPhone &&
                         `Telp: ${brandData.companyPhone}`}
@@ -92,20 +94,36 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <p className="mb-0 fw-semibold">
                     {invoiceData.invoiceNo || "-"}
                   </p>
-                  <p className="custom-text">{invoiceData.date || "-"}</p>
                 </div>
               </div>
             </div>
 
             <div className="mb-4">
               <div className="bg-light p-3 rounded">
-                <p className="custom-text text-uppercase fw-semibold">
-                  Kepada Yth,
+                {invoiceData.toClient ? (
+                  <>
+                    <div className="d-flex justify-content-between align-items-start">
+                      <p className="custom-text text-uppercas fw-semibold">
+                        {invoiceData.toClient}
+                      </p>
+                      <p className="custom-text">{invoiceData.date || "-"}</p>
+                    </div>
+                    <p className="mb-0 fw-semibold">
+                      {invoiceData.clientName || "-"}
+                    </p>
+                  </>
+                ) : (
+                  <div className="d-flex justify-content-between align-items-start">
+                    <p className="mb-0 fw-semibold">
+                      {invoiceData.clientName || "-"}
+                    </p>
+                    <p className="custom-text">{invoiceData.date || "-"}</p>
+                  </div>
+                )}
+
+                <p className="custom-text mb-0">
+                  {invoiceData.clientEmail || "-"}
                 </p>
-                <p className="mb-0 fw-semibold">
-                  {invoiceData.clientName || "-"}
-                </p>
-                <p className="custom-text">{invoiceData.clientEmail || "-"}</p>
                 <p className="mb-0 p">{invoiceData.clientAddress || "-"}</p>
               </div>
             </div>
@@ -227,9 +245,10 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               </div>
             </div>
 
-            <div className="border-top pt-3 mt-3 d-flex justify-content-end align-items-center">
-              <br />
-              <br />
+            <br />
+            <br />
+            <div className="border-top pt-3 mt-3 d-flex justify-content-around align-items-center">
+              <div></div>
               <div>
                 <p className="text-center text-uppercse fw-semibold">
                   {invoiceData.best_regards}

@@ -78,6 +78,18 @@ export default function InvoiceSettings({
         <input
           type="text"
           className="form-control form-control-sm mb-2"
+          placeholder="Kepada YTH"
+          value={invoiceData.toClient}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              toClient: e.target.value,
+            })
+          }
+        />
+        <input
+          type="text"
+          className="form-control form-control-sm mb-2"
           placeholder="Nama Klien"
           value={invoiceData.clientName}
           onChange={(e) =>

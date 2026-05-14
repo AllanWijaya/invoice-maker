@@ -16,6 +16,7 @@ export interface InvoiceData {
   items: InvoiceItem[];
   notes: string;
   best_regards?: string;
+  toClient?: string;
 }
 
 export interface SavedInvoice extends InvoiceData {
