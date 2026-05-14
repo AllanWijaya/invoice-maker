@@ -56,7 +56,7 @@ export default function InvoiceSettings({
             Tanggal
           </label>
           <input
-            type="date"
+            type="text"
             className="form-control form-control-sm"
             value={invoiceData.date}
             onChange={(e) =>

@@ -103,28 +103,32 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 {invoiceData.toClient ? (
                   <>
                     <div className="d-flex justify-content-between align-items-start">
-                      <p className="custom-text text-uppercas fw-semibold">
+                      <p className="custom-text text-uppercas fw-semibold my-0">
                         {invoiceData.toClient}
                       </p>
-                      <p className="custom-text">{invoiceData.date || "-"}</p>
+                      <p className="custom-text my-0">
+                        {invoiceData.date || "-"}
+                      </p>
                     </div>
-                    <p className="mb-0 fw-semibold">
+                    <p className="fw-semibold my-0">
                       {invoiceData.clientName || "-"}
                     </p>
                   </>
                 ) : (
                   <div className="d-flex justify-content-between align-items-start">
-                    <p className="mb-0 fw-semibold">
+                    <p className="fw-semibold my-0">
                       {invoiceData.clientName || "-"}
                     </p>
-                    <p className="custom-text">{invoiceData.date || "-"}</p>
+                    <p className="custom-text my-0">
+                      {invoiceData.date || "-"}
+                    </p>
                   </div>
                 )}
 
-                <p className="custom-text mb-0">
+                <p className="custom-text my-0">
                   {invoiceData.clientEmail || "-"}
                 </p>
-                <p className="mb-0 p">{invoiceData.clientAddress || "-"}</p>
+                <p className="my-0 p">{invoiceData.clientAddress || "-"}</p>
               </div>
             </div>
 
