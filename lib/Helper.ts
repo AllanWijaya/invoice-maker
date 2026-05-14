@@ -51,10 +51,15 @@ export const calculateTotal = (
   return calculateSubtotal(items);
 };
 
-export const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
+export const formatCurrency = (amount: number, isCurrency: boolean = false) => {
+  const options: Intl.NumberFormatOptions = {
     minimumFractionDigits: 0,
-  }).format(amount);
+  };
+
+  if (isCurrency) {
+    options.style = "currency";
+    options.currency = "IDR";
+  }
+
+  return new Intl.NumberFormat("id-ID", options).format(amount);
 };
