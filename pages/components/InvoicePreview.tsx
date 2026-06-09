@@ -168,11 +168,20 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       </td>
 
                       <td>{item.description || "-"}</td>
-                      <td className="text-end justify-content-between">
-                        {formatCurrency(item.price, true)}
+                      {/* <td className="text-end justify-content-between"> */}
+                      <td>
+                        {/* {formatCurrency(item.price)} */}
+                        <div className="d-flex justify-content-between">
+                          <p>Rp.</p>
+                          <p>{formatCurrency(item.price)}</p>
+                        </div>
                       </td>
                       <td className="text-end">
-                        {formatCurrency(item.quantity * item.price, true)}
+                        <div className="d-flex justify-content-between">
+                          <p>Rp.</p>
+                          <p>{formatCurrency(item.quantity * item.price)}</p>
+                        </div>
+                        {/* {formatCurrency(item.quantity * item.price, true)} */}
                       </td>
                     </tr>
                   ))}
@@ -258,7 +267,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   </tr>
 
                   {["include-ppn", "exclude-ppn"].includes(
-                    brandData.jenisTransaksi,
+                    brandData.jenisTransaksi
                   ) && (
                     <>
                       {brandData.jenisTransaksi === "include-ppn" && (
@@ -270,8 +279,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                               calculateDPP(
                                 invoiceData.items,
                                 brandData.taxRate,
-                                brandData.jenisTransaksi,
-                              ),
+                                brandData.jenisTransaksi
+                              )
                             )}
                           </td>
                         </tr>
@@ -288,8 +297,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                               calculateTax(
                                 invoiceData.items,
                                 brandData.taxRate,
-                                brandData.jenisTransaksi,
-                              ),
+                                brandData.jenisTransaksi
+                              )
                             )}
                           </td>
                         </tr>
@@ -329,8 +338,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         calculateTotal(
                           invoiceData.items,
                           brandData.taxRate,
-                          brandData.jenisTransaksi,
-                        ),
+                          brandData.jenisTransaksi
+                        )
                       )}
                     </td>
                   </tr>
@@ -371,7 +380,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         </div>
       </div>
     );
-  },
+  }
 );
 
 InvoicePreview.displayName = "InvoicePreview";
