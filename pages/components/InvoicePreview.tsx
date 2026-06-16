@@ -98,7 +98,6 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </div>
               </div>
             </div>
-
             <div className="mb-4">
               <div className="bg-light p-3 rounded">
                 {invoiceData.toClient ? (
@@ -132,7 +131,6 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </p>
               </div>
             </div>
-
             <div className="table-responsive mb-4">
               <table className="table table-sm table-bordered border-dark">
                 <tr>
@@ -188,7 +186,6 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 )}
               </table>
             </div>
-
             {/* <div className="d-flex justify-content-end"> */}
             {/* <div style={{ width: 300 }}>
                 <div className="d-flex justify-content-between mb-1">
@@ -340,44 +337,46 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               </tr>
             </table>
             {/* </div> */}
-
             <br />
             <br />
-            <table className="border-top pt-3 mt-3 d-flex flex-grow-1 justify-content-around align-items-center">
-              <tr>
-                <td width="50%">
-                  <p className="text-center text-uppercse fw-semibold">
-                    {invoiceData.receiver}
-                  </p>
-                  <br />
-                  <br />
-                  <br />
-                  {invoiceData.receiver_name ? (
+            <div className="border-top pt-3 mt-3">
+              <table className=" w-100">
+                <tr>
+                  <td width="50%">
                     <p className="text-center text-uppercse fw-semibold">
-                      {invoiceData.receiver_name}
+                      {invoiceData.receiver}
                     </p>
-                  ) : (
-                    <hr style={{ strokeColor: "#111" }} />
-                  )}{" "}
-                </td>
-                <td width="50%">
-                  <p className="text-center text-uppercse fw-semibold">
-                    {invoiceData.best_regards}
-                  </p>
-                  <br />
-                  <br />
-                  <br />
-                  {invoiceData.best_regards_name ? (
+                    <br />
+                    <br />
+                    <br />
+                    {invoiceData.receiver_name ? (
+                      <p className="text-center text-uppercse fw-semibold">
+                        {invoiceData.receiver_name}
+                      </p>
+                    ) : (
+                      // <hr style={{ strokeColor: "#111" }} />
+                      <></>
+                    )}{" "}
+                  </td>
+                  <td width="50%">
                     <p className="text-center text-uppercse fw-semibold">
-                      {invoiceData.best_regards_name}
+                      {invoiceData.best_regards}
                     </p>
-                  ) : (
-                    <hr style={{ strokeColor: "#111" }} />
-                  )}
-                </td>
-              </tr>
-            </table>
-
+                    <br />
+                    <br />
+                    <br />
+                    {invoiceData.best_regards_name ? (
+                      <p className="text-center text-uppercse fw-semibold">
+                        {invoiceData.best_regards_name}
+                      </p>
+                    ) : (
+                      // <hr style={{ strokeColor: "#111" }} />
+                      <></>
+                    )}
+                  </td>
+                </tr>
+              </table>
+            </div>
             {invoiceData.notes && (
               <div className="border-top pt-3 mt-3">
                 <p className="custom-text text-uppercase fw-semibold">
@@ -386,7 +385,6 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <p className="p mb-0">{invoiceData.notes}</p>
               </div>
             )}
-
             <div className="text-center pt-3 mt-3 border-top">
               <p style={{ color: brandData.accentColor }}>
                 {brandData.footerText || "Terima kasih atas kepercayaan Anda"}
