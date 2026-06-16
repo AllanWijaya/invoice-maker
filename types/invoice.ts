@@ -15,7 +15,10 @@ export interface InvoiceData {
   clientAddress: string;
   items: InvoiceItem[];
   notes: string;
+  receiver?: string;
+  receiver_name?: string;
   best_regards?: string;
+  best_regards_name?: string;
   toClient?: string;
 }
 

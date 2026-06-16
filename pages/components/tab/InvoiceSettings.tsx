@@ -224,10 +224,40 @@ export default function InvoiceSettings({
 
       <div className="mb-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
+          Tanda Terima
+        </label>
+        <textarea
+          className="form-control form-control-sm mb-2"
+          rows={2}
+          value={invoiceData.receiver || ""}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              receiver: e.target.value,
+            })
+          }
+          placeholder="Tanda terima..."
+        />
+        <input
+          className="form-control form-control-sm"
+          type="text"
+          value={invoiceData.receiver_name || ""}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              receiver_name: e.target.value,
+            })
+          }
+          placeholder="Nama Penerima..."
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label small text-muted text-uppercase fw-semibold">
           Hormat Kami
         </label>
         <textarea
-          className="form-control form-control-sm"
+          className="form-control form-control-sm mb-2"
           rows={2}
           value={invoiceData.best_regards || ""}
           onChange={(e) =>
@@ -237,6 +267,18 @@ export default function InvoiceSettings({
             })
           }
           placeholder="Hormat kami..."
+        />
+        <input
+          className="form-control form-control-sm"
+          type="text"
+          value={invoiceData.best_regards_name || ""}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              best_regards_name: e.target.value,
+            })
+          }
+          placeholder="Nama Hormat Kami..."
         />
       </div>
 

@@ -65,7 +65,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       src={brandData.logo}
                       alt="Logo"
                       style={{
-                        maxHeight: "60px",
+                        flexGrow: 1,
+                        maxHeight: "70px",
                         maxWidth: "120px",
                         objectFit: "contain",
                       }}
@@ -81,7 +82,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <p className="custom-text mb-0">
                       {brandData.companyAddress}
                     </p>
-                    <p className="custom-text">
+                    <p className="custom-text mb-0">
                       {brandData.companyPhone &&
                         `Telp: ${brandData.companyPhone}`}
                       {brandData.companyEmail &&
@@ -134,70 +135,62 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
             <div className="table-responsive mb-4">
               <table className="table table-sm table-bordered border-dark">
-                <thead
-                  style={{
-                    backgroundColor: brandData.accentColor + "20",
-                    color: brandData.accentColor,
-                  }}
-                >
-                  <tr>
-                    <th className="text-center" style={{ width: 50 }}>
-                      No
-                    </th>
-                    <th
-                      colSpan={2}
-                      className="text-center"
-                      style={{ width: 150 }}
-                    >
-                      Qty
-                    </th>
-                    <th className="text-center">Nama Barang</th>
-                    <th className="text-center">Harga Satuan</th>
-                    <th className="text-center">Jumlah Harga</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {invoiceData.items.map((item) => (
-                    <tr key={item.id}>
-                      <td className="text-center">{item.no}</td>
-                      <td className="text-center" style={{ width: "10%" }}>
-                        {item.quantity}
-                      </td>
-                      <td className="text-center" style={{ width: "10%" }}>
-                        {item.unit}
-                      </td>
+                <tr>
+                  <th className="text-center" style={{ width: "7%" }}>
+                    No
+                  </th>
+                  <th className="text-center" style={{ width: "25%" }}>
+                    Nama Barang
+                  </th>
+                  <th className="text-center" style={{ width: "14%" }}>
+                    Qty
+                  </th>
+                  <th className="text-center" style={{ width: "14%" }}>
+                    Satuan
+                  </th>
+                  <th className="text-center" style={{ width: "20%" }}>
+                    Harga Satuan
+                  </th>
+                  <th className="text-center" style={{ width: "20%" }}>
+                    Jumlah Harga
+                  </th>
+                </tr>
+                {invoiceData.items.map((item) => (
+                  <tr key={item.id}>
+                    <td className="text-center">{item.no}</td>
 
-                      <td>{item.description || "-"}</td>
-                      {/* <td className="text-end justify-content-between"> */}
-                      <td>
-                        {/* {formatCurrency(item.price)} */}
-                        <div className="d-flex justify-content-between">
-                          <p>Rp.</p>
-                          <p>{formatCurrency(item.price)}</p>
-                        </div>
-                      </td>
-                      <td className="text-end">
-                        <div className="d-flex justify-content-between">
-                          <p>Rp.</p>
-                          <p>{formatCurrency(item.quantity * item.price)}</p>
-                        </div>
-                        {/* {formatCurrency(item.quantity * item.price, true)} */}
-                      </td>
-                    </tr>
-                  ))}
-                  {invoiceData.items.length === 0 && (
-                    <tr>
-                      <td colSpan={6} className="text-center custom-text py-3">
-                        Tidak ada item
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
+                    <td>{item.description || "-"}</td>
+                    <td className="text-center">{item.quantity}</td>
+                    <td className="text-center">{item.unit}</td>
+                    {/* <td className="text-end justify-content-between"> */}
+                    <td>
+                      {/* {formatCurrency(item.price)} */}
+                      <div className="d-flex justify-content-between">
+                        <p>Rp.</p>
+                        <p>{formatCurrency(item.price)}</p>
+                      </div>
+                    </td>
+                    <td className="text-end">
+                      <div className="d-flex justify-content-between">
+                        <p>Rp.</p>
+                        <p>{formatCurrency(item.quantity * item.price)}</p>
+                      </div>
+                      {/* {formatCurrency(item.quantity * item.price, true)} */}
+                    </td>
+                  </tr>
+                ))}
+                {invoiceData.items.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="text-center custom-text py-3">
+                      Tidak ada item
+                    </td>
+                  </tr>
+                )}
               </table>
             </div>
 
-            <div className="d-flex justify-content-end">
-              {/* <div style={{ width: 300 }}>
+            {/* <div className="d-flex justify-content-end"> */}
+            {/* <div style={{ width: 300 }}>
                 <div className="d-flex justify-content-between mb-1">
                   <span>Subtotal</span>
                   <span>
@@ -256,111 +249,134 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   </span>
                 </div>
               </div> */}
-              <table className="border-dark" style={{ width: 300 }}>
-                <tbody>
-                  <tr>
-                    <td style={{ width: "50%" }}>Subtotal</td>
-                    <td style={{ width: "8%" }}>Rp</td>
-                    <td style={{ width: "42%" }}>
-                      {formatCurrency(calculateSubtotal(invoiceData.items))}
-                    </td>
-                  </tr>
+            <table className="border-dark w-100">
+              <tr>
+                <td style={{ width: "60%" }}></td>
+                <td style={{ width: "20%" }}>Subtotal</td>
+                <td style={{ width: "5%" }}>Rp</td>
+                <td className="text-end" style={{ width: "15%" }}>
+                  {formatCurrency(calculateSubtotal(invoiceData.items))}
+                </td>
+              </tr>
 
-                  {["include-ppn", "exclude-ppn"].includes(
-                    brandData.jenisTransaksi
-                  ) && (
-                    <>
-                      {brandData.jenisTransaksi === "include-ppn" && (
-                        <tr>
-                          <td style={{ width: "50%" }}>DPP</td>
-                          <td style={{ width: "8%" }}>Rp</td>
-                          <td style={{ width: "42%" }}>
-                            {formatCurrency(
-                              calculateDPP(
-                                invoiceData.items,
-                                brandData.taxRate,
-                                brandData.jenisTransaksi
-                              )
-                            )}
-                          </td>
-                        </tr>
-                      )}
-
-                      {brandData.taxRate > 0 && (
-                        <tr>
-                          <td style={{ width: "50%" }}>
-                            PPN {brandData.taxRate}%
-                          </td>
-                          <td style={{ width: "8%" }}>Rp</td>
-                          <td style={{ width: "42%" }}>
-                            {formatCurrency(
-                              calculateTax(
-                                invoiceData.items,
-                                brandData.taxRate,
-                                brandData.jenisTransaksi
-                              )
-                            )}
-                          </td>
-                        </tr>
-                      )}
-                    </>
+              {["include-ppn", "exclude-ppn"].includes(
+                brandData.jenisTransaksi,
+              ) && (
+                <>
+                  {brandData.jenisTransaksi === "include-ppn" && (
+                    <tr>
+                      <td style={{ width: "60%" }}></td>
+                      <td style={{ width: "20%" }}>DPP</td>
+                      <td style={{ width: "5%" }}>Rp</td>
+                      <td className="text-end" style={{ width: "15%" }}>
+                        {formatCurrency(
+                          calculateDPP(
+                            invoiceData.items,
+                            brandData.taxRate,
+                            brandData.jenisTransaksi,
+                          ),
+                        )}
+                      </td>
+                    </tr>
                   )}
 
-                  <tr style={{ borderTop: "1px solid #dee2e6" }}>
-                    <td
-                      style={{
-                        width: "50%",
-                        fontWeight: "bold",
-                        paddingTop: "8px",
-                      }}
-                    >
-                      Total
-                    </td>
-                    <td
-                      style={{
-                        width: "8%",
-                        fontWeight: "bold",
-                        paddingTop: "8px",
-                      }}
-                    >
-                      Rp
-                    </td>
-                    <td
-                      style={{
-                        width: "43%",
-                        fontWeight: "bold",
-                        paddingTop: "8px",
-                        color: brandData.accentColor,
-                        fontSize: "1.2rem",
-                      }}
-                    >
-                      {formatCurrency(
-                        calculateTotal(
-                          invoiceData.items,
-                          brandData.taxRate,
-                          brandData.jenisTransaksi
-                        )
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                  {brandData.taxRate > 0 && (
+                    <tr>
+                      <td style={{ width: "60%" }}></td>
+                      <td style={{ width: "20%" }}>PPN {brandData.taxRate}%</td>
+                      <td style={{ width: "5%" }}>Rp</td>
+                      <td className="text-end" style={{ width: "15%" }}>
+                        {formatCurrency(
+                          calculateTax(
+                            invoiceData.items,
+                            brandData.taxRate,
+                            brandData.jenisTransaksi,
+                          ),
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </>
+              )}
+
+              <tr style={{ borderTop: "1px solid #dee2e6" }}>
+                <td style={{ width: "60%" }}></td>
+                <td
+                  style={{
+                    width: "20%",
+                    fontWeight: "bold",
+                    paddingTop: "8px",
+                  }}
+                >
+                  Total
+                </td>
+                <td
+                  style={{
+                    width: "5%",
+                    fontWeight: "bold",
+                    paddingTop: "8px",
+                  }}
+                >
+                  Rp
+                </td>
+                <td
+                  className="text-end"
+                  style={{
+                    width: "15%",
+                    fontWeight: "bold",
+                    paddingTop: "8px",
+                    color: brandData.accentColor,
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  {formatCurrency(
+                    calculateTotal(
+                      invoiceData.items,
+                      brandData.taxRate,
+                      brandData.jenisTransaksi,
+                    ),
+                  )}
+                </td>
+              </tr>
+            </table>
+            {/* </div> */}
 
             <br />
             <br />
-            <div className="border-top pt-3 mt-3 d-flex justify-content-around align-items-center">
-              <div></div>
-              <div>
-                <p className="text-center text-uppercse fw-semibold">
-                  {invoiceData.best_regards}
-                </p>
-                <br />
-                <br />
-                <br />
-                <hr style={{ strokeColor: "#111" }} />
-              </div>
-            </div>
+            <table className="border-top pt-3 mt-3 d-flex flex-grow-1 justify-content-around align-items-center">
+              <tr>
+                <td width="50%">
+                  <p className="text-center text-uppercse fw-semibold">
+                    {invoiceData.receiver}
+                  </p>
+                  <br />
+                  <br />
+                  <br />
+                  {invoiceData.receiver_name ? (
+                    <p className="text-center text-uppercse fw-semibold">
+                      {invoiceData.receiver_name}
+                    </p>
+                  ) : (
+                    <hr style={{ strokeColor: "#111" }} />
+                  )}{" "}
+                </td>
+                <td width="50%">
+                  <p className="text-center text-uppercse fw-semibold">
+                    {invoiceData.best_regards}
+                  </p>
+                  <br />
+                  <br />
+                  <br />
+                  {invoiceData.best_regards_name ? (
+                    <p className="text-center text-uppercse fw-semibold">
+                      {invoiceData.best_regards_name}
+                    </p>
+                  ) : (
+                    <hr style={{ strokeColor: "#111" }} />
+                  )}
+                </td>
+              </tr>
+            </table>
 
             {invoiceData.notes && (
               <div className="border-top pt-3 mt-3">
@@ -380,7 +396,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 InvoicePreview.displayName = "InvoicePreview";
