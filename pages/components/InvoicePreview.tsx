@@ -7,6 +7,7 @@ import {
   calculateTax,
   calculateTotal,
   formatCurrency,
+  formatDate,
 } from "../../lib/Helper";
 
 interface InvoicePreviewProps {
@@ -57,17 +58,16 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             className="bg-white p-4 rounded shadow-sm"
             id="invoice-preview"
           >
-            <div className="border-bottom border-dark pb-3 mb-3">
-              <div className="d-flex justify-content-between align-items-start">
-                <div className="d-flex align-items-center gap-3">
+            <div className="border-bottom border-3 border-dark pb-3 mb-3">
+              <div className="row justify-content-between align-items-start">
+                <div className="col-9 d-flex align-items-center gap-3">
                   {brandData.logo && (
                     <img
                       src={brandData.logo}
                       alt="Logo"
                       style={{
                         flexGrow: 1,
-                        maxHeight: "70px",
-                        maxWidth: "120px",
+                        width: "150px",
                         objectFit: "contain",
                       }}
                     />
@@ -88,9 +88,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       {brandData.companyEmail &&
                         ` | Email: ${brandData.companyEmail}`}
                     </p>
+                    <p className="custom-text mb-0">
+                      {brandData.companyNPWP &&
+                        `NPWP: ${brandData.companyNPWP}`}
+                    </p>
                   </div>
                 </div>
-                <div className="text-end">
+                <div className="col-3 text-end">
                   <div className="badge bg-secondary mb-1">INVOICE</div>
                   <p className="mb-0 fw-semibold">
                     {invoiceData.invoiceNo || "-"}
@@ -105,7 +109,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <div className="d-flex justify-content-between align-items-start  fw-semibold">
                       <p className="custom-text my-0">{invoiceData.toClient}</p>
                       <p className="custom-text my-0">
-                        {invoiceData.date || "-"}
+                        {invoiceData.place && `${invoiceData.place}, `}
+                        {invoiceData.date ? formatDate(invoiceData.date) : "-"}
                       </p>
                     </div>
                     <p className="custom-text fw-semibold my-0">
@@ -118,21 +123,36 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       {invoiceData.clientName || "-"}
                     </p>
                     <p className="custom-text my-0">
-                      {invoiceData.date || "-"}
+                      {invoiceData.place && `${invoiceData.place}, `}
+                      {invoiceData.date ? formatDate(invoiceData.date) : "-"}
                     </p>
                   </div>
                 )}
 
                 <p className="custom-text my-0  fw-semibold">
-                  {invoiceData.clientEmail || "-"}
+                  {invoiceData.clientEmail || ""}
                 </p>
-                <p className="custom-text my-0  fw-semibold">
-                  {invoiceData.clientAddress || "-"}
+                <p className="custom-text my-0  fw-semibold ">
+                  {invoiceData.clientAddress || ""}
                 </p>
+                <table className="w-100">
+                  <tr className="fw-semibold">
+                    <td style={{ width: "10%" }}>No PO</td>
+                    <td style={{ width: "1%" }}>:</td>
+                    <td style={{ width: "60%" }}>
+                      {invoiceData.POnumber || ""}
+                    </td>
+                  </tr>
+                  <tr className="fw-semibold">
+                    <td style={{ width: "10%" }}>Tanggal PO</td>
+                    <td style={{ width: "1%" }}>:</td>
+                    <td style={{ width: "60%" }}>{invoiceData.POdate || ""}</td>
+                  </tr>
+                </table>
               </div>
             </div>
-            <div className="table-responsive mb-4">
-              <table className="table table-sm table-bordered border-dark">
+            <div className="table-responsive mb-0 pb-0">
+              <table className="table table-sm table-bordered border-dark mb-0">
                 <tr>
                   <th className="text-center" style={{ width: "7%" }}>
                     No
@@ -155,25 +175,24 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </tr>
                 {invoiceData.items.map((item) => (
                   <tr key={item.id}>
-                    <td className="text-center">{item.no}</td>
+                    <td className="p-0 px-2 text-center">{item.no}</td>
 
-                    <td>{item.description || "-"}</td>
-                    <td className="text-center">{item.quantity}</td>
-                    <td className="text-center">{item.unit}</td>
-                    {/* <td className="text-end justify-content-between"> */}
-                    <td>
-                      {/* {formatCurrency(item.price)} */}
-                      <div className="d-flex justify-content-between">
-                        <p>Rp.</p>
-                        <p>{formatCurrency(item.price)}</p>
+                    <td className="p-0 px-2">{item.description || "-"}</td>
+                    <td className="p-0 px-2 text-center">{item.quantity}</td>
+                    <td className="p-0 px-2 text-center">{item.unit}</td>
+                    <td className="px-2">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Rp.</span>
+                        <span>{formatCurrency(item.price)}</span>
                       </div>
                     </td>
-                    <td className="text-end">
-                      <div className="d-flex justify-content-between">
-                        <p>Rp.</p>
-                        <p>{formatCurrency(item.quantity * item.price)}</p>
+                    <td className="ps-2 pe-1">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Rp.</span>
+                        <span>
+                          {formatCurrency(item.quantity * item.price)}
+                        </span>
                       </div>
-                      {/* {formatCurrency(item.quantity * item.price, true)} */}
                     </td>
                   </tr>
                 ))}
@@ -186,72 +205,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 )}
               </table>
             </div>
-            {/* <div className="d-flex justify-content-end"> */}
-            {/* <div style={{ width: 300 }}>
-                <div className="d-flex justify-content-between mb-1">
-                  <span>Subtotal</span>
-                  <span>
-                    {formatCurrency(calculateSubtotal(invoiceData.items))}
-                  </span>
-                </div>
-                {["include-ppn", "exclude-ppn"].includes(
-                  brandData.jenisTransaksi,
-                ) && (
-                  <>
-                    {brandData.jenisTransaksi === "include-ppn" && (
-                      <div className="d-flex justify-content-between mb-1">
-                        <span>DPP</span>
-                        <span>
-                          {formatCurrency(
-                            calculateDPP(
-                              invoiceData.items,
-                              brandData.taxRate,
-                              brandData.jenisTransaksi,
-                            ),
-                          )}
-                        </span>
-                      </div>
-                    )}
-                    {brandData.taxRate > 0 && (
-                      <div className="d-flex justify-content-between mb-1">
-                        <span>PPN {brandData.taxRate}%</span>
-                        <span>
-                          {formatCurrency(
-                            calculateTax(
-                              invoiceData.items,
-                              brandData.taxRate,
-                              brandData.jenisTransaksi,
-                            ),
-                          )}
-                        </span>
-                      </div>
-                    )}
-                  </>
-                )}
-                <div className="d-flex justify-content-between pt-2 border-top fw-bold">
-                  <span>Total</span>
-                  <span
-                    style={{
-                      color: brandData.accentColor,
-                      fontSize: "1.2rem",
-                    }}
-                  >
-                    {formatCurrency(
-                      calculateTotal(
-                        invoiceData.items,
-                        brandData.taxRate,
-                        brandData.jenisTransaksi,
-                      ),
-                    )}
-                  </span>
-                </div>
-              </div> */}
-            <table className="border-dark w-100">
+            <table className="w-100">
               <tr>
-                <td style={{ width: "60%" }}></td>
+                <td style={{ width: "61.6%" }}></td>
                 <td style={{ width: "20%" }}>Subtotal</td>
-                <td style={{ width: "5%" }}>Rp</td>
-                <td className="text-end" style={{ width: "15%" }}>
+                <td style={{ width: "5%" }}>Rp.</td>
+                <td className="text-end pe-2" style={{ width: "15%" }}>
                   {formatCurrency(calculateSubtotal(invoiceData.items))}
                 </td>
               </tr>
@@ -264,8 +223,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <tr>
                       <td style={{ width: "60%" }}></td>
                       <td style={{ width: "20%" }}>DPP</td>
-                      <td style={{ width: "5%" }}>Rp</td>
-                      <td className="text-end" style={{ width: "15%" }}>
+                      <td style={{ width: "5%" }}>Rp.</td>
+                      <td className="text-end pe-2" style={{ width: "15%" }}>
                         {formatCurrency(
                           calculateDPP(
                             invoiceData.items,
@@ -281,8 +240,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <tr>
                       <td style={{ width: "60%" }}></td>
                       <td style={{ width: "20%" }}>PPN {brandData.taxRate}%</td>
-                      <td style={{ width: "5%" }}>Rp</td>
-                      <td className="text-end" style={{ width: "15%" }}>
+                      <td style={{ width: "5%" }}>Rp.</td>
+                      <td className="text-end pe-2" style={{ width: "15%" }}>
                         {formatCurrency(
                           calculateTax(
                             invoiceData.items,
@@ -296,34 +255,32 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </>
               )}
 
-              <tr style={{ borderTop: "1px solid #dee2e6" }}>
+              <tr style={{ borderTop: "1px solid #111111" }}>
                 <td style={{ width: "60%" }}></td>
                 <td
+                  className="fw-semibold"
                   style={{
                     width: "20%",
-                    fontWeight: "bold",
                     paddingTop: "8px",
                   }}
                 >
-                  Total
+                  Total Harga
                 </td>
                 <td
+                  className="fw-semibold"
                   style={{
                     width: "5%",
-                    fontWeight: "bold",
                     paddingTop: "8px",
                   }}
                 >
-                  Rp
+                  Rp.
                 </td>
                 <td
-                  className="text-end"
+                  className="text-end pe-2 fw-semibold"
                   style={{
                     width: "15%",
-                    fontWeight: "bold",
                     paddingTop: "8px",
                     color: brandData.accentColor,
-                    fontSize: "1.2rem",
                   }}
                 >
                   {formatCurrency(
@@ -349,6 +306,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <br />
                     <br />
                     <br />
+                    {invoiceData.best_regards_name && <p></p>}
                     {invoiceData.receiver_name ? (
                       <p className="text-center text-uppercse fw-semibold">
                         {invoiceData.receiver_name}
@@ -382,7 +340,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <p className="custom-text text-uppercase fw-semibold">
                   Catatan
                 </p>
-                <p className="p mb-0">{invoiceData.notes}</p>
+                {/* <p className="p mb-0">{invoiceData.notes}</p> */}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: invoiceData.notes.replace(/\n/g, "<br />"),
+                  }}
+                ></div>
               </div>
             )}
             <div className="text-center pt-3 mt-3 border-top">

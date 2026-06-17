@@ -51,6 +51,22 @@ export default function InvoiceSettings({
             placeholder="INV-20250101-001"
           />
         </div>
+        <div className="col-12 mb-2">
+          <label className="form-label small text-muted text-uppercase fw-semibold">
+            Tempat
+          </label>
+          <input
+            type="text"
+            className="form-control form-control-sm"
+            value={invoiceData.place}
+            onChange={(e) =>
+              setInvoiceData({
+                ...invoiceData,
+                place: e.target.value,
+              })
+            }
+          />
+        </div>
         <div className="col-12">
           <label className="form-label small text-muted text-uppercase fw-semibold">
             Tanggal
@@ -112,7 +128,7 @@ export default function InvoiceSettings({
           }
         />
         <textarea
-          className="form-control form-control-sm"
+          className="form-control form-control-sm mb-2"
           rows={2}
           placeholder="Alamat"
           value={invoiceData.clientAddress}
@@ -120,6 +136,30 @@ export default function InvoiceSettings({
             setInvoiceData({
               ...invoiceData,
               clientAddress: e.target.value,
+            })
+          }
+        />
+        <input
+          type="text"
+          className="form-control form-control-sm mb-2"
+          placeholder="No PO"
+          value={invoiceData.POnumber}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              POnumber: e.target.value,
+            })
+          }
+        />
+        <input
+          type="text"
+          className="form-control form-control-sm mb-2"
+          placeholder="Tanggal PO"
+          value={invoiceData.POdate}
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              POdate: e.target.value,
             })
           }
         />

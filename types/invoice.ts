@@ -10,6 +10,9 @@ export interface InvoiceItem {
 export interface InvoiceData {
   invoiceNo: string;
   date: string;
+  place?: string;
+  POnumber?: string;
+  POdate?: string;
   clientName: string;
   clientEmail: string;
   clientAddress: string;
@@ -31,6 +34,7 @@ export interface BrandData {
   companyAddress: string;
   companyPhone: string;
   companyEmail: string;
+  companyNPWP?: string;
   logo: string | null; // base64 or URL
   footerText: string;
   taxRate: number; // PPN dalam persen

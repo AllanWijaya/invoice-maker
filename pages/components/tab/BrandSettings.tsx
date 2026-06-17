@@ -121,7 +121,7 @@ export default function BrandSettings({
       </div>
 
       <div className="row">
-        <div className="col-md-6 mb-3">
+        <div className="col-md-12 mb-3">
           <label className="form-label fw-semibold">Telepon</label>
           <input
             type="text"
@@ -136,7 +136,7 @@ export default function BrandSettings({
             placeholder="(021) 1234567"
           />
         </div>
-        <div className="col-md-6 mb-3">
+        <div className="col-md-12 mb-3">
           <label className="form-label fw-semibold">Email</label>
           <input
             type="email"
@@ -149,6 +149,21 @@ export default function BrandSettings({
               })
             }
             placeholder="info@company.com"
+          />
+        </div>
+        <div className="col-md-12 mb-3">
+          <label className="form-label fw-semibold">NPWP</label>
+          <input
+            type="text"
+            className="form-control"
+            value={brandData.companyNPWP}
+            onChange={(e) =>
+              setBrandData({
+                ...brandData,
+                companyNPWP: e.target.value,
+              })
+            }
+            placeholder="NPWP Perusahaan"
           />
         </div>
       </div>

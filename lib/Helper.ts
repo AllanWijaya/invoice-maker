@@ -63,3 +63,12 @@ export const formatCurrency = (amount: number, isCurrency: boolean = false) => {
 
   return new Intl.NumberFormat("id-ID", options).format(amount);
 };
+
+export const formatDate = (date: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return new Date(date).toLocaleDateString("id-ID", options);
+};
