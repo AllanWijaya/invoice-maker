@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { forwardRef } from "react";
-import { BrandData, InvoiceData } from "../../types/invoice";
+import { BrandData, InvoiceData, PrintOptions } from "../../types/invoice";
 import {
   calculateDPP,
   calculateSubtotal,
@@ -14,6 +14,7 @@ interface InvoicePreviewProps {
   previewRef: React.RefObject<HTMLDivElement | null>;
   invoiceData: InvoiceData;
   brandData: BrandData;
+  printOptions?: PrintOptions;
 }
 
 const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
@@ -40,10 +41,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
       jenisTransaksi: "non-ppn",
     },
     previewRef,
+    printOptions,
   }) => {
+    console.log(printOptions);
     return (
       <div
-        className="card border-0 shadow-sm sticky-top"
+        className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"} card border-0 shadow-sm sticky-top`}
         style={{ top: "100px" }}
       >
         <div className="card-header bg-white border-bottom">
@@ -297,38 +300,41 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             <br />
             <br />
             <div className="border-top pt-3 mt-3">
-              <table className=" w-100">
+              <table className="w-100">
                 <tr>
                   <td width="50%">
                     <p className="text-center text-uppercse fw-semibold">
                       {invoiceData.receiver}
                     </p>
-                    <br />
-                    <br />
-                    <br />
-                    {invoiceData.best_regards_name && <p></p>}
-                    {invoiceData.receiver_name ? (
-                      <p className="text-center text-uppercse fw-semibold">
-                        {invoiceData.receiver_name}
-                      </p>
-                    ) : (
-                      // <hr style={{ strokeColor: "#111" }} />
-                      <></>
-                    )}{" "}
                   </td>
                   <td width="50%">
                     <p className="text-center text-uppercse fw-semibold">
                       {invoiceData.best_regards}
                     </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <br />
                     <br />
-                    <br />
+                  </td>
+                </tr>
+                <tr>
+                  <td width="50%">
+                    {invoiceData.receiver_name ? (
+                      <p className="text-center text-uppercse fw-semibold">
+                        {invoiceData.receiver_name}
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                  </td>
+                  <td width="50%">
                     {invoiceData.best_regards_name ? (
                       <p className="text-center text-uppercse fw-semibold">
                         {invoiceData.best_regards_name}
                       </p>
                     ) : (
-                      // <hr style={{ strokeColor: "#111" }} />
                       <></>
                     )}
                   </td>
@@ -340,7 +346,6 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <p className="custom-text text-uppercase fw-semibold">
                   Catatan
                 </p>
-                {/* <p className="p mb-0">{invoiceData.notes}</p> */}
                 <div
                   dangerouslySetInnerHTML={{
                     __html: invoiceData.notes.replace(/\n/g, "<br />"),

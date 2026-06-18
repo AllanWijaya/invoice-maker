@@ -69,3 +69,17 @@
   color: #212529 !important;
   font-size: 14px !important;
 }
+
+/* Print Styles */
+@media print {
+  .invoice-a4 {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 10mm;
+  }
+
+  .continuous-form {
+    width: 210mm;
+    padding: 5mm;
+  }
+}

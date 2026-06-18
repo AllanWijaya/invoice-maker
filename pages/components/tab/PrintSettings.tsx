@@ -1,12 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { calculateTotal, formatCurrency } from "@/lib/Helper";
-import { BrandData, InvoiceData } from "../../../types/invoice";
+import {
+  calculateTotal,
+  formatCurrency,
+  handleChangeState,
+} from "@/lib/Helper";
+import { BrandData, InvoiceData, PrintOptions } from "../../../types/invoice";
+import { Dispatch } from "react";
 
 interface PrintSettingsProps {
   brandData: BrandData;
   invoiceData: InvoiceData;
   handlePrint: () => void;
+  printOptions: PrintOptions;
+  onPrintOptions: Dispatch<React.SetStateAction<PrintOptions>>;
 }
 
 export default function PrintSettings({
@@ -31,6 +38,8 @@ export default function PrintSettings({
     notes: "",
   },
   handlePrint,
+  printOptions,
+  onPrintOptions,
 }: PrintSettingsProps) {
   return (
     <>
@@ -86,6 +95,78 @@ export default function PrintSettings({
             <li>Margin cetak</li>
             <li>Jumlah copy</li>
           </ul>
+        </div>
+      </div>
+
+      <div className="d-grid gap-2 mt-3">
+        <div className="row g-2">
+          <div className="col-6">
+            <input
+              type="radio"
+              className="btn-check"
+              name="pageSize"
+              value="a4"
+              onChange={(e) => handleChangeState(e, onPrintOptions)}
+              checked={printOptions?.pageSize === "a4"}
+              id="kertasA4"
+            />
+            <label
+              className={`btn w-100 h-100 p-3 rounded-3 text-start bg-white d-flex flex-column justify-content-between shadow-sm border-2 ${
+                printOptions?.pageSize === "a4"
+                  ? "border-primary"
+                  : "border-light-subtle"
+              }`}
+              htmlFor="kertasA4"
+            >
+              <div className="d-flex justify-content-between align-items-center w-100 mb-1">
+                <span
+                  className={`fw-bold small ${printOptions?.pageSize === "a4" ? "text-primary" : "text-dark"}`}
+                >
+                  Kertas A4
+                </span>
+                <i
+                  className={`bi bi-file-earmark-text fs-5 ${printOptions?.pageSize === "a4" ? "text-primary" : "text-muted"}`}
+                ></i>
+              </div>
+              <span className="text-muted" style={{ fontSize: "0.75rem" }}>
+                210 x 297 mm • Standar Laporan
+              </span>
+            </label>
+          </div>
+
+          <div className="col-6">
+            <input
+              type="radio"
+              className="btn-check"
+              name="pageSize"
+              value="continuous"
+              onChange={(e) => handleChangeState(e, onPrintOptions)}
+              checked={printOptions?.pageSize === "continuous"}
+              id="kertasContinuous"
+            />
+            <label
+              className={`btn w-100 h-100 p-3 rounded-3 text-start bg-white d-flex flex-column justify-content-between shadow-sm border-2 ${
+                printOptions?.pageSize === "continuous"
+                  ? "border-primary"
+                  : "border-light-subtle"
+              }`}
+              htmlFor="kertasContinuous"
+            >
+              <div className="d-flex justify-content-between align-items-between w-100 mb-1">
+                <span
+                  className={`fw-bold small ${printOptions?.pageSize === "continuous" ? "text-primary" : "text-dark"}`}
+                >
+                  Continuous Form
+                </span>
+                <i
+                  className={`bi bi-printer fs-5 ${printOptions?.pageSize === "continuous" ? "text-primary" : "text-muted"}`}
+                ></i>
+              </div>
+              <span className="text-muted" style={{ fontSize: "0.75rem" }}>
+                9.5 x 11 inch • Dot Matrix / Faktur
+              </span>
+            </label>
+          </div>
         </div>
       </div>
 

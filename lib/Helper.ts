@@ -1,3 +1,4 @@
+import { Dispatch } from "react";
 import { InvoiceItem } from "../types/invoice";
 
 export const calculateSubtotal = (items: InvoiceItem[]) => {
@@ -71,4 +72,18 @@ export const formatDate = (date: string) => {
     day: "numeric",
   };
   return new Date(date).toLocaleDateString("id-ID", options);
+};
+
+export const handleChangeState = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSet: Dispatch<React.SetStateAction<any>>,
+) => {
+  const { name, value, type, checked } = e.target;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSet((prev: any) => ({
+    ...prev,
+    [name]: type === "checkbox" ? checked : value,
+  }));
 };

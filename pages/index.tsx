@@ -1,6 +1,11 @@
-import { useRef, useState } from "react";
+import { Dispatch, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import { InvoiceData, BrandData, InvoiceItem } from "../types/invoice";
+import {
+  InvoiceData,
+  BrandData,
+  InvoiceItem,
+  PrintOptions,
+} from "../types/invoice";
 import Header from "./components/form/Header";
 import InvoiceSettings from "./components/tab/InvoiceSettings";
 import BrandSettings from "./components/tab/BrandSettings";
@@ -11,6 +16,10 @@ import InvoicePreview from "./components/InvoicePreview";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("invoice");
   const previewRef = useRef<HTMLDivElement | null>(null);
+
+  const [printOptions, setPrintOptions] = useState<PrintOptions>({
+    pageSize: "a4",
+  });
 
   const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     invoiceNo: `INV-${new Date().getFullYear()}${(new Date().getMonth() + 1)
@@ -330,6 +339,8 @@ export default function Home() {
                     brandData={brandData}
                     invoiceData={invoiceData}
                     handlePrint={handlePrint}
+                    printOptions={printOptions}
+                    onPrintOptions={setPrintOptions}
                   />
                 </div>
               </div>
@@ -341,6 +352,7 @@ export default function Home() {
               previewRef={previewRef}
               brandData={brandData}
               invoiceData={invoiceData}
+              printOptions={printOptions}
             />
           </div>
         </div>

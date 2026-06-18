@@ -41,3 +41,7 @@ export interface BrandData {
   accentColor: string;
   jenisTransaksi: "non-ppn" | "include-ppn" | "exclude-ppn";
 }
+
+export interface PrintOptions {
+  pageSize: string;
+}
