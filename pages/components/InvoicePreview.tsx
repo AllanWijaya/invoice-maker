@@ -85,16 +85,29 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <p className="custom-text mb-0">
                       {brandData.companyAddress}
                     </p>
-                    <p className="custom-text mb-0">
-                      {brandData.companyPhone &&
-                        `Telp: ${brandData.companyPhone}`}
-                      {brandData.companyEmail &&
-                        ` | Email: ${brandData.companyEmail}`}
-                    </p>
-                    <p className="custom-text mb-0">
-                      {brandData.companyNPWP &&
-                        `NPWP: ${brandData.companyNPWP}`}
-                    </p>
+                    <table className="w-100">
+                      <tr className="custom-text">
+                        <td style={{ width: "19%" }}>Telp</td>
+                        <td style={{ width: "1%" }}>: </td>
+                        <td style={{ width: "60%" }}>
+                          {brandData.companyPhone || ""}
+                        </td>
+                      </tr>
+                      <tr className="custom-text">
+                        <td style={{ width: "19%" }}>Email</td>
+                        <td style={{ width: "1%" }}>: </td>
+                        <td style={{ width: "60%" }}>
+                          {brandData.companyEmail || ""}
+                        </td>
+                      </tr>
+                      <tr className="custom-text">
+                        <td style={{ width: "19%" }}>NPWP</td>
+                        <td style={{ width: "1%" }}>: </td>
+                        <td style={{ width: "60%" }}>
+                          {brandData.companyNPWP || ""}
+                        </td>
+                      </tr>
+                    </table>
                   </div>
                 </div>
                 <div className="col-3 text-end">
@@ -139,14 +152,14 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   {invoiceData.clientAddress || ""}
                 </p>
                 <table className="w-100">
-                  <tr className="fw-semibold">
+                  <tr className="custom-text fw-semibold">
                     <td style={{ width: "10%" }}>No PO</td>
                     <td style={{ width: "1%" }}>:</td>
                     <td style={{ width: "60%" }}>
                       {invoiceData.POnumber || ""}
                     </td>
                   </tr>
-                  <tr className="fw-semibold">
+                  <tr className="custom-text fw-semibold">
                     <td style={{ width: "10%" }}>Tanggal PO</td>
                     <td style={{ width: "1%" }}>:</td>
                     <td style={{ width: "60%" }}>{invoiceData.POdate || ""}</td>
