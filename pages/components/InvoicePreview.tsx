@@ -8,6 +8,8 @@ import {
   calculateTotal,
   formatCurrency,
   formatDate,
+  formatTerbilang,
+  ucwords,
 } from "../../lib/Helper";
 
 interface InvoicePreviewProps {
@@ -43,7 +45,16 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
     previewRef,
     printOptions,
   }) => {
-    console.log(printOptions);
+    const column = {
+      no: 3,
+      description: 39,
+      quantity: 9,
+      unit: 9,
+      price: 20,
+      total: 20,
+      terbilang: 10,
+    };
+
     return (
       <div
         className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"} card border-0 shadow-sm sticky-top`}
@@ -61,7 +72,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             className="bg-white p-4 rounded shadow-sm"
             id="invoice-preview"
           >
-            <div className="border-bottom border-3 border-dark pb-3 mb-3">
+            <div className="border-bottom border-3 border-dark pb-3 mb-1">
               <div className="row justify-content-between align-items-start">
                 <div className="col-9 d-flex align-items-center gap-3">
                   {brandData.logo && (
@@ -118,8 +129,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </div>
               </div>
             </div>
-            <div className="mb-4">
-              <div className="bg-light p-3 rounded">
+            {/* Client Information */}
+            <div className="mb-2">
+              <div className="bg-light p-1 rounded">
                 {invoiceData.toClient ? (
                   <>
                     <div className="d-flex justify-content-between align-items-start  fw-semibold">
@@ -167,35 +179,53 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </table>
               </div>
             </div>
-            <div className="table-responsive mb-0 pb-0">
-              <table className="table table-sm table-bordered border-dark mb-0">
-                <tr>
-                  <th className="text-center" style={{ width: "7%" }}>
+            <div className="table-responsive custom-text mb-0 pb-0">
+              <table className="table table-sm table-bordere border-dark mb-0">
+                <tr className="custom-border">
+                  <th
+                    className="text-center"
+                    style={{ width: `${column.no}%` }}
+                  >
                     No
                   </th>
-                  <th className="text-center" style={{ width: "25%" }}>
+                  <th
+                    className="text-center"
+                    style={{ width: `${column.description}%` }}
+                  >
                     Nama Barang
                   </th>
-                  <th className="text-center" style={{ width: "14%" }}>
+                  <th
+                    className="text-center"
+                    style={{ width: `${column.quantity}%` }}
+                  >
                     Qty
                   </th>
-                  <th className="text-center" style={{ width: "14%" }}>
+                  <th
+                    className="text-center"
+                    style={{ width: `${column.unit}%` }}
+                  >
                     Satuan
                   </th>
-                  <th className="text-center" style={{ width: "20%" }}>
+                  <th
+                    className="text-center"
+                    style={{ width: `${column.price}%` }}
+                  >
                     Harga Satuan
                   </th>
-                  <th className="text-center" style={{ width: "20%" }}>
+                  <th
+                    className="text-center"
+                    style={{ width: `${column.total}%` }}
+                  >
                     Jumlah Harga
                   </th>
                 </tr>
                 {invoiceData.items.map((item) => (
-                  <tr key={item.id}>
+                  <tr key={item.id} className="custom-border">
                     <td className="p-0 px-2 text-center">{item.no}</td>
 
                     <td className="p-0 px-2">{item.description || "-"}</td>
-                    <td className="p-0 px-2 text-center">{item.quantity}</td>
-                    <td className="p-0 px-2 text-center">{item.unit}</td>
+                    <td className="p-0 px-0 text-center">{item.quantity}</td>
+                    <td className="p-0 px-0 text-center">{item.unit}</td>
                     <td className="px-2">
                       <div className="d-flex justify-content-between align-items-center">
                         <span>Rp.</span>
@@ -212,6 +242,111 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     </td>
                   </tr>
                 ))}
+                <tr>
+                  <td colSpan={4}></td>
+                  <td className="ps-2" style={{ width: `${column.price}%` }}>
+                    Subtotal
+                  </td>
+                  <td className="px-2" style={{ width: `${column.total}%` }}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span>Rp.</span>
+                      <span>
+                        {formatCurrency(calculateSubtotal(invoiceData.items))}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+                {["include-ppn", "exclude-ppn"].includes(
+                  brandData.jenisTransaksi,
+                ) && (
+                  <>
+                    {brandData.jenisTransaksi === "include-ppn" && (
+                      <tr style={{ borderTop: "0" }}>
+                        <td colSpan={4}></td>
+
+                        <td
+                          className="ps-2"
+                          style={{ width: `${column.price}%` }}
+                        >
+                          DPP
+                        </td>
+                        <td
+                          className="px-2"
+                          style={{ width: `${column.total}%` }}
+                        >
+                          <div className="d-flex justify-content-between align-items-center">
+                            <span>Rp.</span>
+                            <span>
+                              {formatCurrency(
+                                calculateDPP(
+                                  invoiceData.items,
+                                  brandData.taxRate,
+                                  brandData.jenisTransaksi,
+                                ),
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+
+                    {brandData.taxRate > 0 && (
+                      <tr>
+                        <td colSpan={4}></td>
+
+                        <td
+                          className="ps-2"
+                          style={{ width: `${column.price}%` }}
+                        >
+                          PPN {brandData.taxRate}%
+                        </td>
+                        <td
+                          className="px-2"
+                          style={{ width: `${column.total}%` }}
+                        >
+                          <div className="d-flex justify-content-between align-items-center">
+                            <span>Rp.</span>
+                            <span>
+                              {formatCurrency(
+                                calculateTax(
+                                  invoiceData.items,
+                                  brandData.taxRate,
+                                  brandData.jenisTransaksi,
+                                ),
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                )}
+
+                <tr className="custom-border">
+                  <td colSpan={4}></td>
+                  <td
+                    className="ps-2 fw-semibold"
+                    style={{
+                      width: `${column.price}%`,
+                    }}
+                  >
+                    Total Harga
+                  </td>
+                  <td className="px-2" style={{ width: `${column.total}%` }}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span>Rp.</span>
+                      <span>
+                        {formatCurrency(
+                          calculateTotal(
+                            invoiceData.items,
+                            brandData.taxRate,
+                            brandData.jenisTransaksi,
+                          ),
+                        )}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
                 {invoiceData.items.length === 0 && (
                   <tr>
                     <td colSpan={6} className="text-center custom-text py-3">
@@ -221,97 +356,50 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 )}
               </table>
             </div>
-            <table className="w-100">
+            <table
+              className="custom-text w-100"
+              style={{ borderTop: "1px solid #111111" }}
+            >
               <tr>
-                <td style={{ width: "61.6%" }}></td>
-                <td style={{ width: "20%" }}>Subtotal</td>
-                <td style={{ width: "5%" }}>Rp.</td>
-                <td className="text-end pe-2" style={{ width: "15%" }}>
-                  {formatCurrency(calculateSubtotal(invoiceData.items))}
-                </td>
-              </tr>
-
-              {["include-ppn", "exclude-ppn"].includes(
-                brandData.jenisTransaksi,
-              ) && (
-                <>
-                  {brandData.jenisTransaksi === "include-ppn" && (
-                    <tr>
-                      <td style={{ width: "60%" }}></td>
-                      <td style={{ width: "20%" }}>DPP</td>
-                      <td style={{ width: "5%" }}>Rp.</td>
-                      <td className="text-end pe-2" style={{ width: "15%" }}>
-                        {formatCurrency(
-                          calculateDPP(
-                            invoiceData.items,
-                            brandData.taxRate,
-                            brandData.jenisTransaksi,
-                          ),
-                        )}
-                      </td>
-                    </tr>
-                  )}
-
-                  {brandData.taxRate > 0 && (
-                    <tr>
-                      <td style={{ width: "60%" }}></td>
-                      <td style={{ width: "20%" }}>PPN {brandData.taxRate}%</td>
-                      <td style={{ width: "5%" }}>Rp.</td>
-                      <td className="text-end pe-2" style={{ width: "15%" }}>
-                        {formatCurrency(
-                          calculateTax(
-                            invoiceData.items,
-                            brandData.taxRate,
-                            brandData.jenisTransaksi,
-                          ),
-                        )}
-                      </td>
-                    </tr>
-                  )}
-                </>
-              )}
-
-              <tr style={{ borderTop: "1px solid #111111" }}>
-                <td style={{ width: "60%" }}></td>
                 <td
                   className="fw-semibold"
+                  width={`${column.terbilang}%`}
                   style={{
-                    width: "20%",
                     paddingTop: "8px",
                   }}
                 >
-                  Total Harga
+                  Terbilang
                 </td>
                 <td
                   className="fw-semibold"
+                  width={"2%"}
                   style={{
-                    width: "5%",
                     paddingTop: "8px",
                   }}
                 >
-                  Rp.
+                  :
                 </td>
                 <td
-                  className="text-end pe-2 fw-semibold"
+                  className="pe-2 fw-semibold fst-italic"
+                  width={"80%"}
                   style={{
-                    width: "15%",
                     paddingTop: "8px",
                     color: brandData.accentColor,
                   }}
                 >
-                  {formatCurrency(
-                    calculateTotal(
-                      invoiceData.items,
-                      brandData.taxRate,
-                      brandData.jenisTransaksi,
+                  {ucwords(
+                    formatTerbilang(
+                      calculateTotal(
+                        invoiceData.items,
+                        brandData.taxRate,
+                        brandData.jenisTransaksi,
+                      ),
                     ),
                   )}
                 </td>
               </tr>
             </table>
             {/* </div> */}
-            <br />
-            <br />
             <div className="border-top pt-3 mt-3">
               <table className="w-100">
                 <tr>
