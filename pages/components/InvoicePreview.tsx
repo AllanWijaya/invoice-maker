@@ -247,7 +247,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <td className="ps-2" style={{ width: `${column.price}%` }}>
                     Subtotal
                   </td>
-                  <td className="ps-2" style={{ width: `${column.total}%` }}>
+                  <td className="ps-2 pe-1" style={{ width: `${column.total}%` }}>
                     <div className="d-flex justify-content-between align-items-center">
                       <span>Rp.</span>
                       <span>
@@ -271,7 +271,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                           DPP
                         </td>
                         <td
-                          className="ps-2"
+                          className="ps-2 pe-1"
                           style={{ width: `${column.total}%` }}
                         >
                           <div className="d-flex justify-content-between align-items-center">
@@ -301,7 +301,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                           PPN {brandData.taxRate}%
                         </td>
                         <td
-                          className="ps-2"
+                          className="ps-2 pe-1"
                           style={{ width: `${column.total}%` }}
                         >
                           <div className="d-flex justify-content-between align-items-center">
@@ -325,7 +325,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <tr className="custom-border">
                   <td colSpan={4}></td>
                   <td
-                    className="ps-2 fw-semibold"
+                    className="ps-2 pe-1 fw-semibold"
                     style={{
                       width: `${column.price}%`,
                     }}
