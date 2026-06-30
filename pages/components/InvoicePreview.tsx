@@ -57,7 +57,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
     return (
       <div
-        className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"} card border-0 shadow-sm sticky-top`}
+        className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"}  card border-0 shadow-sm sticky-top`}
         style={{ top: "100px" }}
       >
         <div className="card-header bg-white border-bottom">
@@ -247,7 +247,10 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <td className="ps-2" style={{ width: `${column.price}%` }}>
                     Subtotal
                   </td>
-                  <td className="ps-2 pe-1" style={{ width: `${column.total}%` }}>
+                  <td
+                    className="ps-2 pe-1"
+                    style={{ width: `${column.total}%` }}
+                  >
                     <div className="d-flex justify-content-between align-items-center">
                       <span>Rp.</span>
                       <span>
@@ -332,7 +335,10 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   >
                     Total Harga
                   </td>
-                  <td className="ps-2 pe-1" style={{ width: `${column.total}%` }}>
+                  <td
+                    className="ps-2 pe-1"
+                    style={{ width: `${column.total}%` }}
+                  >
                     <div className="d-flex justify-content-between align-items-center">
                       <span>Rp.</span>
                       <span>
@@ -400,7 +406,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               </tr>
             </table>
             {/* </div> */}
-            <div className="border-top pt-3 mt-3">
+            <div className="border-top pt-3 mt-3 custom-text">
               <table className="w-100">
                 <tr>
                   <td width="50%">
