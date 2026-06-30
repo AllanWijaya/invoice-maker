@@ -448,14 +448,18 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   Catatan
                 </p>
                 <div
+                  className="custom-text"
                   dangerouslySetInnerHTML={{
                     __html: invoiceData.notes.replace(/\n/g, "<br />"),
                   }}
                 ></div>
               </div>
             )}
-            <div className="text-center pt-3 mt-3 border-top">
-              <p style={{ color: brandData.accentColor }}>
+            <div className="custom-text text-center pt-3 mt-3 border-top">
+              <p
+                className="custom-text"
+                style={{ color: brandData.accentColor }}
+              >
                 {brandData.footerText || "Terima kasih atas kepercayaan Anda"}
               </p>
             </div>
