@@ -411,12 +411,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               <table className="w-100">
                 <tr>
                   <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold text-decoration-underline">
+                    <p className="text-center text-uppercse fw-semibold">
                       {invoiceData.receiver}
                     </p>
                   </td>
                   <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold text-decoration-underline">
+                    <p className="text-center text-uppercse fw-semibold">
                       {invoiceData.best_regards}
                     </p>
                   </td>
@@ -431,7 +431,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <tr>
                   <td width="50%">
                     {invoiceData.receiver_name ? (
-                      <p className="text-center text-uppercse fw-semibold">
+                      <p className="text-center text-uppercse fw-semibold text-decoration-underline">
                         {invoiceData.receiver_name}
                       </p>
                     ) : (
@@ -440,7 +440,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   </td>
                   <td width="50%">
                     {invoiceData.best_regards_name ? (
-                      <p className="text-center text-uppercse fw-semibold">
+                      <p className="text-center text-uppercse fw-semibold text-decoration-underline">
                         {invoiceData.best_regards_name}
                       </p>
                     ) : (
