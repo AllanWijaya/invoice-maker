@@ -101,9 +101,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         <td style={{ width: "19%" }}>Telp | Email</td>
                         <td style={{ width: "1%" }}>: </td>
                         <td style={{ width: "60%" }}>
-                          {brandData.companyEmail || ""}
-                          {brandData.companyPhone
-                            ? ` | ${brandData.companyPhone}`
+                          {brandData.companyPhone || ""}
+                          {brandData.companyEmail
+                            ? ` | ${brandData.companyEmail}`
                             : ""}
                         </td>
                       </tr>
