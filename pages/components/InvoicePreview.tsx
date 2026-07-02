@@ -30,6 +30,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
       items: [],
       notes: "",
       toClient: null,
+      space_best_regards: 0,
     },
     brandData = {
       logo: "",
@@ -81,7 +82,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       alt="Logo"
                       style={{
                         flexGrow: 1,
-                        width: "150px",
+                        width: "100px",
                         objectFit: "contain",
                       }}
                     />
@@ -122,7 +123,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     </table>
                   </div>
                 </div>
-                <div className="col-3 text-end">
+                <div className="col-3 text-end" style={{ fontSize: 14 }}>
                   <div className="badge bg-secondary mb-1">INVOICE</div>
                   <p className="mb-0 fw-semibold">
                     {invoiceData.invoiceNo || "-"}
@@ -434,11 +435,11 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </tr>
                 <tr>
                   <td>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
+                    {Array.from({
+                      length: invoiceData.space_best_regards || 0,
+                    }).map((_, index) => (
+                      <br key={index} />
+                    ))}
                   </td>
                 </tr>
                 <tr>

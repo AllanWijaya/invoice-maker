@@ -23,6 +23,10 @@ export default function InvoiceSettings({
     clientAddress: "",
     items: [],
     notes: "",
+    best_regards: "",
+    best_regards_name: "",
+    space_best_regards: 3,
+    toClient: "",
   },
   setInvoiceData,
   addItem,
@@ -293,6 +297,21 @@ export default function InvoiceSettings({
       </div>
 
       <div className="mb-3">
+        <label className="form-label small text-muted text-uppercase fw-semibold">
+          Space Hormat Kami & Tanda Terima
+        </label>
+        <input
+          className="form-control form-control-sm mb-2"
+          value={invoiceData.space_best_regards}
+          type="number"
+          onChange={(e) =>
+            setInvoiceData({
+              ...invoiceData,
+              space_best_regards: Number(e.target.value),
+            })
+          }
+          placeholder="Space Hormat Kami & Tanda Terima"
+        />
         <label className="form-label small text-muted text-uppercase fw-semibold">
           Hormat Kami
         </label>

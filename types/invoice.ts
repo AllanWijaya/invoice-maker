@@ -22,6 +22,7 @@ export interface InvoiceData {
   receiver_name?: string;
   best_regards?: string;
   best_regards_name?: string;
+  space_best_regards?: number;
   toClient?: string;
 }
 
