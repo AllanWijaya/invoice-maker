@@ -411,12 +411,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               <table className="w-100">
                 <tr>
                   <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold underline">
+                    <p className="text-center text-uppercse fw-semibold text-decoration-underline">
                       {invoiceData.receiver}
                     </p>
                   </td>
                   <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold underline">
+                    <p className="text-center text-uppercse fw-semibold text-decoration-underline">
                       {invoiceData.best_regards}
                     </p>
                   </td>
