@@ -401,7 +401,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         brandData.jenisTransaksi,
                       ),
                     ),
-                  )}
+                  )} {' '}
+                  Rupiah
                 </td>
               </tr>
             </table>
