@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { dataStaticPPN } from "@/types/dataStatic";
 import { BrandData } from "@/types/invoice";
 
 interface BrandSettingsProps {
@@ -216,9 +217,11 @@ export default function BrandSettings({
               })
             }
           >
-            <option value="non-ppn">Non PPN</option>
-            <option value="include-ppn">Include PPN</option>
-            <option value="exclude-ppn">Exclude PPN</option>
+            {dataStaticPPN.map((_item) => (
+              <option key={_item.value} value={_item.value}>
+                {_item.label}
+              </option>
+            ))}
           </select>
         </div>
         <div className="col-md-12 mb-3">

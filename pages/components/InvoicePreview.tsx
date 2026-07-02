@@ -57,7 +57,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
     return (
       <div
-        className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"}  card border-0 shadow-sm sticky-top`}
+        className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"} custom-text card border-0 shadow-sm sticky-top`}
         style={{ top: "100px" }}
       >
         <div className="card-header bg-white border-bottom">
@@ -72,7 +72,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             className="bg-white p-4 rounded shadow-sm"
             id="invoice-preview"
           >
-            <div className="border-bottom border-3 border-dark pb-3 mb-1">
+            <div className="border-bottom border-3 border-dark pb-1 mb-1">
               <div className="row justify-content-between align-items-start">
                 <div className="col-9 d-flex align-items-center gap-3">
                   {brandData.logo && (
@@ -98,19 +98,20 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     </p>
                     <table className="w-100">
                       <tr className="custom-text">
-                        <td style={{ width: "19%" }}>Telp</td>
-                        <td style={{ width: "1%" }}>: </td>
-                        <td style={{ width: "60%" }}>
-                          {brandData.companyPhone || ""}
-                        </td>
-                      </tr>
-                      <tr className="custom-text">
-                        <td style={{ width: "19%" }}>Email</td>
+                        <td style={{ width: "19%" }}>Telp | Email</td>
                         <td style={{ width: "1%" }}>: </td>
                         <td style={{ width: "60%" }}>
                           {brandData.companyEmail || ""}
+                          {brandData.companyPhone
+                            ? ` | ${brandData.companyPhone}`
+                            : ""}
                         </td>
                       </tr>
+                      {/* <tr className="custom-text">
+                        <td style={{ width: "19%" }}>Email</td>
+                        <td style={{ width: "1%" }}>: </td>
+                        <td style={{ width: "60%" }}></td>
+                      </tr> */}
                       <tr className="custom-text">
                         <td style={{ width: "19%" }}>NPWP</td>
                         <td style={{ width: "1%" }}>: </td>
@@ -259,11 +260,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     </div>
                   </td>
                 </tr>
-                {["include-ppn", "exclude-ppn"].includes(
+                {["include-ppn", "exclude-ppn", "dpp-nilai-lain"].includes(
                   brandData.jenisTransaksi,
                 ) && (
                   <>
-                    {brandData.jenisTransaksi === "include-ppn" && (
+                    {["include-ppn", "dpp-nilai-lain"].includes(
+                      brandData.jenisTransaksi,
+                    ) && (
                       <tr style={{ borderTop: "0" }}>
                         <td colSpan={4}></td>
 
@@ -281,10 +284,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             <span>Rp.</span>
                             <span>
                               {formatCurrency(
-                                calculateDPP(
-                                  invoiceData.items,
-                                  brandData.taxRate,
-                                  brandData.jenisTransaksi,
+                                Math.round(
+                                  calculateDPP(
+                                    invoiceData.items,
+                                    brandData.taxRate,
+                                    brandData.jenisTransaksi,
+                                  ),
                                 ),
                               )}
                             </span>
@@ -301,7 +306,11 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                           className="ps-2"
                           style={{ width: `${column.price}%` }}
                         >
-                          PPN {brandData.taxRate}%
+                          PPN{" "}
+                          {["dpp-nilai-lain"].includes(brandData.jenisTransaksi)
+                            ? brandData.taxRate + 1
+                            : brandData.taxRate}
+                          %
                         </td>
                         <td
                           className="ps-2 pe-1"
@@ -311,10 +320,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             <span>Rp.</span>
                             <span>
                               {formatCurrency(
-                                calculateTax(
-                                  invoiceData.items,
-                                  brandData.taxRate,
-                                  brandData.jenisTransaksi,
+                                Math.round(
+                                  calculateTax(
+                                    invoiceData.items,
+                                    brandData.taxRate,
+                                    brandData.jenisTransaksi,
+                                  ),
                                 ),
                               )}
                             </span>
@@ -371,7 +382,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   className="fw-semibold"
                   width={`${column.terbilang}%`}
                   style={{
-                    paddingTop: "8px",
+                    paddingTop: "4px",
                   }}
                 >
                   Terbilang
@@ -380,7 +391,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   className="fw-semibold"
                   width={"2%"}
                   style={{
-                    paddingTop: "8px",
+                    paddingTop: "4px",
                   }}
                 >
                   :
@@ -389,7 +400,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   className="pe-2 fw-semibold fst-italic"
                   width={"80%"}
                   style={{
-                    paddingTop: "8px",
+                    paddingTop: "4px",
                     color: brandData.accentColor,
                   }}
                 >
@@ -401,28 +412,30 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         brandData.jenisTransaksi,
                       ),
                     ),
-                  )} {' '}
+                  )}{" "}
                   Rupiah
                 </td>
               </tr>
             </table>
             {/* </div> */}
-            <div className="border-top pt-3 mt-3 custom-text">
-              <table className="w-100">
+            <div className="border-top pt-1 mt-1 custom-text">
+              <table className="w-100" suppressHydrationWarning>
                 <tr>
                   <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold">
+                    <p className="text-center text-uppercse fw-semibold p-0">
                       {invoiceData.receiver}
                     </p>
                   </td>
                   <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold">
+                    <p className="text-center text-uppercse fw-semibold p-0">
                       {invoiceData.best_regards}
                     </p>
                   </td>
                 </tr>
                 <tr>
                   <td>
+                    <br />
+                    <br />
                     <br />
                     <br />
                     <br />
@@ -451,8 +464,8 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               </table>
             </div>
             {invoiceData.notes && (
-              <div className="border-top pt-3 mt-3">
-                <p className="custom-text text-uppercase fw-semibold">
+              <div className="border-top">
+                <p className="custom-text text-uppercase fw-semibold mb-0">
                   Catatan
                 </p>
                 <div
@@ -463,14 +476,14 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 ></div>
               </div>
             )}
-            <div className="custom-text text-center pt-3 mt-3 border-top">
+            {/* <div className="custom-text text-center pt- mt-1 border-top">
               <p
                 className="custom-text"
                 style={{ color: brandData.accentColor }}
               >
                 {brandData.footerText || "Terima kasih atas kepercayaan Anda"}
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

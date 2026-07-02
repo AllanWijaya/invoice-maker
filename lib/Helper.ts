@@ -14,6 +14,9 @@ export const calculateDPP = (
   if (jenisTransaksi === "include-ppn") {
     // DPP = Subtotal / (1 + taxRate/100)
     return subtotal / (1 + taxRate / 100);
+  } else if (jenisTransaksi === "dpp-nilai-lain") {
+    // DPP = Subtotal * (taxRate / (taxRate + 1))
+    return subtotal * (taxRate / (taxRate + 1));
   }
 
   // For "exclude-ppn", DPP = Subtotal
@@ -30,6 +33,9 @@ export const calculateTax = (
   if (jenisTransaksi === "include-ppn") {
     const dpp = subtotal / (1 + taxRate / 100);
     return dpp * (taxRate / 100);
+  } else if (jenisTransaksi === "dpp-nilai-lain") {
+    const dpp = subtotal * (taxRate / (taxRate + 1));
+    return dpp * ((taxRate + 1) / 100);
   }
 
   // For "exclude-ppn"
@@ -41,10 +47,11 @@ export const calculateTotal = (
   taxRate: number,
   jenisTransaksi: string,
 ) => {
-  if (jenisTransaksi === "include-ppn") {
-    return calculateSubtotal(items);
-  }
-  if (jenisTransaksi === "exclude-ppn") {
+  if (["dpp-nilai-lain"].includes(jenisTransaksi)) {
+    return (
+      calculateSubtotal(items) + calculateTax(items, taxRate, jenisTransaksi)
+    );
+  } else if (jenisTransaksi === "exclude-ppn") {
     return (
       calculateSubtotal(items) + calculateTax(items, taxRate, jenisTransaksi)
     );
