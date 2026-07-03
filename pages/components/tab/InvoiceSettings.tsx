@@ -1,4 +1,5 @@
 import { InvoiceData, InvoiceItem } from "@/types/invoice";
+import { NumericFormat } from "react-number-format";
 
 interface InvoiceSettingsProps {
   invoiceData: InvoiceData;
@@ -223,18 +224,18 @@ export default function InvoiceSettings({
                     />
                   </td>
                   <td>
-                    <input
-                      type="number"
-                      className="form-control form-control-sm text-end"
-                      value={item.price}
-                      onChange={(e) =>
-                        updateItem(
-                          item.id,
-                          "price",
-                          parseInt(e.target.value) || 0,
-                        )
-                      }
-                    />
+                    <NumericFormat
+  className="form-control form-control-sm text-end"
+  value={item.price}
+  thousandSeparator=","
+  decimalSeparator="."
+  decimalScale={2}
+  fixedDecimalScale
+  allowNegative={false}
+  onValueChange={(values) => {
+    updateItem(item.id, "price", values.floatValue ?? 0);
+  }}
+/>
                   </td>
                   <td>
                     <input
