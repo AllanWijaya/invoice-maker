@@ -97,6 +97,7 @@ export const formatTerbilang = (amount: number): string => {
     "delapan",
     "sembilan",
   ];
+
   const belasan = [
     "sepuluh",
     "sebelas",
@@ -109,6 +110,7 @@ export const formatTerbilang = (amount: number): string => {
     "delapan belas",
     "sembilan belas",
   ];
+
   const puluhan = [
     "",
     "",
@@ -121,53 +123,68 @@ export const formatTerbilang = (amount: number): string => {
     "delapan puluh",
     "sembilan puluh",
   ];
+
   const ribuan = ["", "ribu", "juta", "miliar", "triliun"];
 
   const numToString = (num: number): string => {
     if (num === 0) return "";
     if (num < 10) return satuan[num];
     if (num < 20) return belasan[num - 10];
+
     if (num < 100) {
-      const puluh = Math.floor(num / 10);
-      const sisa = num % 10;
-      return puluhan[puluh] + (sisa > 0 ? " " + satuan[sisa] : "");
+      const p = Math.floor(num / 10);
+      const s = num % 10;
+      return puluhan[p] + (s ? ` ${satuan[s]}` : "");
     }
+
     if (num < 1000) {
-      const ratus = Math.floor(num / 100);
-      const sisa = num % 100;
-      if (ratus === 1) {
-        return "seratus" + (sisa > 0 ? " " + numToString(sisa) : "");
+      const r = Math.floor(num / 100);
+      const s = num % 100;
+
+      if (r === 1) {
+        return "seratus" + (s ? ` ${numToString(s)}` : "");
       }
-      return (
-        satuan[ratus] + " ratus" + (sisa > 0 ? " " + numToString(sisa) : "")
-      );
+
+      return satuan[r] + " ratus" + (s ? ` ${numToString(s)}` : "");
     }
+
     return "";
   };
 
+  const integerPart = Math.floor(amount);
+  const decimalPart = amount.toString().split(".")[1];
+
   const chunks: number[] = [];
-  let temp = amount;
+  let temp = integerPart;
+
   while (temp > 0) {
     chunks.push(temp % 1000);
     temp = Math.floor(temp / 1000);
   }
 
   let result = "";
+
   for (let i = 0; i < chunks.length; i++) {
-    const chunk = chunks[i];
-    if (chunk === 0) continue;
+    if (!chunks[i]) continue;
 
-    let chunkText = numToString(chunk);
+    let text = numToString(chunks[i]);
 
-    if (i === 1 && chunk === 1) {
-      chunkText = "seribu";
+    if (i === 1 && chunks[i] === 1) {
+      text = "seribu";
     }
 
-    if (i === 0) {
-      result = chunkText + " " + result;
-    } else {
-      result = chunkText + " " + ribuan[i] + " " + result;
-    }
+    result = `${text} ${ribuan[i]} ${result}`;
+  }
+
+  result = result.trim();
+
+  if (decimalPart) {
+    const decimalText = decimalPart
+      .split("")
+      .map((d) => satuan[Number(d)])
+      .join(" ");
+
+    result += " koma " + decimalText;
   }
 
   return result.trim();
