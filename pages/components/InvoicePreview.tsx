@@ -75,6 +75,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           >
             <div className="border-bottom border-3 border-dark pb-1 mb-1">
               <div className="row justify-content-between align-items-start">
+                  {brandData.useLetterhead?(
                 <div className="col-9 d-flex align-items-center gap-3">
                   {brandData.logo && (
                     <img
@@ -87,7 +88,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       }}
                     />
                   )}
-                  <div>
+                  <div className="w-100">
                     <h2
                       className="h4 mb-0 fw-bold"
                       style={{ color: brandData.accentColor }}
@@ -122,7 +123,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       </tr>
                     </table>
                   </div>
-                </div>
+                </div>):(
+                  <div className="col-9"></div>
+                  )}
                 <div className="col-3 text-end" style={{ fontSize: 14 }}>
                   <div className="badge bg-secondary mb-1">INVOICE</div>
                   <p className="mb-0 fw-semibold">

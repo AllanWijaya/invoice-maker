@@ -41,6 +41,7 @@ export interface BrandData {
   taxRate: number; // PPN dalam persen
   accentColor: string;
   jenisTransaksi: "non-ppn" | "include-ppn" | "exclude-ppn";
+  useLetterhead?:boolean
 }
 
 export interface PrintOptions {

@@ -21,6 +21,7 @@ export default function BrandSettings({
     taxRate: 0,
     accentColor: "#0d6efd",
     jenisTransaksi: "non-ppn",
+    useLetterhead:true
   },
   setBrandData,
   removeLogo,
@@ -36,6 +37,30 @@ export default function BrandSettings({
 }: BrandSettingsProps) {
   return (
     <>
+      <div className="mb-4">
+        <label className="form-label fw-semibold">Gunakan Kop Surat</label>
+
+       <div className="form-check form-switch form-switch-md mb-0">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="useLetterheadSwitch"
+          style={{ cursor: 'pointer', transform: 'scale(1.25)' }}
+          checked={brandData.useLetterhead}
+          onChange={(e) =>
+            setBrandData({
+              ...brandData,
+              useLetterhead: e.target.checked, // Perbaikan: Ambil e.target.checked
+            })
+          }
+        />
+        <label className="form-check-label visually-hidden" htmlFor="useLetterheadSwitch">
+          Gunakan Letterhead
+        </label>
+      </div>
+      </div>
+
       <div className="mb-4">
         <label className="form-label fw-semibold">Logo Perusahaan</label>
         <div className="border rounded p-3 text-center bg-light">
