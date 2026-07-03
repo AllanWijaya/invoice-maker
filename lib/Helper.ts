@@ -59,9 +59,9 @@ export const calculateTotal = (
   return calculateSubtotal(items);
 };
 
-export const formatCurrency = (amount: number, isCurrency: boolean = false) => {
+export const formatCurrency = (amount: number, isCurrency: boolean = false,digit=0) => {
   const options: Intl.NumberFormatOptions = {
-    minimumFractionDigits: 0,
+    minimumFractionDigits: digit,
   };
 
   if (isCurrency) {
@@ -69,7 +69,7 @@ export const formatCurrency = (amount: number, isCurrency: boolean = false) => {
     options.currency = "IDR";
   }
 
-  return new Intl.NumberFormat("id-ID", options).format(amount);
+  return new Intl.NumberFormat("en-US", options).format(amount);
 };
 
 export const formatDate = (date: string) => {
