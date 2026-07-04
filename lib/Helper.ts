@@ -216,3 +216,8 @@ export const handleChangeState = (
     [name]: type === "checkbox" ? checked : value,
   }));
 };
+
+export const roundDown = (value: number, digit = 2) => {
+  const factor = 10 ** digit;
+  return Math.floor(value * factor) / factor;
+};

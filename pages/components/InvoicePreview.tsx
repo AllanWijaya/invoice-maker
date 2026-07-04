@@ -9,6 +9,7 @@ import {
   formatCurrency,
   formatDate,
   formatTerbilang,
+  roundDown,
   ucwords,
 } from "../../lib/Helper";
 
@@ -241,7 +242,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       <div className="d-flex justify-content-between align-items-center">
                         <span>Rp.</span>
                         <span>
-                          {formatCurrency(item.quantity * item.price,false,2)}
+                          {formatCurrency(roundDown(item.quantity * item.price),false,2)}
                         </span>
                       </div>
                     </td>
