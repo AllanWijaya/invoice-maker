@@ -28,6 +28,7 @@ export default function InvoiceSettings({
     best_regards_name: "",
     space_best_regards: 3,
     toClient: "",
+    isCustomInputPrice: false,
   },
   setInvoiceData,
   addItem,
@@ -39,6 +40,35 @@ export default function InvoiceSettings({
   return (
     <>
       <div className="row mb-3">
+        <div className="mb-4">
+          <label className="form-label fw-semibold">
+            Gunakan Custom Input Harga
+          </label>
+
+          <div className="form-check form-switch form-switch-md mb-0">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="useCustomInputPriceSwitch"
+              style={{ cursor: "pointer", transform: "scale(1.25)" }}
+              checked={invoiceData.isCustomInputPrice}
+              onChange={(e) =>
+                setInvoiceData({
+                  ...invoiceData,
+                  isCustomInputPrice: e.target.checked,
+                })
+              }
+            />
+            <label
+              className="form-check-label visually-hidden"
+              htmlFor="useCustomInputPriceSwitch"
+            >
+              Gunakan Custom Total Harga
+            </label>
+          </div>
+        </div>
+
         <div className="col-12 mb-3">
           <label className="form-label small text-muted text-uppercase fw-semibold">
             No. Invoice
@@ -89,9 +119,7 @@ export default function InvoiceSettings({
           />
         </div>
       </div>
-
       <hr className="my-3" />
-
       <div className="mb-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
           Informasi Klien
@@ -169,9 +197,7 @@ export default function InvoiceSettings({
           }
         />
       </div>
-
       <hr className="my-3" />
-
       <div className="mb-3">
         <div className="d-flex justify-content-between align-items-center mb-2">
           <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
@@ -191,8 +217,9 @@ export default function InvoiceSettings({
               <tr>
                 <th>Deskripsi</th>
                 <th style={{ width: "70" }}>Qty</th>
-                <th style={{ width: "100" }}>Harga</th>
                 <th style={{ width: "30" }}>Satuan</th>
+                <th style={{ width: "100" }}>Harga</th>
+                {invoiceData.isCustomInputPrice && <th>Jumlah Harga</th>}
               </tr>
             </thead>
             <tbody>
@@ -210,21 +237,23 @@ export default function InvoiceSettings({
                     />
                   </td>
                   <td>
-                    <input
-                      type="number"
-                      className="form-control form-control-sm text-center"
+                    <NumericFormat
+                      type="text"
+                      className="form-control form-control-sm text-end"
                       value={item.quantity}
-                      onChange={(e) =>
-                        updateItem(
-                          item.id,
-                          "quantity",
-                          parseInt(e.target.value) || 0,
-                        )
-                      }
+                      thousandSeparator=","
+                      decimalSeparator="."
+                      // decimalScale={2}
+                      fixedDecimalScale
+                      allowNegative={false}
+                      onValueChange={(values) => {
+                        updateItem(item.id, "quantity", values.floatValue ?? 0);
+                      }}
                     />
                   </td>
                   <td>
                     <NumericFormat
+                      type="text"
                       className="form-control form-control-sm text-end"
                       value={item.price}
                       thousandSeparator=","
@@ -237,6 +266,27 @@ export default function InvoiceSettings({
                       }}
                     />
                   </td>
+                  {invoiceData.isCustomInputPrice && (
+                    <td>
+                      <NumericFormat
+                        type="text"
+                        className="form-control form-control-sm text-end"
+                        value={item.totalPrice}
+                        thousandSeparator=","
+                        decimalSeparator="."
+                        decimalScale={2}
+                        fixedDecimalScale
+                        allowNegative={false}
+                        onValueChange={(values) => {
+                          updateItem(
+                            item.id,
+                            "totalPrice",
+                            values.floatValue ?? 0,
+                          );
+                        }}
+                      />
+                    </td>
+                  )}
                   <td>
                     <input
                       type="text"
@@ -264,9 +314,90 @@ export default function InvoiceSettings({
           <p className="text-muted text-center small py-3">Belum ada item</p>
         )}
       </div>
+      {invoiceData.isCustomInputPrice && (
+        <div className="mb-3">
+          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
+            Subtotal
+          </label>
+          <NumericFormat
+            type="text"
+            className="form-control form-control-sm text-end"
+            value={invoiceData.subTotal}
+            thousandSeparator=","
+            decimalSeparator="."
+            decimalScale={2}
+            fixedDecimalScale
+            allowNegative={false}
+            onValueChange={({ floatValue }) => {
+              setInvoiceData({
+                ...invoiceData,
+                subTotal: floatValue ?? 0,
+              });
+            }}
+          />
+          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
+            DPP
+          </label>
+          <NumericFormat
+            type="text"
+            className="form-control form-control-sm text-end"
+            value={invoiceData.dppAmount}
+            thousandSeparator=","
+            decimalSeparator="."
+            decimalScale={2}
+            fixedDecimalScale
+            allowNegative={false}
+            onValueChange={({ floatValue }) => {
+              setInvoiceData({
+                ...invoiceData,
+                dppAmount: floatValue ?? 0,
+              });
+            }}
+          />
+
+          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
+            PPN
+          </label>
+          <NumericFormat
+            type="text"
+            className="form-control form-control-sm text-end"
+            value={invoiceData.taxAmount}
+            thousandSeparator=","
+            decimalSeparator="."
+            decimalScale={2}
+            fixedDecimalScale
+            allowNegative={false}
+            onValueChange={({ floatValue }) => {
+              setInvoiceData({
+                ...invoiceData,
+                taxAmount: floatValue ?? 0,
+              });
+            }}
+          />
+
+          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
+            Grand Total
+          </label>
+          <NumericFormat
+            type="text"
+            className="form-control form-control-sm text-end"
+            value={invoiceData.totalPrice}
+            thousandSeparator=","
+            decimalSeparator="."
+            decimalScale={2}
+            fixedDecimalScale
+            allowNegative={false}
+            onValueChange={({ floatValue }) => {
+              setInvoiceData({
+                ...invoiceData,
+                totalPrice: floatValue ?? 0,
+              });
+            }}
+          />
+        </div>
+      )}
 
       <hr className="my-3" />
-
       <div className="mb-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
           Tanda Terima
@@ -296,7 +427,6 @@ export default function InvoiceSettings({
           placeholder="Nama Penerima..."
         />
       </div>
-
       <div className="mb-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
           Space Hormat Kami & Tanda Terima
@@ -341,7 +471,6 @@ export default function InvoiceSettings({
           placeholder="Nama Hormat Kami..."
         />
       </div>
-
       <div className="mb-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
           Catatan
@@ -359,9 +488,7 @@ export default function InvoiceSettings({
           placeholder="Catatan untuk klien..."
         />
       </div>
-
       <hr className="my-3" />
-
       <div className="mt-3">
         <label className="form-label small text-muted text-uppercase fw-semibold">
           Load Data dari JSON

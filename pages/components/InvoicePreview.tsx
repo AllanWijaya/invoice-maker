@@ -9,7 +9,6 @@ import {
   formatCurrency,
   formatDate,
   formatTerbilang,
-  roundDown,
   ucwords,
 } from "../../lib/Helper";
 
@@ -244,7 +243,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         <span>Rp.</span>
                         <span>
                           {formatCurrency(
-                            roundDown(item.quantity * item.price),
+                            (invoiceData.isCustomInputPrice &&
+                              item.totalPrice) ||
+                              item.quantity * item.price,
                             false,
                             2,
                           )}
@@ -266,7 +267,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       <span>Rp.</span>
                       <span>
                         {formatCurrency(
-                          calculateSubtotal(invoiceData.items),
+                          (invoiceData.isCustomInputPrice &&
+                            invoiceData.subTotal) ||
+                            calculateSubtotal(invoiceData.items),
                           false,
                           2,
                         )}
@@ -298,13 +301,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             <span>Rp.</span>
                             <span>
                               {formatCurrency(
-                                Math.round(
+                                (invoiceData.isCustomInputPrice &&
+                                  invoiceData.dppAmount) ||
                                   calculateDPP(
                                     invoiceData.items,
                                     brandData.taxRate,
                                     brandData.jenisTransaksi,
                                   ),
-                                ),
                                 false,
                                 2,
                               )}
@@ -336,13 +339,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             <span>Rp.</span>
                             <span>
                               {formatCurrency(
-                                Math.round(
+                                (invoiceData.isCustomInputPrice &&
+                                  invoiceData.taxAmount) ||
                                   calculateTax(
                                     invoiceData.items,
                                     brandData.taxRate,
                                     brandData.jenisTransaksi,
                                   ),
-                                ),
                                 false,
                                 2,
                               )}
@@ -372,11 +375,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       <span>Rp.</span>
                       <span>
                         {formatCurrency(
-                          calculateTotal(
-                            invoiceData.items,
-                            brandData.taxRate,
-                            brandData.jenisTransaksi,
-                          ),
+                          (invoiceData.isCustomInputPrice &&
+                            invoiceData.totalPrice) ||
+                            calculateTotal(
+                              invoiceData.items,
+                              brandData.taxRate,
+                              brandData.jenisTransaksi,
+                            ),
                           false,
                           2,
                         )}
@@ -426,18 +431,18 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 >
                   {ucwords(
                     formatTerbilang(
-                      calculateTotal(
-                        invoiceData.items,
-                        brandData.taxRate,
-                        brandData.jenisTransaksi,
-                      ),
+                      invoiceData.totalPrice ||
+                        calculateTotal(
+                          invoiceData.items,
+                          brandData.taxRate,
+                          brandData.jenisTransaksi,
+                        ),
                     ),
                   )}{" "}
                   Rupiah
                 </td>
               </tr>
             </table>
-            {/* </div> */}
             <div className="border-top pt-1 mt-1 custom-text">
               <table className="w-100" suppressHydrationWarning>
                 <tr>

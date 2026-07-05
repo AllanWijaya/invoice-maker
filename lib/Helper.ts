@@ -59,7 +59,11 @@ export const calculateTotal = (
   return calculateSubtotal(items);
 };
 
-export const formatCurrency = (amount: number, isCurrency: boolean = false,digit=0) => {
+export const formatCurrency = (
+  amount: number,
+  isCurrency: boolean = false,
+  digit = 0,
+) => {
   const options: Intl.NumberFormatOptions = {
     minimumFractionDigits: digit,
   };
@@ -85,6 +89,8 @@ export const formatTerbilang = (amount: number): string => {
   if (amount === 0) return "nol";
   if (amount < 0) return "minus " + formatTerbilang(Math.abs(amount));
 
+  console.log(amount);
+  amount = Math.floor(amount);
   const satuan = [
     "",
     "satu",
@@ -97,7 +103,6 @@ export const formatTerbilang = (amount: number): string => {
     "delapan",
     "sembilan",
   ];
-
   const belasan = [
     "sepuluh",
     "sebelas",
@@ -110,7 +115,6 @@ export const formatTerbilang = (amount: number): string => {
     "delapan belas",
     "sembilan belas",
   ];
-
   const puluhan = [
     "",
     "",
@@ -123,68 +127,53 @@ export const formatTerbilang = (amount: number): string => {
     "delapan puluh",
     "sembilan puluh",
   ];
-
   const ribuan = ["", "ribu", "juta", "miliar", "triliun"];
 
   const numToString = (num: number): string => {
     if (num === 0) return "";
     if (num < 10) return satuan[num];
     if (num < 20) return belasan[num - 10];
-
     if (num < 100) {
-      const p = Math.floor(num / 10);
-      const s = num % 10;
-      return puluhan[p] + (s ? ` ${satuan[s]}` : "");
+      const puluh = Math.floor(num / 10);
+      const sisa = num % 10;
+      return puluhan[puluh] + (sisa > 0 ? " " + satuan[sisa] : "");
     }
-
     if (num < 1000) {
-      const r = Math.floor(num / 100);
-      const s = num % 100;
-
-      if (r === 1) {
-        return "seratus" + (s ? ` ${numToString(s)}` : "");
+      const ratus = Math.floor(num / 100);
+      const sisa = num % 100;
+      if (ratus === 1) {
+        return "seratus" + (sisa > 0 ? " " + numToString(sisa) : "");
       }
-
-      return satuan[r] + " ratus" + (s ? ` ${numToString(s)}` : "");
+      return (
+        satuan[ratus] + " ratus" + (sisa > 0 ? " " + numToString(sisa) : "")
+      );
     }
-
     return "";
   };
 
-  const integerPart = Math.floor(amount);
-  const decimalPart = amount.toString().split(".")[1];
-
   const chunks: number[] = [];
-  let temp = integerPart;
-
+  let temp = amount;
   while (temp > 0) {
     chunks.push(temp % 1000);
     temp = Math.floor(temp / 1000);
   }
 
   let result = "";
-
   for (let i = 0; i < chunks.length; i++) {
-    if (!chunks[i]) continue;
+    const chunk = chunks[i];
+    if (chunk === 0) continue;
 
-    let text = numToString(chunks[i]);
+    let chunkText = numToString(chunk);
 
-    if (i === 1 && chunks[i] === 1) {
-      text = "seribu";
+    if (i === 1 && chunk === 1) {
+      chunkText = "seribu";
     }
 
-    result = `${text} ${ribuan[i]} ${result}`;
-  }
-
-  result = result.trim();
-
-  if (decimalPart) {
-    const decimalText = decimalPart
-      .split("")
-      .map((d) => satuan[Number(d)])
-      .join(" ");
-
-    result += " koma " + decimalText;
+    if (i === 0) {
+      result = chunkText + " " + result;
+    } else {
+      result = chunkText + " " + ribuan[i] + " " + result;
+    }
   }
 
   return result.trim();

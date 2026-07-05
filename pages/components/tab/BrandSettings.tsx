@@ -51,7 +51,7 @@ export default function BrandSettings({
             onChange={(e) =>
               setBrandData({
                 ...brandData,
-                useLetterhead: e.target.checked, // Perbaikan: Ambil e.target.checked
+                useLetterhead: e.target.checked,
               })
             }
           />

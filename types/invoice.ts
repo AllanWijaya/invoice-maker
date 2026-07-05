@@ -4,6 +4,8 @@ export interface InvoiceItem {
   description: string;
   quantity: number;
   price: number;
+  //custom value
+  totalPrice?: number;
   unit?: string;
 }
 
@@ -17,6 +19,14 @@ export interface InvoiceData {
   clientEmail: string;
   clientAddress: string;
   items: InvoiceItem[];
+
+  //custom value
+  isCustomInputPrice?: boolean;
+  subTotal?: number;
+  dppAmount?: number;
+  taxAmount?: number;
+  totalPrice?: number;
+
   notes: string;
   receiver?: string;
   receiver_name?: string;
@@ -41,7 +51,7 @@ export interface BrandData {
   taxRate: number; // PPN dalam persen
   accentColor: string;
   jenisTransaksi: "non-ppn" | "include-ppn" | "exclude-ppn";
-  useLetterhead?:boolean
+  useLetterhead?: boolean;
 }
 
 export interface PrintOptions {
