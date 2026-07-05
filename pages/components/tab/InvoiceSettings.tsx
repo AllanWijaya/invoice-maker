@@ -225,17 +225,17 @@ export default function InvoiceSettings({
                   </td>
                   <td>
                     <NumericFormat
-  className="form-control form-control-sm text-end"
-  value={item.price}
-  thousandSeparator=","
-  decimalSeparator="."
-  decimalScale={2}
-  fixedDecimalScale
-  allowNegative={false}
-  onValueChange={(values) => {
-    updateItem(item.id, "price", values.floatValue ?? 0);
-  }}
-/>
+                      className="form-control form-control-sm text-end"
+                      value={item.price}
+                      thousandSeparator=","
+                      decimalSeparator="."
+                      decimalScale={2}
+                      fixedDecimalScale
+                      allowNegative={false}
+                      onValueChange={(values) => {
+                        updateItem(item.id, "price", values.floatValue ?? 0);
+                      }}
+                    />
                   </td>
                   <td>
                     <input

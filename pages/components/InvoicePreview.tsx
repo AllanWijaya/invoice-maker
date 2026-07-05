@@ -76,57 +76,58 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           >
             <div className="border-bottom border-3 border-dark pb-1 mb-1">
               <div className="row justify-content-between align-items-start">
-                  {brandData.useLetterhead?(
-                <div className="col-9 d-flex align-items-center gap-3">
-                  {brandData.logo && (
-                    <img
-                      src={brandData.logo}
-                      alt="Logo"
-                      style={{
-                        flexGrow: 1,
-                        width: "100px",
-                        objectFit: "contain",
-                      }}
-                    />
-                  )}
-                  <div className="w-100">
-                    <h2
-                      className="h4 mb-0 fw-bold"
-                      style={{ color: brandData.accentColor }}
-                    >
-                      {brandData.companyName || "INVOICE"}
-                    </h2>
-                    <p className="custom-text mb-0">
-                      {brandData.companyAddress}
-                    </p>
-                    <table className="w-100">
-                      <tr className="custom-text">
-                        <td style={{ width: "19%" }}>Telp | Email</td>
-                        <td style={{ width: "1%" }}>: </td>
-                        <td style={{ width: "60%" }}>
-                          {brandData.companyPhone || ""}
-                          {brandData.companyEmail
-                            ? ` | ${brandData.companyEmail}`
-                            : ""}
-                        </td>
-                      </tr>
-                      {/* <tr className="custom-text">
+                {brandData.useLetterhead ? (
+                  <div className="col-9 d-flex align-items-center gap-3">
+                    {brandData.logo && (
+                      <img
+                        src={brandData.logo}
+                        alt="Logo"
+                        style={{
+                          flexGrow: 1,
+                          width: "100px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    )}
+                    <div className="w-100">
+                      <h2
+                        className="h4 mb-0 fw-bold"
+                        style={{ color: brandData.accentColor }}
+                      >
+                        {brandData.companyName || "INVOICE"}
+                      </h2>
+                      <p className="custom-text mb-0">
+                        {brandData.companyAddress}
+                      </p>
+                      <table className="w-100">
+                        <tr className="custom-text">
+                          <td style={{ width: "19%" }}>Telp | Email</td>
+                          <td style={{ width: "1%" }}>: </td>
+                          <td style={{ width: "60%" }}>
+                            {brandData.companyPhone || ""}
+                            {brandData.companyEmail
+                              ? ` | ${brandData.companyEmail}`
+                              : ""}
+                          </td>
+                        </tr>
+                        {/* <tr className="custom-text">
                         <td style={{ width: "19%" }}>Email</td>
                         <td style={{ width: "1%" }}>: </td>
                         <td style={{ width: "60%" }}></td>
                       </tr> */}
-                      <tr className="custom-text">
-                        <td style={{ width: "19%" }}>NPWP</td>
-                        <td style={{ width: "1%" }}>: </td>
-                        <td style={{ width: "60%" }}>
-                          {brandData.companyNPWP || ""}
-                        </td>
-                      </tr>
-                    </table>
+                        <tr className="custom-text">
+                          <td style={{ width: "19%" }}>NPWP</td>
+                          <td style={{ width: "1%" }}>: </td>
+                          <td style={{ width: "60%" }}>
+                            {brandData.companyNPWP || ""}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
                   </div>
-                </div>):(
+                ) : (
                   <div className="col-9"></div>
-                  )}
+                )}
                 <div className="col-3 text-end" style={{ fontSize: 14 }}>
                   <div className="badge bg-secondary mb-1">INVOICE</div>
                   <p className="mb-0 fw-semibold">
@@ -235,14 +236,18 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <td className="px-2">
                       <div className="d-flex justify-content-between align-items-center">
                         <span>Rp.</span>
-                        <span>{formatCurrency(item.price,false,2)}</span>
+                        <span>{formatCurrency(item.price, false, 2)}</span>
                       </div>
                     </td>
                     <td className="ps-2 pe-1">
                       <div className="d-flex justify-content-between align-items-center">
                         <span>Rp.</span>
                         <span>
-                          {formatCurrency(roundDown(item.quantity * item.price),false,2)}
+                          {formatCurrency(
+                            roundDown(item.quantity * item.price),
+                            false,
+                            2,
+                          )}
                         </span>
                       </div>
                     </td>
@@ -260,7 +265,11 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <div className="d-flex justify-content-between align-items-center">
                       <span>Rp.</span>
                       <span>
-                        {formatCurrency(calculateSubtotal(invoiceData.items),false,2)}
+                        {formatCurrency(
+                          calculateSubtotal(invoiceData.items),
+                          false,
+                          2,
+                        )}
                       </span>
                     </div>
                   </td>
@@ -295,8 +304,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                                     brandData.taxRate,
                                     brandData.jenisTransaksi,
                                   ),
-                                )
-                                ,false,2
+                                ),
+                                false,
+                                2,
                               )}
                             </span>
                           </div>
@@ -332,8 +342,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                                     brandData.taxRate,
                                     brandData.jenisTransaksi,
                                   ),
-                                )
-                                ,false,2
+                                ),
+                                false,
+                                2,
                               )}
                             </span>
                           </div>
@@ -365,7 +376,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             invoiceData.items,
                             brandData.taxRate,
                             brandData.jenisTransaksi,
-                          ),false,2
+                          ),
+                          false,
+                          2,
                         )}
                       </span>
                     </div>
