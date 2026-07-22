@@ -11,7 +11,7 @@ interface HeaderProps {
 export default function Header({
   onSave,
   onDownload,
-  onShowHistory,
+  // onShowHistory,
 }: HeaderProps) {
   const router = useRouter();
   return (
