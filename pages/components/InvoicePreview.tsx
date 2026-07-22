@@ -55,104 +55,98 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
       total: 20,
       terbilang: 10,
     };
-
     return (
       <div
-        className={`${printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"} custom-text card border-0 shadow-sm sticky-top`}
-        style={{ top: "100px" }}
+        className={`${
+          printOptions?.pageSize === "a4" ? "invoice-a4" : "continuous-form"
+        } custom-text card border-0 shadow-sm sticky top-[100px] bg-white rounded-lg`}
       >
-        <div className="card-header bg-white border-bottom">
-          <h5 className="mb-0">Preview Invoice</h5>
+        <div className="px-4 py-3 bg-white border-b border-gray-200 rounded-t-lg">
+          <h5 className="m-0 text-base font-semibold text-gray-800">
+            Preview Invoice
+          </h5>
         </div>
-        <div
-          className="card-body bg-light"
-          style={{ maxHeight: "calc(100vh - 150px)", overflowY: "auto" }}
-        >
+        <div className="p-4 bg-slate-100 max-h-[calc(100vh-150px)] overflow-y-auto">
           <div
             ref={previewRef}
-            className="bg-white p-4 rounded shadow-sm"
+            className="bg-white p-6 rounded shadow-sm"
             id="invoice-preview"
           >
-            <div className="border-bottom border-3 border-dark pb-1 mb-1">
-              <div className="row justify-content-between align-items-start">
+            <div className="border-b-4 border-black pb-1 mb-2">
+              <div className="flex justify-between items-start">
                 {brandData.useLetterhead ? (
-                  <div className="col-9 d-flex align-items-center gap-3">
+                  <div className="w-3/4 flex items-center gap-3">
                     {brandData.logo && (
                       <img
                         src={brandData.logo}
                         alt="Logo"
-                        style={{
-                          flexGrow: 1,
-                          width: "100px",
-                          objectFit: "contain",
-                        }}
+                        className="w-[100px] shrink-0 object-contain"
                       />
                     )}
-                    <div className="w-100">
+                    <div className="w-full">
                       <h2
-                        className="h4 mb-0 fw-bold"
+                        className="text-lg font-bold m-0"
                         style={{ color: brandData.accentColor }}
                       >
                         {brandData.companyName || "INVOICE"}
                       </h2>
-                      <p className="custom-text mb-0">
+                      <p className="custom-text m-0 text-sm text-gray-700">
                         {brandData.companyAddress}
                       </p>
-                      <table className="w-100">
-                        <tr className="custom-text">
-                          <td style={{ width: "19%" }}>Telp | Email</td>
-                          <td style={{ width: "1%" }}>: </td>
-                          <td style={{ width: "60%" }}>
-                            {brandData.companyPhone || ""}
-                            {brandData.companyEmail
-                              ? ` | ${brandData.companyEmail}`
-                              : ""}
-                          </td>
-                        </tr>
-                        {/* <tr className="custom-text">
-                        <td style={{ width: "19%" }}>Email</td>
-                        <td style={{ width: "1%" }}>: </td>
-                        <td style={{ width: "60%" }}></td>
-                      </tr> */}
-                        <tr className="custom-text">
-                          <td style={{ width: "19%" }}>NPWP</td>
-                          <td style={{ width: "1%" }}>: </td>
-                          <td style={{ width: "60%" }}>
-                            {brandData.companyNPWP || ""}
-                          </td>
-                        </tr>
+                      <table className="w-full text-xs">
+                        <tbody>
+                          <tr className="custom-text">
+                            <td className="w-[19%]">Telp | Email</td>
+                            <td className="w-[1%]">: </td>
+                            <td className="w-[60%]">
+                              {brandData.companyPhone || ""}
+                              {brandData.companyEmail
+                                ? ` | ${brandData.companyEmail}`
+                                : ""}
+                            </td>
+                          </tr>
+                          <tr className="custom-text">
+                            <td className="w-[19%]">NPWP</td>
+                            <td className="w-[1%]">: </td>
+                            <td className="w-[60%]">
+                              {brandData.companyNPWP || ""}
+                            </td>
+                          </tr>
+                        </tbody>
                       </table>
                     </div>
                   </div>
                 ) : (
-                  <div className="col-9"></div>
+                  <div className="w-3/4"></div>
                 )}
-                <div className="col-3 text-end" style={{ fontSize: 14 }}>
-                  <div className="badge bg-secondary mb-1">INVOICE</div>
-                  <p className="mb-0 fw-semibold">
+                <div className="w-1/4 text-right text-xs">
+                  <span className="inline-block bg-gray-500 text-white text-[10px] px-2 py-0.5 rounded mb-1 font-medium">
+                    INVOICE
+                  </span>
+                  <p className="m-0 font-semibold text-gray-800">
                     {invoiceData.invoiceNo || "-"}
                   </p>
                 </div>
               </div>
             </div>
-            {/* Client Information */}
+
             <div className="mb-2">
-              <div className="bg-light p-1 rounded">
+              <div className="bg-slate-50 p-2 rounded text-xs">
                 {invoiceData.toClient ? (
                   <>
-                    <div className="d-flex justify-content-between align-items-start  fw-semibold">
+                    <div className="flex justify-between items-start font-semibold">
                       <p className="custom-text my-0">{invoiceData.toClient}</p>
                       <p className="custom-text my-0">
                         {invoiceData.place && `${invoiceData.place}, `}
                         {invoiceData.date ? formatDate(invoiceData.date) : "-"}
                       </p>
                     </div>
-                    <p className="custom-text fw-semibold my-0">
+                    <p className="custom-text font-semibold my-0">
                       {invoiceData.clientName || "-"}
                     </p>
                   </>
                 ) : (
-                  <div className="d-flex justify-content-between align-items-start  fw-semibold">
+                  <div className="flex justify-between items-start font-semibold">
                     <p className="custom-text my-0">
                       {invoiceData.clientName || "-"}
                     </p>
@@ -163,89 +157,131 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   </div>
                 )}
 
-                <p className="custom-text my-0  fw-semibold">
+                <p className="custom-text my-0 font-semibold">
                   {invoiceData.clientEmail || ""}
                 </p>
-                <p className="custom-text my-0  fw-semibold ">
+                <p className="custom-text my-0 font-semibold">
                   {invoiceData.clientAddress || ""}
                 </p>
-                <table className="w-100">
-                  <tr className="custom-text fw-semibold">
-                    <td style={{ width: "10%" }}>No PO</td>
-                    <td style={{ width: "1%" }}>:</td>
-                    <td style={{ width: "60%" }}>
-                      {invoiceData.POnumber || ""}
-                    </td>
-                  </tr>
-                  <tr className="custom-text fw-semibold">
-                    <td style={{ width: "10%" }}>Tanggal PO</td>
-                    <td style={{ width: "1%" }}>:</td>
-                    <td style={{ width: "60%" }}>{invoiceData.POdate || ""}</td>
-                  </tr>
+                <table className="w-full text-xs mt-1">
+                  <tbody>
+                    <tr className="custom-text font-semibold">
+                      <td className="w-[10%]">No PO</td>
+                      <td className="w-[1%]">:</td>
+                      <td className="w-[60%]">{invoiceData.POnumber || ""}</td>
+                    </tr>
+                    <tr className="custom-text font-semibold">
+                      <td className="w-[10%]">Tanggal PO</td>
+                      <td className="w-[1%]">:</td>
+                      <td className="w-[60%]">{invoiceData.POdate || ""}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
-            <div className="table-responsive custom-text mb-0 pb-0">
-              <table className="table table-sm table-bordere border-dark mb-0">
-                <tr className="custom-border">
-                  <th
-                    className="text-center"
-                    style={{ width: `${column.no}%` }}
-                  >
-                    No
-                  </th>
-                  <th
-                    className="text-center"
-                    style={{ width: `${column.description}%` }}
-                  >
-                    Nama Barang
-                  </th>
-                  <th
-                    className="text-center"
-                    style={{ width: `${column.quantity}%` }}
-                  >
-                    Qty
-                  </th>
-                  <th
-                    className="text-center"
-                    style={{ width: `${column.unit}%` }}
-                  >
-                    Satuan
-                  </th>
-                  <th
-                    className="text-center"
-                    style={{ width: `${column.price}%` }}
-                  >
-                    Harga Satuan
-                  </th>
-                  <th
-                    className="text-center"
-                    style={{ width: `${column.total}%` }}
-                  >
-                    Jumlah Harga
-                  </th>
-                </tr>
-                {invoiceData.items.map((item) => (
-                  <tr key={item.id} className="custom-border">
-                    <td className="p-0 px-2 text-center">{item.no}</td>
 
-                    <td className="p-0 px-2">{item.description || "-"}</td>
-                    <td className="p-0 px-0 text-center">{item.quantity}</td>
-                    <td className="p-0 px-0 text-center">{item.unit}</td>
-                    <td className="px-2">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>Rp.</span>
-                        <span>{formatCurrency(item.price, false, 2)}</span>
-                      </div>
+            <div className="overflow-x-auto custom-text mb-0 pb-0">
+              <table className="w-full border-collapse text-xs">
+                <thead>
+                  <tr className="bg-gray-50 border-t border-b border-black">
+                    <th
+                      className="p-1 text-center border-t border-b border-black"
+                      style={{ width: `${column.no}%` }}
+                    >
+                      No
+                    </th>
+                    <th
+                      className="p-1 text-center border-t border-b border-black"
+                      style={{ width: `${column.description}%` }}
+                    >
+                      Nama Barang
+                    </th>
+                    <th
+                      className="p-1 text-center border-t border-b border-black"
+                      style={{ width: `${column.quantity}%` }}
+                    >
+                      Qty
+                    </th>
+                    <th
+                      className="p-1 text-center border-t border-b border-black"
+                      style={{ width: `${column.unit}%` }}
+                    >
+                      Satuan
+                    </th>
+                    <th
+                      className="p-1 text-center border-t border-b border-black"
+                      style={{ width: `${column.price}%` }}
+                    >
+                      Harga Satuan
+                    </th>
+                    <th
+                      className="p-1 text-center border-t border-b border-black"
+                      style={{ width: `${column.total}%` }}
+                    >
+                      Jumlah Harga
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoiceData.items.map((item) => (
+                    <tr key={item.id}>
+                      <td className="p-1 text-center border-t border-b border-black">
+                        {item.no}
+                      </td>
+                      <td className="p-1 px-2 border-t border-b border-black">
+                        {item.description || "-"}
+                      </td>
+                      <td className="p-1 text-center border-t border-b border-black">
+                        {item.quantity}
+                      </td>
+                      <td className="p-1 text-center border-t border-b border-black">
+                        {item.unit}
+                      </td>
+                      <td className="p-1 px-2 border-t border-b border-black">
+                        <div className="flex justify-between items-center">
+                          <span>Rp.</span>
+                          <span>{formatCurrency(item.price, false, 2)}</span>
+                        </div>
+                      </td>
+                      <td className="p-1 px-2 border-t border-b border-black">
+                        <div className="flex justify-between items-center">
+                          <span>Rp.</span>
+                          <span>
+                            {formatCurrency(
+                              (invoiceData.isCustomInputPrice &&
+                                item.totalPrice) ||
+                                item.quantity * item.price,
+                              false,
+                              2,
+                            )}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="border-t border-b border-black"
+                    ></td>
+                    <td
+                      className="p-1 px-2 border-t border-b border-black"
+                      style={{ width: `${column.price}%` }}
+                    >
+                      Subtotal
                     </td>
-                    <td className="ps-2 pe-1">
-                      <div className="d-flex justify-content-between align-items-center">
+                    <td
+                      className="p-1 px-2 border-t border-b border-black"
+                      style={{ width: `${column.total}%` }}
+                    >
+                      <div className="flex justify-between items-center">
                         <span>Rp.</span>
                         <span>
                           {formatCurrency(
                             (invoiceData.isCustomInputPrice &&
-                              item.totalPrice) ||
-                              item.quantity * item.price,
+                              invoiceData.subTotal) ||
+                              calculateSubtotal(invoiceData.items),
                             false,
                             2,
                           )}
@@ -253,262 +289,214 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       </div>
                     </td>
                   </tr>
-                ))}
-                <tr>
-                  <td colSpan={4}></td>
-                  <td className="ps-2" style={{ width: `${column.price}%` }}>
-                    Subtotal
-                  </td>
-                  <td
-                    className="ps-2 pe-1"
-                    style={{ width: `${column.total}%` }}
-                  >
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span>Rp.</span>
-                      <span>
-                        {formatCurrency(
-                          (invoiceData.isCustomInputPrice &&
-                            invoiceData.subTotal) ||
-                            calculateSubtotal(invoiceData.items),
-                          false,
-                          2,
-                        )}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-                {["include-ppn", "exclude-ppn", "dpp-nilai-lain"].includes(
-                  brandData.jenisTransaksi,
-                ) && (
-                  <>
-                    {["include-ppn", "dpp-nilai-lain"].includes(
-                      brandData.jenisTransaksi,
-                    ) && (
-                      <tr style={{ borderTop: "0" }}>
-                        <td colSpan={4}></td>
 
-                        <td
-                          className="ps-2"
-                          style={{ width: `${column.price}%` }}
-                        >
-                          DPP
-                        </td>
-                        <td
-                          className="ps-2 pe-1"
-                          style={{ width: `${column.total}%` }}
-                        >
-                          <div className="d-flex justify-content-between align-items-center">
-                            <span>Rp.</span>
-                            <span>
-                              {formatCurrency(
-                                (invoiceData.isCustomInputPrice &&
-                                  invoiceData.dppAmount) ||
-                                  calculateDPP(
-                                    invoiceData.items,
-                                    brandData.taxRate,
-                                    brandData.jenisTransaksi,
-                                  ),
-                                false,
-                                2,
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
+                  {["include-ppn", "exclude-ppn", "dpp-nilai-lain"].includes(
+                    brandData.jenisTransaksi,
+                  ) && (
+                    <>
+                      {["include-ppn", "dpp-nilai-lain"].includes(
+                        brandData.jenisTransaksi,
+                      ) && (
+                        <tr>
+                          <td
+                            colSpan={4}
+                            className="border-t border-b border-black"
+                          ></td>
+                          <td
+                            className="p-1 px-2 border-t border-b border-black"
+                            style={{ width: `${column.price}%` }}
+                          >
+                            DPP
+                          </td>
+                          <td
+                            className="p-1 px-2 border-t border-b border-black"
+                            style={{ width: `${column.total}%` }}
+                          >
+                            <div className="flex justify-between items-center">
+                              <span>Rp.</span>
+                              <span>
+                                {formatCurrency(
+                                  (invoiceData.isCustomInputPrice &&
+                                    invoiceData.dppAmount) ||
+                                    calculateDPP(
+                                      invoiceData.items,
+                                      brandData.taxRate,
+                                      brandData.jenisTransaksi,
+                                    ),
+                                  false,
+                                  2,
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
 
-                    {brandData.taxRate > 0 && (
-                      <tr>
-                        <td colSpan={4}></td>
-
-                        <td
-                          className="ps-2"
-                          style={{ width: `${column.price}%` }}
-                        >
-                          PPN{" "}
-                          {["dpp-nilai-lain"].includes(brandData.jenisTransaksi)
-                            ? brandData.taxRate + 1
-                            : brandData.taxRate}
-                          %
-                        </td>
-                        <td
-                          className="ps-2 pe-1"
-                          style={{ width: `${column.total}%` }}
-                        >
-                          <div className="d-flex justify-content-between align-items-center">
-                            <span>Rp.</span>
-                            <span>
-                              {formatCurrency(
-                                (invoiceData.isCustomInputPrice &&
-                                  invoiceData.taxAmount) ||
-                                  calculateTax(
-                                    invoiceData.items,
-                                    brandData.taxRate,
-                                    brandData.jenisTransaksi,
-                                  ),
-                                false,
-                                2,
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </>
-                )}
-
-                <tr className="custom-border">
-                  <td colSpan={4}></td>
-                  <td
-                    className="ps-2  fw-semibold"
-                    style={{
-                      width: `${column.price}%`,
-                    }}
-                  >
-                    Total Harga
-                  </td>
-                  <td
-                    className="ps-2 pe-1"
-                    style={{ width: `${column.total}%` }}
-                  >
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span>Rp.</span>
-                      <span>
-                        {formatCurrency(
-                          (invoiceData.isCustomInputPrice &&
-                            invoiceData.totalPrice) ||
-                            calculateTotal(
-                              invoiceData.items,
-                              brandData.taxRate,
+                      {brandData.taxRate > 0 && (
+                        <tr>
+                          <td
+                            colSpan={4}
+                            className="border-t border-b border-black"
+                          ></td>
+                          <td
+                            className="p-1 px-2 border-t border-b border-black"
+                            style={{ width: `${column.price}%` }}
+                          >
+                            PPN{" "}
+                            {["dpp-nilai-lain"].includes(
                               brandData.jenisTransaksi,
-                            ),
-                          false,
-                          2,
-                        )}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-                {invoiceData.items.length === 0 && (
-                  <tr>
-                    <td colSpan={6} className="text-center custom-text py-3">
-                      Tidak ada item
+                            )
+                              ? brandData.taxRate + 1
+                              : brandData.taxRate}
+                            %
+                          </td>
+                          <td
+                            className="p-1 px-2 border-t border-b border-black"
+                            style={{ width: `${column.total}%` }}
+                          >
+                            <div className="flex justify-between items-center">
+                              <span>Rp.</span>
+                              <span>
+                                {formatCurrency(
+                                  (invoiceData.isCustomInputPrice &&
+                                    invoiceData.taxAmount) ||
+                                    calculateTax(
+                                      invoiceData.items,
+                                      brandData.taxRate,
+                                      brandData.jenisTransaksi,
+                                    ),
+                                  false,
+                                  2,
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  )}
+
+                  <tr className="font-semibold">
+                    <td
+                      colSpan={4}
+                      className="border-t border-b border-black"
+                    ></td>
+                    <td
+                      className="p-1 px-2 border-t border-b border-black"
+                      style={{ width: `${column.price}%` }}
+                    >
+                      Total Harga
+                    </td>
+                    <td
+                      className="p-1 px-2 border-t border-b border-black"
+                      style={{ width: `${column.total}%` }}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>Rp.</span>
+                        <span>
+                          {formatCurrency(
+                            (invoiceData.isCustomInputPrice &&
+                              invoiceData.totalPrice) ||
+                              calculateTotal(
+                                invoiceData.items,
+                                brandData.taxRate,
+                                brandData.jenisTransaksi,
+                              ),
+                            false,
+                            2,
+                          )}
+                        </span>
+                      </div>
                     </td>
                   </tr>
-                )}
+                </tbody>
               </table>
             </div>
-            <table
-              className="custom-text w-100"
-              style={{ borderTop: "1px solid #111111" }}
-            >
-              <tr>
-                <td
-                  className="fw-semibold"
-                  width={`${column.terbilang}%`}
-                  style={{
-                    paddingTop: "4px",
-                  }}
-                >
-                  Terbilang
-                </td>
-                <td
-                  className="fw-semibold"
-                  width={"2%"}
-                  style={{
-                    paddingTop: "4px",
-                  }}
-                >
-                  :
-                </td>
-                <td
-                  className="pe-2 fw-semibold fst-italic"
-                  width={"80%"}
-                  style={{
-                    paddingTop: "4px",
-                    color: brandData.accentColor,
-                  }}
-                >
-                  {ucwords(
-                    formatTerbilang(
-                      invoiceData.totalPrice ||
-                        calculateTotal(
-                          invoiceData.items,
-                          brandData.taxRate,
-                          brandData.jenisTransaksi,
-                        ),
-                    ),
-                  )}{" "}
-                  Rupiah
-                </td>
-              </tr>
+
+            <table className="custom-text w-full border-t border-black text-xs">
+              <tbody>
+                <tr>
+                  <td
+                    className="font-semibold pt-1"
+                    style={{ width: `${column.terbilang}%` }}
+                  >
+                    Terbilang
+                  </td>
+                  <td className="font-semibold pt-1 w-[2%]">:</td>
+                  <td
+                    className="pr-2 font-semibold italic pt-1 w-[80%]"
+                    style={{ color: brandData.accentColor }}
+                  >
+                    {ucwords(
+                      formatTerbilang(
+                        invoiceData.totalPrice ||
+                          calculateTotal(
+                            invoiceData.items,
+                            brandData.taxRate,
+                            brandData.jenisTransaksi,
+                          ),
+                      ),
+                    )}{" "}
+                    Rupiah
+                  </td>
+                </tr>
+              </tbody>
             </table>
-            <div className="border-top pt-1 mt-1 custom-text">
-              <table className="w-100" suppressHydrationWarning>
-                <tr>
-                  <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold p-0">
-                      {invoiceData.receiver}
-                    </p>
-                  </td>
-                  <td width="50%">
-                    <p className="text-center text-uppercse fw-semibold p-0">
-                      {invoiceData.best_regards}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    {Array.from({
-                      length: invoiceData.space_best_regards || 0,
-                    }).map((_, index) => (
-                      <br key={index} />
-                    ))}
-                  </td>
-                </tr>
-                <tr>
-                  <td width="50%">
-                    {invoiceData.receiver_name ? (
-                      <p className="text-center text-uppercse fw-semibold text-decoration-underline">
-                        {invoiceData.receiver_name}
+
+            <div className="border-t border-gray-300 pt-1 mt-1 custom-text text-xs">
+              <table className="w-full" suppressHydrationWarning>
+                <tbody>
+                  <tr>
+                    <td className="w-1/2">
+                      <p className="text-center uppercase font-semibold p-0 m-0">
+                        {invoiceData.receiver}
                       </p>
-                    ) : (
-                      <></>
-                    )}
-                  </td>
-                  <td width="50%">
-                    {invoiceData.best_regards_name ? (
-                      <p className="text-center text-uppercse fw-semibold text-decoration-underline">
-                        {invoiceData.best_regards_name}
+                    </td>
+                    <td className="w-1/2">
+                      <p className="text-center uppercase font-semibold p-0 m-0">
+                        {invoiceData.best_regards}
                       </p>
-                    ) : (
-                      <></>
-                    )}
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan={2}>
+                      {Array.from({
+                        length: invoiceData.space_best_regards || 0,
+                      }).map((_, index) => (
+                        <br key={index} />
+                      ))}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="w-1/2">
+                      {invoiceData.receiver_name && (
+                        <p className="text-center uppercase font-semibold underline m-0">
+                          {invoiceData.receiver_name}
+                        </p>
+                      )}
+                    </td>
+                    <td className="w-1/2">
+                      {invoiceData.best_regards_name && (
+                        <p className="text-center uppercase font-semibold underline m-0">
+                          {invoiceData.best_regards_name}
+                        </p>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
+
             {invoiceData.notes && (
-              <div className="border-top">
-                <p className="custom-text text-uppercase fw-semibold mb-0">
+              <div className="border-t border-gray-300 mt-2 pt-1 text-xs">
+                <p className="custom-text uppercase font-semibold mb-0">
                   Catatan
                 </p>
-                <div
-                  className="custom-text"
-                  dangerouslySetInnerHTML={{
-                    __html: invoiceData.notes.replace(/\n/g, "<br />"),
-                  }}
-                ></div>
+                <div className="custom-text whitespace-pre-line text-gray-700">
+                  {invoiceData.notes}
+                </div>
               </div>
             )}
-            {/* <div className="custom-text text-center pt- mt-1 border-top">
-              <p
-                className="custom-text"
-                style={{ color: brandData.accentColor }}
-              >
-                {brandData.footerText || "Terima kasih atas kepercayaan Anda"}
-              </p>
-            </div> */}
           </div>
         </div>
       </div>

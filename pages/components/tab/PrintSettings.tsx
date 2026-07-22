@@ -7,6 +7,15 @@ import {
 } from "@/lib/Helper";
 import { BrandData, InvoiceData, PrintOptions } from "../../../types/invoice";
 import { Dispatch } from "react";
+import {
+  Printer,
+  FileText,
+  Info,
+  Check,
+  FileCheck2,
+  PrinterCheck,
+} from "lucide-react";
+import MyButton from "../form/MyButton";
 
 interface PrintSettingsProps {
   brandData: BrandData;
@@ -42,33 +51,37 @@ export default function PrintSettings({
   onPrintOptions,
 }: PrintSettingsProps) {
   return (
-    <>
-      <div className="border rounded p-3 bg-light text-center mb-4">
-        <div
-          className="bg-white mx-auto shadow-sm p-2"
-          style={{ maxWidth: "100%", overflow: "hidden" }}
-        >
-          <div className="p-2">
-            <small className="text-muted">Preview Cetak</small>
-            <div className="border p-2 mt-1">
-              <div className="d-flex align-items-center gap-2 mb-2">
-                {brandData.logo && (
-                  <img
-                    src={brandData.logo}
-                    alt="Logo"
-                    style={{ height: "25px" }}
-                  />
-                )}
-                <small className="fw-bold">
-                  {brandData.companyName || "Invoice"}
-                </small>
-              </div>
-              <hr className="my-1" />
-              <small>No: {invoiceData.invoiceNo}</small>
-              <hr className="my-1" />
-              <div className="text-center p-2 bg-light">
-                <small className="text-muted">
-                  Total:{" "}
+    <div className="space-y-6 text-sm text-zinc-700">
+      <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-4 text-center">
+        <div className="mx-auto max-w-full overflow-hidden rounded-lg border border-zinc-200 bg-white p-3 shadow-sm">
+          <span className="text-xs font-medium text-zinc-400">
+            Preview Ringkas Cetak
+          </span>
+          <div className="mt-2 space-y-2 rounded-md border border-zinc-100 p-3 text-left">
+            <div className="flex items-center gap-2">
+              {brandData.logo && (
+                <img
+                  src={brandData.logo}
+                  alt="Logo"
+                  className="h-6 object-contain"
+                />
+              )}
+              <span className="font-semibold text-zinc-900">
+                {brandData.companyName || "Invoice"}
+              </span>
+            </div>
+            <hr className="border-zinc-200" />
+            <div className="text-xs text-zinc-600">
+              No:{" "}
+              <span className="font-mono font-medium text-zinc-800">
+                {invoiceData.invoiceNo || "-"}
+              </span>
+            </div>
+            <hr className="border-zinc-200" />
+            <div className="rounded-md bg-zinc-50 p-2 text-center">
+              <span className="text-xs font-medium text-zinc-600">
+                Total:{" "}
+                <span className="font-semibold text-zinc-900">
                   {formatCurrency(
                     calculateTotal(
                       invoiceData.items,
@@ -76,177 +89,185 @@ export default function PrintSettings({
                       brandData.jenisTransaksi,
                     ),
                   )}
-                </small>
-              </div>
+                </span>
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="border-top pt-3">
-        <label className="form-label fw-semibold">Pengaturan Cetak</label>
+      <div className="space-y-3">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          Pengaturan Cetak
+        </label>
 
-        <div className="alert alert-info small mt-2">
-          💡 Gunakan fitur cetak browser (Ctrl+P / Cmd+P) untuk pengaturan
-          lengkap:
-          <ul className="mb-0 mt-1">
-            <li>Ukuran kertas (A4, Letter, dll)</li>
-            <li>Orientasi (Potrait/Landscape)</li>
-            <li>Margin cetak</li>
-            <li>Jumlah copy</li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="d-grid gap-2 mt-3">
-        <div className="row g-2">
-          <div className="col-6">
-            <input
-              type="radio"
-              className="btn-check"
-              name="pageSize"
-              value="a4"
-              onChange={(e) => handleChangeState(e, onPrintOptions)}
-              checked={printOptions?.pageSize === "a4"}
-              id="kertasA4"
-            />
-            <label
-              className={`btn w-100 h-100 p-3 rounded-3 text-start bg-white d-flex flex-column justify-content-between shadow-sm border-2 ${
-                printOptions?.pageSize === "a4"
-                  ? "border-primary"
-                  : "border-light-subtle"
-              }`}
-              htmlFor="kertasA4"
-            >
-              <div className="d-flex justify-content-between align-items-center w-100 mb-1">
-                <span
-                  className={`fw-bold small ${printOptions?.pageSize === "a4" ? "text-primary" : "text-dark"}`}
-                >
-                  Kertas A4
-                </span>
-                <i
-                  className={`bi bi-file-earmark-text fs-5 ${printOptions?.pageSize === "a4" ? "text-primary" : "text-muted"}`}
-                ></i>
-              </div>
-              <span className="text-muted" style={{ fontSize: "0.75rem" }}>
-                210 x 297 mm • Standar Laporan
-              </span>
-            </label>
-          </div>
-
-          <div className="col-6">
-            <input
-              type="radio"
-              className="btn-check"
-              name="pageSize"
-              value="continuous"
-              onChange={(e) => handleChangeState(e, onPrintOptions)}
-              checked={printOptions?.pageSize === "continuous"}
-              id="kertasContinuous"
-            />
-            <label
-              className={`btn w-100 h-100 p-3 rounded-3 text-start bg-white d-flex flex-column justify-content-between shadow-sm border-2 ${
-                printOptions?.pageSize === "continuous"
-                  ? "border-primary"
-                  : "border-light-subtle"
-              }`}
-              htmlFor="kertasContinuous"
-            >
-              <div className="d-flex justify-content-between align-items-between w-100 mb-1">
-                <span
-                  className={`fw-bold small ${printOptions?.pageSize === "continuous" ? "text-primary" : "text-dark"}`}
-                >
-                  Continuous Form
-                </span>
-                <i
-                  className={`bi bi-printer fs-5 ${printOptions?.pageSize === "continuous" ? "text-primary" : "text-muted"}`}
-                ></i>
-              </div>
-              <span className="text-muted" style={{ fontSize: "0.75rem" }}>
-                9.5 x 11 inch • Dot Matrix / Faktur
-              </span>
-            </label>
+        <div className="flex items-start gap-3 rounded-xl border border-sky-200/60 bg-sky-50/60 p-3.5 text-xs text-sky-900">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" />
+          <div className="space-y-1">
+            <p className="font-medium">
+              Gunakan dialog cetak browser (Ctrl+P / Cmd+P) untuk penyesuaian:
+            </p>
+            <ul className="list-inside list-disc space-y-0.5 text-sky-800">
+              <li>Ukuran kertas (A4, Letter, Continuous, dll.)</li>
+              <li>Orientasi (Portrait / Landscape)</li>
+              <li>Margin cetak dan header/footer browser</li>
+              <li>Jumlah salinan (copies)</li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <div className="d-grid gap-2 mt-3">
-        <button onClick={handlePrint} className="btn btn-primary btn-lg">
-          🖨️ Cetak Invoice
-        </button>
-        <button
-          onClick={() => window.print()}
-          className="btn btn-outline-secondary"
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <label
+          htmlFor="kertasA4"
+          className={`relative flex cursor-pointer flex-col justify-between rounded-xl border-2 p-3.5 transition-all ${
+            printOptions?.pageSize === "a4"
+              ? "border-zinc-900 bg-zinc-900/5"
+              : "border-zinc-200 bg-white hover:border-zinc-300"
+          }`}
         >
-          📄 Cetak dengan Pengaturan Browser (Ctrl+P)
-        </button>
+          <input
+            type="radio"
+            name="pageSize"
+            value="a4"
+            id="kertasA4"
+            className="sr-only"
+            onChange={(e) => handleChangeState(e, onPrintOptions)}
+            checked={printOptions?.pageSize === "a4"}
+          />
+          <div className="mb-2 flex items-center justify-between">
+            <span
+              className={`font-semibold ${
+                printOptions?.pageSize === "a4"
+                  ? "text-zinc-900"
+                  : "text-zinc-700"
+              }`}
+            >
+              Kertas A4
+            </span>
+            <FileText
+              className={`h-5 w-5 ${
+                printOptions?.pageSize === "a4"
+                  ? "text-zinc-900"
+                  : "text-zinc-400"
+              }`}
+            />
+          </div>
+          <span className="text-[11px] text-zinc-500">
+            210 x 297 mm • Standar Laporan
+          </span>
+        </label>
+
+        <label
+          htmlFor="kertasContinuous"
+          className={`relative flex cursor-pointer flex-col justify-between rounded-xl border-2 p-3.5 transition-all ${
+            printOptions?.pageSize === "continuous"
+              ? "border-zinc-900 bg-zinc-900/5"
+              : "border-zinc-200 bg-white hover:border-zinc-300"
+          }`}
+        >
+          <input
+            type="radio"
+            name="pageSize"
+            value="continuous"
+            id="kertasContinuous"
+            className="sr-only"
+            onChange={(e) => handleChangeState(e, onPrintOptions)}
+            checked={printOptions?.pageSize === "continuous"}
+          />
+          <div className="mb-2 flex items-center justify-between">
+            <span
+              className={`font-semibold ${
+                printOptions?.pageSize === "continuous"
+                  ? "text-zinc-900"
+                  : "text-zinc-700"
+              }`}
+            >
+              Continuous Form
+            </span>
+            <Printer
+              className={`h-5 w-5 ${
+                printOptions?.pageSize === "continuous"
+                  ? "text-zinc-900"
+                  : "text-zinc-400"
+              }`}
+            />
+          </div>
+          <span className="text-[11px] text-zinc-500">
+            9.5 x 11 inch • Dot Matrix / Faktur
+          </span>
+        </label>
       </div>
 
-      <hr className="my-3" />
+      <div className="space-y-2">
+        <MyButton onClick={handlePrint}>
+          <PrinterCheck className="h-4 w-4" />
+          Cetak Invoice
+        </MyButton>
+        <MyButton onClick={() => window.print()}>
+          <FileCheck2 className="h-4 w-4 text-zinc-500" />
+          Cetak via Native Dialog (Ctrl+P)
+        </MyButton>
+      </div>
 
-      <div>
-        <label className="form-label fw-semibold">Yang Akan Dicetak:</label>
-        <div className="form-check mb-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="printLogo"
-            defaultChecked
-            disabled
-          />
-          <label className="form-check-label" htmlFor="printLogo">
-            Logo Perusahaan {brandData.logo ? "✓" : "(belum diupload)"}
-          </label>
-        </div>
-        <div className="form-check mb-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="printCompany"
-            defaultChecked
-            disabled
-          />
-          <label className="form-check-label" htmlFor="printCompany">
-            Informasi Perusahaan
-          </label>
-        </div>
-        <div className="form-check mb-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="printClient"
-            defaultChecked
-            disabled
-          />
-          <label className="form-check-label" htmlFor="printClient">
-            Informasi Klien
-          </label>
-        </div>
-        <div className="form-check mb-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="printItems"
-            defaultChecked
-            disabled
-          />
-          <label className="form-check-label" htmlFor="printItems">
-            Daftar Item ({invoiceData.items.length} item)
-          </label>
-        </div>
-        <div className="form-check mb-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="printFooter"
-            defaultChecked
-            disabled
-          />
-          <label className="form-check-label" htmlFor="printFooter">
-            Footer {brandData.footerText && "✓"}
-          </label>
+      <hr className="border-zinc-200" />
+
+      <div className="space-y-3">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          Elemen Yang Ikut Dicetak:
+        </label>
+
+        <div className="space-y-2.5 text-xs text-zinc-600">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-4 w-4 items-center justify-center rounded border border-zinc-300 bg-zinc-100">
+              <Check className="h-3 w-3 text-zinc-700" />
+            </div>
+            <span>
+              Logo Perusahaan{" "}
+              {brandData.logo ? (
+                <span className="font-semibold text-emerald-600">
+                  (Tersedia)
+                </span>
+              ) : (
+                <span className="text-zinc-400">(Belum diupload)</span>
+              )}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-4 w-4 items-center justify-center rounded border border-zinc-300 bg-zinc-100">
+              <Check className="h-3 w-3 text-zinc-700" />
+            </div>
+            <span>Informasi Perusahaan</span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-4 w-4 items-center justify-center rounded border border-zinc-300 bg-zinc-100">
+              <Check className="h-3 w-3 text-zinc-700" />
+            </div>
+            <span>Informasi Klien</span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-4 w-4 items-center justify-center rounded border border-zinc-300 bg-zinc-100">
+              <Check className="h-3 w-3 text-zinc-700" />
+            </div>
+            <span>Daftar Item ({invoiceData.items?.length || 0} item)</span>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-4 w-4 items-center justify-center rounded border border-zinc-300 bg-zinc-100">
+              <Check className="h-3 w-3 text-zinc-700" />
+            </div>
+            <span>
+              Footer Teks{" "}
+              {brandData.footerText && (
+                <span className="font-semibold text-emerald-600">(Aktif)</span>
+              )}
+            </span>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

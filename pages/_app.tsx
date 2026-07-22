@@ -1,14 +1,18 @@
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/custom.css";
-import { useEffect } from "react";
+import { Ubuntu_Sans } from "next/font/google";
+
+const ubuntu = Ubuntu_Sans({
+  subsets: ["latin"],
+  variable: "--font-ubuntu",
+  display: "swap",
+});
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("bootstrap/dist/js/bootstrap.bundle.min.js");
-  }, []);
-
-  return <Component {...pageProps} />;
+  return (
+    <main className={ubuntu.className}>
+      <Component {...pageProps} />
+    </main>
+  );
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import {
   InvoiceData,
@@ -12,29 +12,71 @@ import BrandSettings from "./components/tab/BrandSettings";
 import PrintSettings from "./components/tab/PrintSettings";
 import { useLocalStorage } from "../hooks/UseLocalStorage";
 import InvoicePreview from "./components/InvoicePreview";
+import { FileText, Building2, Printer } from "lucide-react";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("invoice");
   const previewRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const [printOptions, setPrintOptions] = useState<PrintOptions>({
     pageSize: "a4",
   });
 
-  const [invoiceData, setInvoiceData] = useState<InvoiceData>({
-    invoiceNo: `INV-${new Date().getFullYear()}${(new Date().getMonth() + 1)
-      .toString()
-      .padStart(
-        2,
-        "0",
-      )}${new Date().getDate().toString().padStart(2, "0")}-001`,
-    date: new Date().toISOString().split("T")[0],
-    clientName: "",
-    clientEmail: "",
-    clientAddress: "",
-    items: [],
-    notes: "Terima kasih atas kepercayaan Anda",
-  });
+  const createDefaultInvoice = (): InvoiceData => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return {
+      invoiceNo: `INV-${year}${month}${day}-001`,
+      date: now.toISOString().split("T")[0],
+      clientName: "",
+      clientEmail: "",
+      clientAddress: "",
+      items: [],
+      notes: "Terima kasih atas kepercayaan Anda",
+    };
+  };
+
+  const [invoiceData, setInvoiceData] =
+    useState<InvoiceData>(createDefaultInvoice);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const { id } = router.query;
+    const savedInvoices = localStorage.getItem("saved_invoices");
+
+    if (savedInvoices && id !== undefined) {
+      try {
+        const invoices = JSON.parse(savedInvoices);
+
+        if (Array.isArray(invoices) && invoices[Number(id)]) {
+          const cleanInvoice = invoices[Number(id)];
+
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setInvoiceData({
+            ...cleanInvoice,
+            items: cleanInvoice.items.map(
+              (item: InvoiceItem, index: number) => ({
+                ...item,
+                id: Date.now() + index,
+              }),
+            ),
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Gagal membaca data dari localStorage:", error);
+      }
+    }
+
+    setInvoiceData(createDefaultInvoice());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady, router.query.id]);
 
   const [brandData, setBrandData] = useLocalStorage<BrandData>(
     "brand_settings",
@@ -83,7 +125,6 @@ export default function Home() {
     });
   };
 
-  // Load Items dari JSON
   const handleLoadItemsFromJson = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -121,7 +162,6 @@ export default function Home() {
     input.click();
   };
 
-  // Load Full Invoice
   const handleLoadFullInvoice = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -160,7 +200,6 @@ export default function Home() {
     input.click();
   };
 
-  // Save ke Local Storage
   const saveToLocalStorage = () => {
     try {
       const savedInvoices = localStorage.getItem("saved_invoices");
@@ -175,7 +214,6 @@ export default function Home() {
     }
   };
 
-  // Download JSON
   const downloadAsJson = () => {
     const dataStr = JSON.stringify(invoiceData, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -187,7 +225,6 @@ export default function Home() {
     URL.revokeObjectURL(url);
   };
 
-  // Load saved invoices
   const showSavedInvoices = () => {
     const saved = localStorage.getItem("saved_invoices");
     if (saved) {
@@ -222,7 +259,6 @@ export default function Home() {
     }
   };
 
-  // Handle Logo Upload
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -244,7 +280,7 @@ export default function Home() {
   };
 
   const handlePrint = useReactToPrint({
-    contentRef: previewRef, // Gunakan contentRef, bukan content
+    contentRef: previewRef,
     documentTitle: `Invoice_${invoiceData.invoiceNo}`,
     onPrintError: (error) => console.error(error),
   });
@@ -259,148 +295,123 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-vh-100 bg-light">
+    <div className="min-h-screen bg-zinc-50/50 font-sans text-zinc-900 antialiased">
       <Header
         onSave={saveToLocalStorage}
         onDownload={downloadAsJson}
         onShowHistory={showSavedInvoices}
       />
-      <main className="container py-4">
-        <div className="row g-4">
-          <div className="col-md-4">
-            <div className="card border-0 shadow-sm">
-              <div className="card-header bg-white border-bottom p-0">
-                <ul className="nav nav-tabs card-header-tabs" role="tablist">
-                  <li className="nav-item" role="presentation">
-                    <button
-                      className={`nav-link ${activeTab === "invoice" ? "active" : ""}`}
-                      onClick={() => setActiveTab("invoice")}
-                      type="button"
-                    >
-                      📄 Invoice
-                    </button>
-                  </li>
-                  <li className="nav-item" role="presentation">
-                    <button
-                      className={`nav-link ${activeTab === "brand" ? "active" : ""}`}
-                      onClick={() => setActiveTab("brand")}
-                      type="button"
-                    >
-                      🏢 Brand
-                    </button>
-                  </li>
-                  <li className="nav-item" role="presentation">
-                    <button
-                      className={`nav-link ${activeTab === "print" ? "active" : ""}`}
-                      onClick={() => setActiveTab("print")}
-                      type="button"
-                    >
-                      🖨️ Cetak
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div
-                className="card-body"
-                style={{ maxHeight: "calc(100vh - 200px)", overflowY: "auto" }}
-              >
-                <div
-                  style={{
-                    display: activeTab === "invoice" ? "block" : "none",
-                  }}
-                >
-                  <InvoiceSettings
-                    invoiceData={invoiceData}
-                    setInvoiceData={setInvoiceData}
-                    addItem={addItem}
-                    removeItem={removeItem}
-                    updateItem={updateItem}
-                    handleLoadItemsFromJson={handleLoadItemsFromJson}
-                    handleLoadFullInvoice={handleLoadFullInvoice}
-                  />
-                </div>
 
-                <div
-                  style={{ display: activeTab === "brand" ? "block" : "none" }}
+      <main className="mx-auto max-w-7xl p-4 sm:p-6">
+        <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
+          <aside className="sticky top-20 rounded-2xl border border-zinc-200/80 bg-white shadow-sm ">
+            <div className="border-b border-zinc-100 p-4 sm:p-5">
+              <div className="flex rounded-xl bg-zinc-100/80 p-1">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("invoice")}
+                  className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-medium transition-all ${
+                    activeTab === "invoice"
+                      ? "bg-white text-zinc-900 shadow-sm "
+                      : "text-zinc-500 hover:text-zinc-900 "
+                  }`}
                 >
-                  <BrandSettings
-                    brandData={brandData}
-                    setBrandData={setBrandData}
-                    removeLogo={removeLogo}
-                    handleLogoUpload={handleLogoUpload}
-                    colorOptions={colorOptions}
-                  />
-                </div>
+                  <FileText className="h-3.5 w-3.5" />
+                  <span>Invoice</span>
+                </button>
 
-                <div
-                  style={{ display: activeTab === "print" ? "block" : "none" }}
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("brand")}
+                  className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-medium transition-all ${
+                    activeTab === "brand"
+                      ? "bg-white text-zinc-900 shadow-sm "
+                      : "text-zinc-500 hover:text-zinc-900 "
+                  }`}
                 >
-                  <PrintSettings
-                    brandData={brandData}
-                    invoiceData={invoiceData}
-                    handlePrint={handlePrint}
-                    printOptions={printOptions}
-                    onPrintOptions={setPrintOptions}
-                  />
-                </div>
+                  <Building2 className="h-3.5 w-3.5" />
+                  <span>Brand</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("print")}
+                  className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-medium transition-all ${
+                    activeTab === "print"
+                      ? "bg-white text-zinc-900 shadow-sm "
+                      : "text-zinc-500 hover:text-zinc-900 "
+                  }`}
+                >
+                  <Printer className="h-3.5 w-3.5" />
+                  <span>Cetak</span>
+                </button>
               </div>
             </div>
-          </div>
 
-          <div className="col-md-8">
-            <InvoicePreview
-              previewRef={previewRef}
-              brandData={brandData}
-              invoiceData={invoiceData}
-              printOptions={printOptions}
-            />
-          </div>
+            <div className="max-h-[calc(100vh-220px)] overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+              <div className={activeTab === "invoice" ? "block" : "hidden"}>
+                <InvoiceSettings
+                  invoiceData={invoiceData}
+                  setInvoiceData={setInvoiceData}
+                  addItem={addItem}
+                  removeItem={removeItem}
+                  updateItem={updateItem}
+                  handleLoadItemsFromJson={handleLoadItemsFromJson}
+                  handleLoadFullInvoice={handleLoadFullInvoice}
+                />
+              </div>
+
+              <div className={activeTab === "brand" ? "block" : "hidden"}>
+                <BrandSettings
+                  brandData={brandData}
+                  setBrandData={setBrandData}
+                  removeLogo={removeLogo}
+                  handleLogoUpload={handleLogoUpload}
+                  colorOptions={colorOptions}
+                />
+              </div>
+
+              <div className={activeTab === "print" ? "block" : "hidden"}>
+                <PrintSettings
+                  brandData={brandData}
+                  invoiceData={invoiceData}
+                  handlePrint={handlePrint}
+                  printOptions={printOptions}
+                  onPrintOptions={setPrintOptions}
+                />
+              </div>
+            </div>
+          </aside>
+
+          <section className="flex flex-col gap-3">
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  Live Preview
+                </span>
+              </div>
+              <span className="text-[11px] text-zinc-400 dark:text-zinc-500">
+                A4 Standard Format
+              </span>
+            </div>
+
+            <div className="flex min-h-[720px] justify-center rounded-2xl border border-zinc-200/80 bg-zinc-100/60 p-4 sm:p-8 dark:border-zinc-800/80 dark:bg-zinc-900/40">
+              <div className="w-full max-w-[800px]">
+                <InvoicePreview
+                  previewRef={previewRef}
+                  brandData={brandData}
+                  invoiceData={invoiceData}
+                  printOptions={printOptions}
+                />
+              </div>
+            </div>
+          </section>
         </div>
       </main>
-
-      <style jsx global>{`
-        .nav-tabs .nav-link {
-          color: #6c757d;
-          border: none;
-          padding: 0.75rem 1.25rem;
-          transition: all 0.2s;
-        }
-        .nav-tabs .nav-link:hover {
-          color: #0d6efd;
-          background-color: transparent;
-        }
-        .nav-tabs .nav-link.active {
-          color: #0d6efd;
-          border-bottom: 2px solid #0d6efd;
-          background-color: transparent;
-        }
-        .card-header-tabs {
-          margin-right: 0;
-          margin-left: 0;
-          border-bottom: 1px solid #dee2e6;
-        }
-        @media print {
-          .sticky-top,
-          .card-header,
-          button,
-          .btn,
-          .nav-tabs,
-          header {
-            display: none !important;
-          }
-          .card {
-            border: none !important;
-            box-shadow: none !important;
-          }
-          .bg-light {
-            background-color: white !important;
-          }
-          body {
-            print-color-adjust: exact;
-            -webkit-print-color-adjust: exact;
-          }
-        }
-      `}</style>
     </div>
   );
 }

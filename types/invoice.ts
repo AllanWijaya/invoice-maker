@@ -40,6 +40,8 @@ export interface SavedInvoice extends InvoiceData {
   savedAt: string;
 }
 
+export type JenisTransaksi = "non-ppn" | "include-ppn" | "exclude-ppn";
+
 export interface BrandData {
   companyName: string;
   companyAddress: string;
@@ -50,7 +52,7 @@ export interface BrandData {
   footerText: string;
   taxRate: number; // PPN dalam persen
   accentColor: string;
-  jenisTransaksi: "non-ppn" | "include-ppn" | "exclude-ppn";
+  jenisTransaksi: JenisTransaksi;
   useLetterhead?: boolean;
 }
 

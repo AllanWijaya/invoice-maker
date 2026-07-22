@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { dataStaticPPN } from "@/types/dataStatic";
-import { BrandData } from "@/types/invoice";
+import { BrandData, JenisTransaksi } from "@/types/invoice";
+import { Upload, Trash2, Check, Image as ImageIcon } from "lucide-react";
 
 interface BrandSettingsProps {
   brandData: BrandData;
@@ -36,189 +37,189 @@ export default function BrandSettings({
   ],
 }: BrandSettingsProps) {
   return (
-    <>
-      <div className="mb-4">
-        <label className="form-label fw-semibold">Gunakan Kop Surat</label>
-
-        <div className="form-check form-switch form-switch-md mb-0">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            role="switch"
-            id="useLetterheadSwitch"
-            style={{ cursor: "pointer", transform: "scale(1.25)" }}
-            checked={brandData.useLetterhead}
-            onChange={(e) =>
-              setBrandData({
-                ...brandData,
-                useLetterhead: e.target.checked,
-              })
-            }
-          />
+    <div className="space-y-5 text-sm text-zinc-700">
+      <div className="flex items-center justify-between rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-3.5">
+        <div>
           <label
-            className="form-check-label visually-hidden"
             htmlFor="useLetterheadSwitch"
+            className="cursor-pointer font-medium text-zinc-900"
           >
-            Gunakan Letterhead
+            Gunakan Kop Surat
           </label>
+          <p className="text-xs text-zinc-500">
+            Tampilkan header & identitas resmi perusahaan
+          </p>
         </div>
+        <button
+          type="button"
+          role="switch"
+          id="useLetterheadSwitch"
+          aria-checked={brandData.useLetterhead}
+          onClick={() =>
+            setBrandData({
+              ...brandData,
+              useLetterhead: !brandData.useLetterhead,
+            })
+          }
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+            brandData.useLetterhead ? "bg-zinc-900" : "bg-zinc-200"
+          }`}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+              brandData.useLetterhead ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
       </div>
 
-      <div className="mb-4">
-        <label className="form-label fw-semibold">Logo Perusahaan</label>
-        <div className="border rounded p-3 text-center bg-light">
+      <div>
+        <label className="mb-1.5 block font-medium text-zinc-900">
+          Logo Perusahaan
+        </label>
+        <div className="relative flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 p-4 text-center transition-all hover:bg-zinc-50">
           {brandData.logo ? (
-            <div className="mb-2">
+            <div className="flex flex-col items-center gap-3">
               <img
                 src={brandData.logo}
                 alt="Company Logo"
-                style={{
-                  maxHeight: "100px",
-                  maxWidth: "200px",
-                  objectFit: "contain",
-                }}
-                className="mb-2"
+                className="max-h-20 max-w-[180px] object-contain"
               />
-              <br />
               <button
+                type="button"
                 onClick={removeLogo}
-                className="btn btn-sm btn-outline-danger"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-2.5 py-1 text-xs font-medium text-red-600 shadow-sm transition-all hover:bg-red-50 hover:text-red-700"
               >
+                <Trash2 className="h-3.5 w-3.5" />
                 Hapus Logo
               </button>
             </div>
           ) : (
-            <div>
-              <div className="mb-2 text-muted">
-                <svg
-                  width="48"
-                  height="48"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <rect x="2" y="3" width="20" height="18" rx="2" ry="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21 15 16 10 5 21" />
-                </svg>
+            <label className="flex w-full cursor-pointer flex-col items-center justify-center">
+              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-500">
+                <Upload className="h-5 w-5" />
               </div>
+              <p className="text-xs font-medium text-zinc-700">
+                Klik untuk unggah{" "}
+                <span className="font-normal text-zinc-500">
+                  atau drag & drop
+                </span>
+              </p>
+              <p className="mt-1 text-[11px] text-zinc-400">
+                SVG, PNG, atau JPG (Max 2MB)
+              </p>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleLogoUpload}
-                className="form-control form-control-sm"
+                className="hidden"
               />
-              <small className="text-muted d-block mt-2">
-                Format: JPG, PNG (Max 2MB)
-              </small>
-            </div>
+            </label>
           )}
         </div>
       </div>
 
-      <div className="mb-3">
-        <label className="form-label fw-semibold">Nama Perusahaan</label>
-        <input
-          type="text"
-          className="form-control"
-          value={brandData.companyName}
-          onChange={(e) =>
-            setBrandData({
-              ...brandData,
-              companyName: e.target.value,
-            })
-          }
-          placeholder="PT Example Indonesia"
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label fw-semibold">Alamat Perusahaan</label>
-        <textarea
-          className="form-control"
-          rows={2}
-          value={brandData.companyAddress}
-          onChange={(e) =>
-            setBrandData({
-              ...brandData,
-              companyAddress: e.target.value,
-            })
-          }
-          placeholder="Jl. Sudirman No. 123, Jakarta"
-        />
-      </div>
-
-      <div className="row">
-        <div className="col-md-12 mb-3">
-          <label className="form-label fw-semibold">Telepon</label>
+      <div className="space-y-3.5">
+        <div>
+          <label className="mb-1 block font-medium text-zinc-900">
+            Nama Perusahaan
+          </label>
           <input
             type="text"
-            className="form-control"
-            value={brandData.companyPhone}
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
+            value={brandData.companyName}
             onChange={(e) =>
-              setBrandData({
-                ...brandData,
-                companyPhone: e.target.value,
-              })
+              setBrandData({ ...brandData, companyName: e.target.value })
             }
-            placeholder="(021) 1234567"
+            placeholder="PT Example Indonesia"
           />
         </div>
-        <div className="col-md-12 mb-3">
-          <label className="form-label fw-semibold">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            value={brandData.companyEmail}
+
+        <div>
+          <label className="mb-1 block font-medium text-zinc-900">
+            Alamat Perusahaan
+          </label>
+          <textarea
+            rows={2}
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
+            value={brandData.companyAddress}
             onChange={(e) =>
-              setBrandData({
-                ...brandData,
-                companyEmail: e.target.value,
-              })
+              setBrandData({ ...brandData, companyAddress: e.target.value })
             }
-            placeholder="info@company.com"
+            placeholder="Jl. Sudirman No. 123, Jakarta"
           />
         </div>
-        <div className="col-md-12 mb-3">
-          <label className="form-label fw-semibold">NPWP</label>
+
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+          <div>
+            <label className="mb-1 block font-medium text-zinc-900">
+              Telepon
+            </label>
+            <input
+              type="text"
+              className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
+              value={brandData.companyPhone}
+              onChange={(e) =>
+                setBrandData({ ...brandData, companyPhone: e.target.value })
+              }
+              placeholder="(021) 1234567"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block font-medium text-zinc-900">
+              Email
+            </label>
+            <input
+              type="email"
+              className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
+              value={brandData.companyEmail}
+              onChange={(e) =>
+                setBrandData({ ...brandData, companyEmail: e.target.value })
+              }
+              placeholder="info@company.com"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1 block font-medium text-zinc-900">NPWP</label>
           <input
             type="text"
-            className="form-control"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
             value={brandData.companyNPWP}
             onChange={(e) =>
-              setBrandData({
-                ...brandData,
-                companyNPWP: e.target.value,
-              })
+              setBrandData({ ...brandData, companyNPWP: e.target.value })
             }
             placeholder="NPWP Perusahaan"
           />
         </div>
+
+        <div>
+          <label className="mb-1 block font-medium text-zinc-900">
+            Teks Footer
+          </label>
+          <input
+            type="text"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
+            value={brandData.footerText}
+            onChange={(e) =>
+              setBrandData({ ...brandData, footerText: e.target.value })
+            }
+            placeholder="Terima kasih atas kepercayaan Anda"
+          />
+        </div>
       </div>
 
-      <div className="mb-3">
-        <label className="form-label fw-semibold">Teks Footer</label>
-        <input
-          type="text"
-          className="form-control"
-          value={brandData.footerText}
-          onChange={(e) =>
-            setBrandData({
-              ...brandData,
-              footerText: e.target.value,
-            })
-          }
-          placeholder="Terima kasih atas kepercayaan Anda"
-        />
-      </div>
-
-      <div className="row">
-        <div className="col-md-6 mb-3">
-          <label className="form-label fw-semibold">PPN / Tax Rate (%)</label>
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+        <div>
+          <label className="mb-1 block font-medium text-zinc-900">
+            PPN / Tax Rate (%)
+          </label>
           <input
             type="number"
-            className="form-control"
+            step="0.5"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
             value={brandData.taxRate}
             onChange={(e) =>
               setBrandData({
@@ -226,22 +227,23 @@ export default function BrandSettings({
                 taxRate: parseFloat(e.target.value) || 0,
               })
             }
-            step="0.5"
           />
-          <small className="text-muted">Contoh: 11 untuk PPN 11%</small>
+          <span className="mt-1 block text-[11px] text-zinc-400">
+            Contoh: 11 untuk PPN 11%
+          </span>
         </div>
-        <div className="col-md-6 mb-3">
-          <label className="form-label fw-semibold">Jenis Transaksi</label>
+
+        <div>
+          <label className="mb-1 block font-medium text-zinc-900">
+            Jenis Transaksi
+          </label>
           <select
-            className="form-control"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
             value={brandData.jenisTransaksi}
             onChange={(e) =>
               setBrandData({
                 ...brandData,
-                jenisTransaksi: e.target.value as
-                  | "non-ppn"
-                  | "include-ppn"
-                  | "exclude-ppn",
+                jenisTransaksi: e.target.value as JenisTransaksi,
               })
             }
           >
@@ -252,71 +254,82 @@ export default function BrandSettings({
             ))}
           </select>
         </div>
-        <div className="col-md-12 mb-3">
-          <label className="form-label fw-semibold">Warna Aksen</label>
-          <div className="d-flex flex-wrap gap-2">
-            {colorOptions.map((color) => (
+      </div>
+
+      <div>
+        <label className="mb-2 block font-medium text-zinc-900">
+          Warna Aksen
+        </label>
+        <div className="flex flex-wrap items-center gap-2">
+          {colorOptions.map((color: { value: string; name: string }) => {
+            const isSelected = brandData.accentColor === color.value;
+            return (
               <button
                 key={color.value}
-                onClick={() =>
-                  setBrandData({
-                    ...brandData,
-                    accentColor: color.value,
-                  })
-                }
-                className="btn rounded-circle p-0"
-                style={{
-                  backgroundColor: color.value,
-                  width: "32px",
-                  height: "32px",
-                  border:
-                    brandData.accentColor === color.value
-                      ? "2px solid #000"
-                      : "1px solid #ddd",
-                }}
-                title={color.name}
                 type="button"
-              />
-            ))}
+                onClick={() =>
+                  setBrandData({ ...brandData, accentColor: color.value })
+                }
+                className={`relative flex h-7 w-7 items-center justify-center rounded-full transition-transform active:scale-90 ${
+                  isSelected ? "ring-2 ring-zinc-900 ring-offset-2" : ""
+                }`}
+                style={{ backgroundColor: color.value }}
+                title={color.name}
+              >
+                {isSelected && (
+                  <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
+                )}
+              </button>
+            );
+          })}
+
+          <div className="relative h-7 w-7 overflow-hidden rounded-full border border-zinc-200 shadow-sm">
             <input
               type="color"
-              className="form-control form-control-color w-auto"
+              className="absolute -inset-2 h-11 w-11 cursor-pointer opacity-0"
               value={brandData.accentColor}
               onChange={(e) =>
-                setBrandData({
-                  ...brandData,
-                  accentColor: e.target.value,
-                })
+                setBrandData({ ...brandData, accentColor: e.target.value })
               }
-              style={{ width: "50px" }}
+              title="Custom Color"
+            />
+            <div
+              className="h-full w-full"
+              style={{ backgroundColor: brandData.accentColor }}
             />
           </div>
         </div>
       </div>
 
-      <div className="border-top pt-3 mt-2">
-        <label className="form-label fw-semibold">Preview Brand</label>
-        <div className="border rounded p-3 bg-light">
-          <div className="d-flex align-items-center gap-3">
-            {brandData.logo && (
-              <img
-                src={brandData.logo}
-                alt="Logo"
-                style={{ height: "40px", width: "auto" }}
-              />
-            )}
-            <div>
-              <strong style={{ color: brandData.accentColor }}>
-                {brandData.companyName || "Nama Perusahaan"}
-              </strong>
-              <br />
-              <small className="text-muted">
-                {brandData.companyAddress || "Alamat perusahaan"}
-              </small>
+      <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-3.5">
+        <span className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+          Preview Ringkas
+        </span>
+        <div className="flex items-center gap-3">
+          {brandData.logo ? (
+            <img
+              src={brandData.logo}
+              alt="Logo"
+              className="h-8 w-auto max-w-[80px] object-contain"
+            />
+          ) : (
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-200/60 text-zinc-400">
+              <ImageIcon className="h-4 w-4" />
             </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p
+              className="truncate text-xs font-semibold"
+              style={{ color: brandData.accentColor }}
+            >
+              {brandData.companyName || "Nama Perusahaan"}
+            </p>
+            <p className="truncate text-[11px] text-zinc-500">
+              {brandData.companyAddress || "Alamat belum diisi"}
+            </p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

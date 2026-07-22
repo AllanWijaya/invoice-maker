@@ -1,9 +1,12 @@
 import { InvoiceData, InvoiceItem } from "@/types/invoice";
 import { NumericFormat } from "react-number-format";
+import { Plus, Trash2, FileCode2 } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
+import MyButton from "../form/MyButton";
 
 interface InvoiceSettingsProps {
   invoiceData: InvoiceData;
-  setInvoiceData: (data: InvoiceData) => void;
+  setInvoiceData: Dispatch<SetStateAction<InvoiceData>>;
   addItem: () => void;
   removeItem: (id: number) => void;
   updateItem: (
@@ -14,6 +17,15 @@ interface InvoiceSettingsProps {
   handleLoadItemsFromJson: () => void;
   handleLoadFullInvoice: () => void;
 }
+
+const inputClass =
+  "w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 placeholder-zinc-400 shadow-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900";
+
+const numericInputClass =
+  "w-full rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-right text-xs text-zinc-900 shadow-sm outline-none focus:border-zinc-900";
+
+const sectionTitleClass =
+  "block text-xs font-semibold uppercase tracking-wider text-zinc-500";
 
 export default function InvoiceSettings({
   invoiceData = {
@@ -38,477 +50,480 @@ export default function InvoiceSettings({
   handleLoadFullInvoice,
 }: InvoiceSettingsProps) {
   return (
-    <>
-      <div className="row mb-3">
-        <div className="mb-4">
-          <label className="form-label fw-semibold">
+    <div className="space-y-5 text-sm text-zinc-700">
+      <div className="flex items-center justify-between rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-3.5">
+        <div>
+          <label
+            htmlFor="useCustomInputPriceSwitch"
+            className="cursor-pointer font-medium text-zinc-900"
+          >
             Gunakan Custom Input Harga
           </label>
-
-          <div className="form-check form-switch form-switch-md mb-0">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="useCustomInputPriceSwitch"
-              style={{ cursor: "pointer", transform: "scale(1.25)" }}
-              checked={invoiceData.isCustomInputPrice}
-              onChange={(e) =>
-                setInvoiceData({
-                  ...invoiceData,
-                  isCustomInputPrice: e.target.checked,
-                })
-              }
-            />
-            <label
-              className="form-check-label visually-hidden"
-              htmlFor="useCustomInputPriceSwitch"
-            >
-              Gunakan Custom Total Harga
-            </label>
-          </div>
+          <p className="text-xs text-zinc-500">
+            Izinkan pengisian manual untuk total harga item dan ringkasan
+          </p>
         </div>
+        <button
+          type="button"
+          role="switch"
+          id="useCustomInputPriceSwitch"
+          aria-checked={Boolean(invoiceData.isCustomInputPrice)}
+          onClick={() =>
+            setInvoiceData((prev) => ({
+              ...prev,
+              isCustomInputPrice: !prev.isCustomInputPrice,
+            }))
+          }
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+            invoiceData.isCustomInputPrice ? "bg-zinc-900" : "bg-zinc-200"
+          }`}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+              invoiceData.isCustomInputPrice ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
 
-        <div className="col-12 mb-3">
-          <label className="form-label small text-muted text-uppercase fw-semibold">
-            No. Invoice
-          </label>
+      <div className="grid grid-cols-1 gap-2">
+        <div>
+          <label className={`mb-1 ${sectionTitleClass}`}>No. Invoice</label>
           <input
             type="text"
-            className="form-control form-control-sm"
-            value={invoiceData.invoiceNo}
+            className={inputClass}
+            value={invoiceData.invoiceNo || ""}
             onChange={(e) =>
-              setInvoiceData({
-                ...invoiceData,
-                invoiceNo: e.target.value,
-              })
+              setInvoiceData((prev) => ({ ...prev, invoiceNo: e.target.value }))
             }
             placeholder="INV-20250101-001"
           />
         </div>
-        <div className="col-12 mb-2">
-          <label className="form-label small text-muted text-uppercase fw-semibold">
-            Tempat
-          </label>
+
+        <div>
+          <label className={`mb-1 ${sectionTitleClass}`}>Tempat</label>
           <input
             type="text"
-            className="form-control form-control-sm"
-            value={invoiceData.place}
+            className={inputClass}
+            value={invoiceData.place || ""}
             onChange={(e) =>
-              setInvoiceData({
-                ...invoiceData,
-                place: e.target.value,
-              })
+              setInvoiceData((prev) => ({ ...prev, place: e.target.value }))
             }
+            placeholder="Jakarta"
           />
         </div>
-        <div className="col-12">
-          <label className="form-label small text-muted text-uppercase fw-semibold">
-            Tanggal
-          </label>
+
+        <div>
+          <label className={`mb-1 ${sectionTitleClass}`}>Tanggal</label>
           <input
             type="text"
-            className="form-control form-control-sm"
-            value={invoiceData.date}
+            className={inputClass}
+            value={invoiceData.date || ""}
             onChange={(e) =>
-              setInvoiceData({
-                ...invoiceData,
-                date: e.target.value,
-              })
+              setInvoiceData((prev) => ({ ...prev, date: e.target.value }))
             }
+            placeholder="01 Januari 2025"
           />
         </div>
       </div>
-      <hr className="my-3" />
-      <div className="mb-3">
-        <label className="form-label small text-muted text-uppercase fw-semibold">
-          Informasi Klien
-        </label>
-        <input
-          type="text"
-          className="form-control form-control-sm mb-2"
-          placeholder="Kepada YTH"
-          value={invoiceData.toClient}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              toClient: e.target.value,
-            })
-          }
-        />
-        <input
-          type="text"
-          className="form-control form-control-sm mb-2"
-          placeholder="Nama Klien"
-          value={invoiceData.clientName}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              clientName: e.target.value,
-            })
-          }
-        />
+
+      <hr className="border-zinc-200" />
+
+      <div className="space-y-3">
+        <span className={sectionTitleClass}>Informasi Klien</span>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <input
+            type="text"
+            className={inputClass}
+            placeholder="Kepada YTH"
+            value={invoiceData.toClient || ""}
+            onChange={(e) =>
+              setInvoiceData((prev) => ({ ...prev, toClient: e.target.value }))
+            }
+          />
+          <input
+            type="text"
+            className={inputClass}
+            placeholder="Nama Klien"
+            value={invoiceData.clientName || ""}
+            onChange={(e) =>
+              setInvoiceData((prev) => ({
+                ...prev,
+                clientName: e.target.value,
+              }))
+            }
+          />
+        </div>
+
         <input
           type="email"
-          className="form-control form-control-sm mb-2"
-          placeholder="Email"
-          value={invoiceData.clientEmail}
+          className={inputClass}
+          placeholder="Email Klien"
+          value={invoiceData.clientEmail || ""}
           onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              clientEmail: e.target.value,
-            })
+            setInvoiceData((prev) => ({ ...prev, clientEmail: e.target.value }))
           }
         />
+
         <textarea
-          className="form-control form-control-sm mb-2"
           rows={2}
-          placeholder="Alamat"
-          value={invoiceData.clientAddress}
+          className={inputClass}
+          placeholder="Alamat Klien"
+          value={invoiceData.clientAddress || ""}
           onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
+            setInvoiceData((prev) => ({
+              ...prev,
               clientAddress: e.target.value,
-            })
+            }))
           }
         />
-        <input
-          type="text"
-          className="form-control form-control-sm mb-2"
-          placeholder="No PO"
-          value={invoiceData.POnumber}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              POnumber: e.target.value,
-            })
-          }
-        />
-        <input
-          type="text"
-          className="form-control form-control-sm mb-2"
-          placeholder="Tanggal PO"
-          value={invoiceData.POdate}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              POdate: e.target.value,
-            })
-          }
-        />
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <input
+            type="text"
+            className={inputClass}
+            placeholder="No PO"
+            value={invoiceData.POnumber || ""}
+            onChange={(e) =>
+              setInvoiceData((prev) => ({ ...prev, POnumber: e.target.value }))
+            }
+          />
+          <input
+            type="text"
+            className={inputClass}
+            placeholder="Tanggal PO"
+            value={invoiceData.POdate || ""}
+            onChange={(e) =>
+              setInvoiceData((prev) => ({ ...prev, POdate: e.target.value }))
+            }
+          />
+        </div>
       </div>
-      <hr className="my-3" />
-      <div className="mb-3">
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
-            Item Invoice
-          </label>
+
+      <hr className="border-zinc-200" />
+
+      <div>
+        <div className="mb-2 flex items-center justify-between">
+          <span className={sectionTitleClass}>Item Invoice</span>
           <button
+            type="button"
             onClick={addItem}
-            className="btn btn-link btn-sm text-primary p-0"
+            className="inline-flex items-center gap-1 text-xs font-medium text-zinc-900 hover:underline"
           >
-            + Tambah Item
+            <Plus className="h-3.5 w-3.5" />
+            Tambah Item
           </button>
         </div>
 
-        <div className="table-responsive">
-          <table className="table table-sm">
-            <thead>
+        <div className="overflow-x-auto rounded-xl border border-zinc-200">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-zinc-50 text-zinc-500">
               <tr>
-                <th>Deskripsi</th>
-                <th style={{ width: "70" }}>Qty</th>
-                <th style={{ width: "100" }}>Harga</th>
-                <th style={{ width: "30" }}>Satuan</th>
-                {invoiceData.isCustomInputPrice && <th>Jumlah Harga</th>}
+                <th className="px-3 py-2.5 font-medium">Deskripsi</th>
+                <th className="w-20 px-2 py-2.5 font-medium text-right">Qty</th>
+                <th className="w-28 px-2 py-2.5 font-medium text-right">
+                  Harga
+                </th>
+                <th className="w-20 px-2 py-2.5 font-medium">Satuan</th>
+                {invoiceData.isCustomInputPrice && (
+                  <th className="w-28 px-2 py-2.5 font-medium text-right">
+                    Jumlah
+                  </th>
+                )}
+                <th className="w-10 px-2 py-2.5 text-center font-medium"></th>
               </tr>
             </thead>
-            <tbody>
-              {invoiceData.items.map((item) => (
-                <tr key={item.id}>
-                  <td>
+            <tbody className="divide-y divide-zinc-200 bg-white">
+              {invoiceData.items?.map((item) => (
+                <tr key={item.id} className="hover:bg-zinc-50/50">
+                  <td className="p-2">
                     <input
                       type="text"
-                      className="form-control form-control-sm"
-                      value={item.description}
+                      className="w-full rounded-md border border-zinc-200 bg-transparent px-2.5 py-1.5 text-xs text-zinc-900 placeholder-zinc-400 outline-none focus:border-zinc-900"
+                      value={item.description || ""}
                       onChange={(e) =>
                         updateItem(item.id, "description", e.target.value)
                       }
                       placeholder="Nama item"
                     />
                   </td>
-                  <td>
+                  <td className="p-2">
                     <NumericFormat
-                      type="text"
-                      className="form-control form-control-sm text-end"
+                      className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-right text-xs text-zinc-900 outline-none focus:border-zinc-900"
                       value={item.quantity}
                       thousandSeparator=","
                       decimalSeparator="."
-                      // decimalScale={2}
-                      fixedDecimalScale
                       allowNegative={false}
-                      onValueChange={(values) => {
-                        updateItem(item.id, "quantity", values.floatValue ?? 0);
-                      }}
+                      onValueChange={(values) =>
+                        updateItem(item.id, "quantity", values.floatValue ?? 0)
+                      }
                     />
                   </td>
-                  <td>
+                  <td className="p-2">
                     <NumericFormat
-                      type="text"
-                      className="form-control form-control-sm text-end"
+                      className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-right text-xs text-zinc-900 outline-none focus:border-zinc-900"
                       value={item.price}
                       thousandSeparator=","
                       decimalSeparator="."
                       decimalScale={2}
                       fixedDecimalScale
                       allowNegative={false}
-                      onValueChange={(values) => {
-                        updateItem(item.id, "price", values.floatValue ?? 0);
-                      }}
+                      onValueChange={(values) =>
+                        updateItem(item.id, "price", values.floatValue ?? 0)
+                      }
                     />
                   </td>
                   {invoiceData.isCustomInputPrice && (
-                    <td>
+                    <td className="p-2">
                       <NumericFormat
-                        type="text"
-                        className="form-control form-control-sm text-end"
+                        className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-right text-xs text-zinc-900 outline-none focus:border-zinc-900"
                         value={item.totalPrice}
                         thousandSeparator=","
                         decimalSeparator="."
                         decimalScale={2}
                         fixedDecimalScale
                         allowNegative={false}
-                        onValueChange={(values) => {
+                        onValueChange={(values) =>
                           updateItem(
                             item.id,
                             "totalPrice",
                             values.floatValue ?? 0,
-                          );
-                        }}
+                          )
+                        }
                       />
                     </td>
                   )}
-                  <td>
+                  <td className="p-2">
                     <input
                       type="text"
-                      className="form-control form-control-sm"
-                      value={item.unit}
+                      className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-xs text-zinc-900 outline-none focus:border-zinc-900"
+                      value={item.unit || ""}
                       onChange={(e) =>
                         updateItem(item.id, "unit", e.target.value)
                       }
+                      placeholder="Pcs"
                     />
                   </td>
-                  <td className="text-center">
+                  <td className="p-2 text-center">
                     <button
+                      type="button"
                       onClick={() => removeItem(item.id)}
-                      className="btn btn-sm btn-link text-danger p-0"
+                      className="rounded p-1 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                      title="Hapus Item"
                     >
-                      🗑️
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {(!invoiceData.items || invoiceData.items.length === 0) && (
+            <div className="p-6 text-center text-xs text-zinc-400">
+              Belum ada item ditambahkan.
+            </div>
+          )}
         </div>
-        {invoiceData.items.length === 0 && (
-          <p className="text-muted text-center small py-3">Belum ada item</p>
-        )}
       </div>
+
       {invoiceData.isCustomInputPrice && (
-        <div className="mb-3">
-          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
-            Subtotal
-          </label>
-          <NumericFormat
-            type="text"
-            className="form-control form-control-sm text-end"
-            value={invoiceData.subTotal}
-            thousandSeparator=","
-            decimalSeparator="."
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            onValueChange={({ floatValue }) => {
-              setInvoiceData({
-                ...invoiceData,
-                subTotal: floatValue ?? 0,
-              });
-            }}
-          />
-          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
-            DPP
-          </label>
-          <NumericFormat
-            type="text"
-            className="form-control form-control-sm text-end"
-            value={invoiceData.dppAmount}
-            thousandSeparator=","
-            decimalSeparator="."
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            onValueChange={({ floatValue }) => {
-              setInvoiceData({
-                ...invoiceData,
-                dppAmount: floatValue ?? 0,
-              });
-            }}
-          />
+        <div className="space-y-3 rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-3.5">
+          <span className="block text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+            Override Ringkas Penjualan
+          </span>
 
-          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
-            PPN
-          </label>
-          <NumericFormat
-            type="text"
-            className="form-control form-control-sm text-end"
-            value={invoiceData.taxAmount}
-            thousandSeparator=","
-            decimalSeparator="."
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            onValueChange={({ floatValue }) => {
-              setInvoiceData({
-                ...invoiceData,
-                taxAmount: floatValue ?? 0,
-              });
-            }}
-          />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs text-zinc-600">
+                Subtotal
+              </label>
+              <NumericFormat
+                className={numericInputClass}
+                value={invoiceData.subTotal}
+                thousandSeparator=","
+                decimalSeparator="."
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                onValueChange={({ floatValue }) =>
+                  setInvoiceData((prev) => ({
+                    ...prev,
+                    subTotal: floatValue ?? 0,
+                  }))
+                }
+              />
+            </div>
 
-          <label className="form-label small text-muted text-uppercase fw-semibold mb-0">
-            Grand Total
-          </label>
-          <NumericFormat
-            type="text"
-            className="form-control form-control-sm text-end"
-            value={invoiceData.totalPrice}
-            thousandSeparator=","
-            decimalSeparator="."
-            decimalScale={2}
-            fixedDecimalScale
-            allowNegative={false}
-            onValueChange={({ floatValue }) => {
-              setInvoiceData({
-                ...invoiceData,
-                totalPrice: floatValue ?? 0,
-              });
-            }}
-          />
+            <div>
+              <label className="mb-1 block text-xs text-zinc-600">DPP</label>
+              <NumericFormat
+                className={numericInputClass}
+                value={invoiceData.dppAmount}
+                thousandSeparator=","
+                decimalSeparator="."
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                onValueChange={({ floatValue }) =>
+                  setInvoiceData((prev) => ({
+                    ...prev,
+                    dppAmount: floatValue ?? 0,
+                  }))
+                }
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs text-zinc-600">PPN</label>
+              <NumericFormat
+                className={numericInputClass}
+                value={invoiceData.taxAmount}
+                thousandSeparator=","
+                decimalSeparator="."
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                onValueChange={({ floatValue }) =>
+                  setInvoiceData((prev) => ({
+                    ...prev,
+                    taxAmount: floatValue ?? 0,
+                  }))
+                }
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs font-medium text-zinc-900">
+                Grand Total
+              </label>
+              <NumericFormat
+                className={`${numericInputClass} font-semibold`}
+                value={invoiceData.totalPrice}
+                thousandSeparator=","
+                decimalSeparator="."
+                decimalScale={2}
+                fixedDecimalScale
+                allowNegative={false}
+                onValueChange={({ floatValue }) =>
+                  setInvoiceData((prev) => ({
+                    ...prev,
+                    totalPrice: floatValue ?? 0,
+                  }))
+                }
+              />
+            </div>
+          </div>
         </div>
       )}
 
-      <hr className="my-3" />
-      <div className="mb-3">
-        <label className="form-label small text-muted text-uppercase fw-semibold">
-          Tanda Terima
-        </label>
-        <textarea
-          className="form-control form-control-sm mb-2"
-          rows={2}
-          value={invoiceData.receiver || ""}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              receiver: e.target.value,
-            })
-          }
-          placeholder="Tanda terima..."
-        />
-        <input
-          className="form-control form-control-sm"
-          type="text"
-          value={invoiceData.receiver_name || ""}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              receiver_name: e.target.value,
-            })
-          }
-          placeholder="Nama Penerima..."
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label small text-muted text-uppercase fw-semibold">
-          Space Hormat Kami & Tanda Terima
-        </label>
-        <input
-          className="form-control form-control-sm mb-2"
-          value={invoiceData.space_best_regards}
-          type="number"
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              space_best_regards: Number(e.target.value),
-            })
-          }
-          placeholder="Space Hormat Kami & Tanda Terima"
-        />
-        <label className="form-label small text-muted text-uppercase fw-semibold">
-          Hormat Kami
-        </label>
-        <textarea
-          className="form-control form-control-sm mb-2"
-          rows={2}
-          value={invoiceData.best_regards || ""}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              best_regards: e.target.value,
-            })
-          }
-          placeholder="Hormat kami..."
-        />
-        <input
-          className="form-control form-control-sm"
-          type="text"
-          value={invoiceData.best_regards_name || ""}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              best_regards_name: e.target.value,
-            })
-          }
-          placeholder="Nama Hormat Kami..."
-        />
-      </div>
-      <div className="mb-3">
-        <label className="form-label small text-muted text-uppercase fw-semibold">
-          Catatan
-        </label>
-        <textarea
-          className="form-control form-control-sm"
-          rows={2}
-          value={invoiceData.notes}
-          onChange={(e) =>
-            setInvoiceData({
-              ...invoiceData,
-              notes: e.target.value,
-            })
-          }
-          placeholder="Catatan untuk klien..."
-        />
-      </div>
-      <hr className="my-3" />
-      <div className="mt-3">
-        <label className="form-label small text-muted text-uppercase fw-semibold">
-          Load Data dari JSON
-        </label>
-        <div className="d-grid gap-2">
-          <button
-            onClick={handleLoadItemsFromJson}
-            className="btn btn-outline-secondary btn-sm"
-          >
-            📂 Load Items.json
-          </button>
-          <small className="text-muted text-center">atau</small>
-          <button
-            onClick={handleLoadFullInvoice}
-            className="btn btn-outline-primary btn-sm"
-          >
-            📂 Load Full Invoice.json
-          </button>
+      <hr className="border-zinc-200" />
+
+      <div className="space-y-4">
+        <div>
+          <span className={`mb-1 ${sectionTitleClass}`}>Tanda Terima</span>
+          <div className="space-y-2">
+            <textarea
+              rows={2}
+              className={inputClass}
+              value={invoiceData.receiver || ""}
+              onChange={(e) =>
+                setInvoiceData((prev) => ({
+                  ...prev,
+                  receiver: e.target.value,
+                }))
+              }
+              placeholder="Teks tanda terima..."
+            />
+            <input
+              type="text"
+              className={inputClass}
+              value={invoiceData.receiver_name || ""}
+              onChange={(e) =>
+                setInvoiceData((prev) => ({
+                  ...prev,
+                  receiver_name: e.target.value,
+                }))
+              }
+              placeholder="Nama Penerima..."
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1 flex items-center justify-between">
+            <span className={sectionTitleClass}>Hormat Kami</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs">Space (px):</span>
+              <input
+                type="number"
+                className="w-16 rounded-md border bg-white px-2 py-1 text-right text-xs shadow-sm outline-none"
+                value={invoiceData.space_best_regards ?? 0}
+                onChange={(e) =>
+                  setInvoiceData((prev) => ({
+                    ...prev,
+                    space_best_regards: Number(e.target.value),
+                  }))
+                }
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <textarea
+              rows={2}
+              className={inputClass}
+              value={invoiceData.best_regards || ""}
+              onChange={(e) =>
+                setInvoiceData((prev) => ({
+                  ...prev,
+                  best_regards: e.target.value,
+                }))
+              }
+              placeholder="Hormat kami..."
+            />
+            <input
+              type="text"
+              className={inputClass}
+              value={invoiceData.best_regards_name || ""}
+              onChange={(e) =>
+                setInvoiceData((prev) => ({
+                  ...prev,
+                  best_regards_name: e.target.value,
+                }))
+              }
+              placeholder="Nama Hormat Kami..."
+            />
+          </div>
+        </div>
+
+        <div>
+          <span className={`mb-1 ${sectionTitleClass}`}>Catatan</span>
+          <textarea
+            rows={2}
+            className={inputClass}
+            value={invoiceData.notes || ""}
+            onChange={(e) =>
+              setInvoiceData((prev) => ({ ...prev, notes: e.target.value }))
+            }
+            placeholder="Catatan untuk klien..."
+          />
         </div>
       </div>
-    </>
+
+      <hr className="border-zinc-200" />
+
+      <div>
+        <span className={`mb-2 ${sectionTitleClass}`}>Load Data dari JSON</span>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <MyButton onClick={handleLoadItemsFromJson}>
+            <FileCode2 className="h-4 w-4 text-zinc-400" />
+            Load Items.json
+          </MyButton>
+          <MyButton onClick={handleLoadFullInvoice}>
+            <FileCode2 className="h-4 w-4" />
+            Load Full Invoice.json
+          </MyButton>
+        </div>
+      </div>
+    </div>
   );
 }
