@@ -217,8 +217,8 @@ export default function InvoiceSettings({
               <tr>
                 <th>Deskripsi</th>
                 <th style={{ width: "70" }}>Qty</th>
-                <th style={{ width: "30" }}>Satuan</th>
                 <th style={{ width: "100" }}>Harga</th>
+                <th style={{ width: "30" }}>Satuan</th>
                 {invoiceData.isCustomInputPrice && <th>Jumlah Harga</th>}
               </tr>
             </thead>
