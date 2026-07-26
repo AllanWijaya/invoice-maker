@@ -458,15 +458,38 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       </p>
                     </td>
                   </tr>
-                  <tr>
-                    <td colSpan={2}>
-                      {Array.from({
-                        length: invoiceData.space_best_regards || 0,
-                      }).map((_, index) => (
-                        <br key={index} />
-                      ))}
-                    </td>
-                  </tr>
+                  {brandData.esign ? (
+                    <tr>
+                      <td className="w-1/2"></td>
+                      <td className="flex justify-center items-center">
+                        {Array.from({
+                          length: invoiceData.space_best_regards || 0,
+                        }).map((_, index) => (
+                          <br key={index} />
+                        ))}
+                        <img
+                          src={brandData.esign}
+                          alt="Company Esign"
+                          className="max-h-20 max-w-[180px] object-contain"
+                        />
+                        {Array.from({
+                          length: invoiceData.space_best_regards || 0,
+                        }).map((_, index) => (
+                          <br key={index} />
+                        ))}
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td colSpan={2}>
+                        {Array.from({
+                          length: invoiceData.space_best_regards || 0,
+                        }).map((_, index) => (
+                          <br key={index} />
+                        ))}
+                      </td>
+                    </tr>
+                  )}
                   <tr>
                     <td className="w-1/2">
                       {invoiceData.receiver_name && (

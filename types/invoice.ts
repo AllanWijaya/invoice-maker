@@ -49,6 +49,7 @@ export interface BrandData {
   companyEmail: string;
   companyNPWP?: string;
   logo: string | null; // base64 or URL
+  esign?: string | null; // base64 or URL
   footerText: string;
   taxRate: number; // PPN dalam persen
   accentColor: string;

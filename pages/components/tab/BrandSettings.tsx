@@ -6,14 +6,18 @@ import { Upload, Trash2, Check, Image as ImageIcon } from "lucide-react";
 interface BrandSettingsProps {
   brandData: BrandData;
   setBrandData: (data: BrandData) => void;
-  removeLogo: () => void;
-  handleLogoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  removeImage: (key: keyof BrandData) => void;
+  handleImageUpload: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: keyof BrandData,
+  ) => void;
   colorOptions: { name: string; value: string }[];
 }
 
 export default function BrandSettings({
   brandData = {
     logo: "",
+    esign: "",
     companyName: "",
     companyAddress: "",
     companyPhone: "",
@@ -25,8 +29,8 @@ export default function BrandSettings({
     useLetterhead: true,
   },
   setBrandData,
-  removeLogo,
-  handleLogoUpload,
+  removeImage,
+  handleImageUpload,
   colorOptions = [
     { name: "Biru", value: "#0d6efd" },
     { name: "Hijau", value: "#198754" },
@@ -87,7 +91,7 @@ export default function BrandSettings({
               />
               <button
                 type="button"
-                onClick={removeLogo}
+                onClick={() => removeImage("logo")}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-2.5 py-1 text-xs font-medium text-red-600 shadow-sm transition-all hover:bg-red-50 hover:text-red-700"
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -111,7 +115,51 @@ export default function BrandSettings({
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleLogoUpload}
+                onChange={(e) => handleImageUpload(e, "logo")}
+                className="hidden"
+              />
+            </label>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <label className="mb-1.5 block font-medium text-zinc-900">Esign</label>
+        <div className="relative flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 p-4 text-center transition-all hover:bg-zinc-50">
+          {brandData.esign ? (
+            <div className="flex flex-col items-center gap-3">
+              <img
+                src={brandData.esign}
+                alt="Company Esign"
+                className="max-h-20 max-w-[180px] object-contain"
+              />
+              <button
+                type="button"
+                onClick={() => removeImage("esign")}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-2.5 py-1 text-xs font-medium text-red-600 shadow-sm transition-all hover:bg-red-50 hover:text-red-700"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Hapus Esign
+              </button>
+            </div>
+          ) : (
+            <label className="flex w-full cursor-pointer flex-col items-center justify-center">
+              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-500">
+                <Upload className="h-5 w-5" />
+              </div>
+              <p className="text-xs font-medium text-zinc-700">
+                Klik untuk unggah{" "}
+                <span className="font-normal text-zinc-500">
+                  atau drag & drop
+                </span>
+              </p>
+              <p className="mt-1 text-[11px] text-zinc-400">
+                SVG, PNG, atau JPG (Max 2MB)
+              </p>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, "esign")}
                 className="hidden"
               />
             </label>

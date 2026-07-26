@@ -259,7 +259,10 @@ export default function Home() {
     }
   };
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    key: keyof BrandData,
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
@@ -269,14 +272,14 @@ export default function Home() {
       const reader = new FileReader();
       reader.onload = (event) => {
         const base64 = event.target?.result as string;
-        setBrandData({ ...brandData, logo: base64 });
+        setBrandData({ ...brandData, [key]: base64 });
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const removeLogo = () => {
-    setBrandData({ ...brandData, logo: null });
+  const removeImage = (key: keyof BrandData) => {
+    setBrandData({ ...brandData, [key]: null });
   };
 
   const handlePrint = useReactToPrint({
@@ -365,8 +368,8 @@ export default function Home() {
                 <BrandSettings
                   brandData={brandData}
                   setBrandData={setBrandData}
-                  removeLogo={removeLogo}
-                  handleLogoUpload={handleLogoUpload}
+                  removeImage={removeImage}
+                  handleImageUpload={handleImageUpload}
                   colorOptions={colorOptions}
                 />
               </div>
