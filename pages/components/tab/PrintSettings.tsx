@@ -83,7 +83,7 @@ export default function PrintSettings({
 
       <div className="grid grid-cols-2 gap-3">
         {Object.entries(PAGE_CONFIG).map(([id, paper]) => {
-          const active = printOptions?.pageSize === id;
+          const active = (printOptions?.pageSize ?? "a4") === id;
 
           return (
             <label

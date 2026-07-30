@@ -239,7 +239,7 @@ export default function Home() {
     setBrandData({ ...brandData, [key]: null });
   };
 
-  const page = PAGE_CONFIG[printOptions.pageSize];
+  const page = PAGE_CONFIG[printOptions.pageSize ?? "a4"];
 
   const handlePrint = useReactToPrint({
     contentRef: previewRef,
