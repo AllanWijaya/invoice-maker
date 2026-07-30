@@ -394,7 +394,12 @@ export default function Home() {
                       Preview Invoice
                     </h5>
                   </div>
-                  <InvoicePreview previewRef={previewRef} />
+                  <InvoicePreview
+                    previewRef={previewRef}
+                    brandData={brandData}
+                    invoiceData={invoiceData}
+                    printOptions={printOptions}
+                  />
                 </div>
               </div>
             </div>

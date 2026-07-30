@@ -1,15 +1,25 @@
-import { useAppConfigStore } from "@/hooks/store/appConfigStore";
 import InvoicePreview from "@/pages/components/InvoicePreview";
 import { useRef } from "react";
 
 export default function PrintPage() {
-  const hasHydrated = useAppConfigStore((s) => s.hasHydrated);
-
   const previewRef = useRef<HTMLDivElement>(null);
+  const appConfig =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("app-config") ?? "{}")
+      : null;
 
-  if (!hasHydrated) {
-    return null;
-  }
+  const invoiceData = appConfig?.state?.brandData;
 
-  return <InvoicePreview previewRef={previewRef} />;
+  const brandData = appConfig?.state?.brandData;
+
+  const printOptions = appConfig?.state?.printOptions;
+
+  return (
+    <InvoicePreview
+      previewRef={previewRef}
+      brandData={brandData}
+      invoiceData={invoiceData}
+      printOptions={printOptions}
+    />
+  );
 }

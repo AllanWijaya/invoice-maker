@@ -11,14 +11,18 @@ import {
   ucwords,
 } from "../../lib/Helper";
 import { PAGE_CONFIG } from "./tab/PrintSettings";
-import { useAppConfigStore } from "@/hooks/store/appConfigStore";
+import { PrintOptions } from "@/hooks/store/appConfigStore";
+import { InvoiceData, BrandData } from "@/types/invoice";
 
 interface InvoicePreviewProps {
   previewRef: React.RefObject<HTMLDivElement | null>;
+  invoiceData: InvoiceData;
+  brandData: BrandData;
+  printOptions: PrintOptions;
 }
 
 const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
-  ({ previewRef }) => {
+  ({ previewRef, invoiceData, brandData, printOptions }) => {
     const column = {
       no: 3,
       description: 39,
@@ -28,9 +32,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
       total: 20,
       terbilang: 10,
     };
-    const invoiceData = useAppConfigStore((s) => s.invoiceData);
-    const brandData = useAppConfigStore((s) => s.brandData);
-    const printOptions = useAppConfigStore((s) => s.printOptions);
+    // const invoiceData = useAppConfigStore((s) => s.invoiceData);
+    // const brandData = useAppConfigStore((s) => s.brandData);
+    // const printOptions = useAppConfigStore((s) => s.printOptions);
 
     const page = PAGE_CONFIG[printOptions.pageSize];
 
