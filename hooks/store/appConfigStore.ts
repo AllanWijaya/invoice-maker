@@ -19,6 +19,9 @@ interface AppConfigState {
   resetInvoiceData: () => void;
   resetBrandData: () => void;
   resetPrintOptions: () => void;
+
+  hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
 }
 
 const createDefaultInvoice = (): InvoiceData => {
@@ -105,9 +108,18 @@ export const useAppConfigStore = create<AppConfigState>()(
         set({
           printOptions: defaultPrintOptions,
         }),
+
+      hasHydrated: false,
+      setHasHydrated: (value) =>
+        set({
+          hasHydrated: value,
+        }),
     }),
     {
       name: "app-config",
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );
