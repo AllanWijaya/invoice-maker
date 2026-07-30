@@ -90,3 +90,8 @@
   border-bottom: 1px solid #111111 !important;
   /* border-bottom: 0 !important; */
 }
+
+tr {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}

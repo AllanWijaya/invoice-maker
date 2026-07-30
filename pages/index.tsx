@@ -1,48 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import {
-  InvoiceData,
-  BrandData,
-  InvoiceItem,
-  PrintOptions,
-} from "../types/invoice";
+import { InvoiceData, BrandData, InvoiceItem } from "../types/invoice";
 import Header from "./components/form/Header";
 import InvoiceSettings from "./components/tab/InvoiceSettings";
 import BrandSettings from "./components/tab/BrandSettings";
-import PrintSettings from "./components/tab/PrintSettings";
-import { useLocalStorage } from "../hooks/UseLocalStorage";
+import PrintSettings, { PAGE_CONFIG } from "./components/tab/PrintSettings";
 import InvoicePreview from "./components/InvoicePreview";
 import { FileText, Building2, Printer } from "lucide-react";
 import { useRouter } from "next/router";
+import { useAppConfigStore } from "@/hooks/store/appConfigStore";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("invoice");
   const previewRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-
-  const [printOptions, setPrintOptions] = useState<PrintOptions>({
-    pageSize: "a4",
-  });
-
-  const createDefaultInvoice = (): InvoiceData => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-
-    return {
-      invoiceNo: `INV-${year}${month}${day}-001`,
-      date: now.toISOString().split("T")[0],
-      clientName: "",
-      clientEmail: "",
-      clientAddress: "",
-      items: [],
-      notes: "Terima kasih atas kepercayaan Anda",
-    };
-  };
-
-  const [invoiceData, setInvoiceData] =
-    useState<InvoiceData>(createDefaultInvoice);
+  const {
+    invoiceData,
+    setInvoiceData,
+    resetInvoiceData,
+    brandData,
+    setBrandData,
+    printOptions,
+  } = useAppConfigStore();
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -57,7 +36,6 @@ export default function Home() {
         if (Array.isArray(invoices) && invoices[Number(id)]) {
           const cleanInvoice = invoices[Number(id)];
 
-          // eslint-disable-next-line react-hooks/set-state-in-effect
           setInvoiceData({
             ...cleanInvoice,
             items: cleanInvoice.items.map(
@@ -74,24 +52,9 @@ export default function Home() {
       }
     }
 
-    setInvoiceData(createDefaultInvoice());
+    resetInvoiceData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, router.query.id]);
-
-  const [brandData, setBrandData] = useLocalStorage<BrandData>(
-    "brand_settings",
-    {
-      companyName: "PT Example Indonesia",
-      companyAddress: "Jl. Sudirman No. 123, Jakarta Selatan",
-      companyPhone: "(021) 1234-5678",
-      companyEmail: "info@example.com",
-      logo: null,
-      footerText: "Terima kasih atas kepercayaan Anda",
-      taxRate: 11,
-      accentColor: "#0d6efd",
-      jenisTransaksi: "non-ppn",
-    },
-  );
 
   const addItem = () => {
     const newItem: InvoiceItem = {
@@ -282,11 +245,45 @@ export default function Home() {
     setBrandData({ ...brandData, [key]: null });
   };
 
+  const page = PAGE_CONFIG[printOptions.pageSize];
+
   const handlePrint = useReactToPrint({
     contentRef: previewRef,
     documentTitle: `Invoice_${invoiceData.invoiceNo}`,
     onPrintError: (error) => console.error(error),
+    pageStyle: `
+    @page {
+      size: ${page.width}mm ${page.height}mm;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  `,
   });
+
+  const downloadPdf = async () => {
+    const res = await fetch(`/api/pdf?no=${invoiceData.invoiceNo}`);
+
+    if (!res.ok) {
+      alert("Gagal membuat PDF");
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Invoice_${invoiceData.invoiceNo}.pdf`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
 
   const colorOptions = [
     { name: "Biru", value: "#0d6efd" },
@@ -354,8 +351,6 @@ export default function Home() {
             <div className="max-h-[calc(100vh-220px)] overflow-y-auto p-4 sm:p-6 custom-scrollbar">
               <div className={activeTab === "invoice" ? "block" : "hidden"}>
                 <InvoiceSettings
-                  invoiceData={invoiceData}
-                  setInvoiceData={setInvoiceData}
                   addItem={addItem}
                   removeItem={removeItem}
                   updateItem={updateItem}
@@ -366,8 +361,6 @@ export default function Home() {
 
               <div className={activeTab === "brand" ? "block" : "hidden"}>
                 <BrandSettings
-                  brandData={brandData}
-                  setBrandData={setBrandData}
                   removeImage={removeImage}
                   handleImageUpload={handleImageUpload}
                   colorOptions={colorOptions}
@@ -376,11 +369,9 @@ export default function Home() {
 
               <div className={activeTab === "print" ? "block" : "hidden"}>
                 <PrintSettings
-                  brandData={brandData}
                   invoiceData={invoiceData}
                   handlePrint={handlePrint}
-                  printOptions={printOptions}
-                  onPrintOptions={setPrintOptions}
+                  downloadPdf={downloadPdf}
                 />
               </div>
             </div>
@@ -397,19 +388,20 @@ export default function Home() {
                   Live Preview
                 </span>
               </div>
-              <span className="text-[11px] text-zinc-400 dark:text-zinc-500">
-                A4 Standard Format
-              </span>
             </div>
 
             <div className="flex min-h-[720px] justify-center rounded-2xl border border-zinc-200/80 bg-zinc-100/60 p-4 sm:p-8 dark:border-zinc-800/80 dark:bg-zinc-900/40">
               <div className="w-full max-w-[800px]">
-                <InvoicePreview
-                  previewRef={previewRef}
-                  brandData={brandData}
-                  invoiceData={invoiceData}
-                  printOptions={printOptions}
-                />
+                <div
+                  className={`custom-text card border-0 shadow-sm sticky top-[100px] bg-white rounded-lg`}
+                >
+                  <div className="px-4 py-3 bg-white border-b border-gray-200 rounded-t-lg">
+                    <h5 className="m-0 text-base font-semibold text-gray-800">
+                      Preview Invoice
+                    </h5>
+                  </div>
+                  <InvoicePreview previewRef={previewRef} />
+                </div>
               </div>
             </div>
           </section>

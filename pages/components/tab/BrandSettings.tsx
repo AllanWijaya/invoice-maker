@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
+import { useAppConfigStore } from "@/hooks/store/appConfigStore";
 import { dataStaticPPN } from "@/types/dataStatic";
 import { BrandData, JenisTransaksi } from "@/types/invoice";
 import { Upload, Trash2, Check, Image as ImageIcon } from "lucide-react";
 
 interface BrandSettingsProps {
-  brandData: BrandData;
-  setBrandData: (data: BrandData) => void;
   removeImage: (key: keyof BrandData) => void;
   handleImageUpload: (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -15,20 +14,6 @@ interface BrandSettingsProps {
 }
 
 export default function BrandSettings({
-  brandData = {
-    logo: "",
-    esign: "",
-    companyName: "",
-    companyAddress: "",
-    companyPhone: "",
-    companyEmail: "",
-    footerText: "",
-    taxRate: 0,
-    accentColor: "#0d6efd",
-    jenisTransaksi: "non-ppn",
-    useLetterhead: true,
-  },
-  setBrandData,
   removeImage,
   handleImageUpload,
   colorOptions = [
@@ -40,6 +25,7 @@ export default function BrandSettings({
     { name: "Hitam", value: "#212529" },
   ],
 }: BrandSettingsProps) {
+  const { brandData, setBrandData } = useAppConfigStore();
   return (
     <div className="space-y-5 text-sm text-zinc-700">
       <div className="flex items-center justify-between rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-3.5">

@@ -62,7 +62,6 @@ export default function HistoryPage() {
             style={{ width: 100 }}
           >
             <Trash className="h-4 w-4" />
-            Delete
           </MyButton>
         </div>
       ))}

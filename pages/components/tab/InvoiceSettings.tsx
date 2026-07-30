@@ -1,12 +1,10 @@
-import { InvoiceData, InvoiceItem } from "@/types/invoice";
+import { InvoiceItem } from "@/types/invoice";
 import { NumericFormat } from "react-number-format";
 import { Plus, Trash2, FileCode2 } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 import MyButton from "../form/MyButton";
+import { useAppConfigStore } from "@/hooks/store/appConfigStore";
 
 interface InvoiceSettingsProps {
-  invoiceData: InvoiceData;
-  setInvoiceData: Dispatch<SetStateAction<InvoiceData>>;
   addItem: () => void;
   removeItem: (id: number) => void;
   updateItem: (
@@ -28,27 +26,14 @@ const sectionTitleClass =
   "block text-xs font-semibold uppercase tracking-wider text-zinc-500";
 
 export default function InvoiceSettings({
-  invoiceData = {
-    invoiceNo: "",
-    date: "",
-    clientName: "",
-    clientEmail: "",
-    clientAddress: "",
-    items: [],
-    notes: "",
-    best_regards: "",
-    best_regards_name: "",
-    space_best_regards: 3,
-    toClient: "",
-    isCustomInputPrice: false,
-  },
-  setInvoiceData,
   addItem,
   removeItem,
   updateItem,
   handleLoadItemsFromJson,
   handleLoadFullInvoice,
 }: InvoiceSettingsProps) {
+  const { invoiceData, setInvoiceData } = useAppConfigStore();
+
   return (
     <div className="space-y-5 text-sm text-zinc-700">
       <div className="flex items-center justify-between rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-3.5">
@@ -69,10 +54,9 @@ export default function InvoiceSettings({
           id="useCustomInputPriceSwitch"
           aria-checked={Boolean(invoiceData.isCustomInputPrice)}
           onClick={() =>
-            setInvoiceData((prev) => ({
-              ...prev,
-              isCustomInputPrice: !prev.isCustomInputPrice,
-            }))
+            setInvoiceData({
+              isCustomInputPrice: !invoiceData.isCustomInputPrice,
+            })
           }
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
             invoiceData.isCustomInputPrice ? "bg-zinc-900" : "bg-zinc-200"
@@ -93,9 +77,7 @@ export default function InvoiceSettings({
             type="text"
             className={inputClass}
             value={invoiceData.invoiceNo || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, invoiceNo: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ invoiceNo: e.target.value })}
             placeholder="INV-20250101-001"
           />
         </div>
@@ -106,9 +88,7 @@ export default function InvoiceSettings({
             type="text"
             className={inputClass}
             value={invoiceData.place || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, place: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ place: e.target.value })}
             placeholder="Jakarta"
           />
         </div>
@@ -119,9 +99,7 @@ export default function InvoiceSettings({
             type="text"
             className={inputClass}
             value={invoiceData.date || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, date: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ date: e.target.value })}
             placeholder="01 Januari 2025"
           />
         </div>
@@ -137,9 +115,7 @@ export default function InvoiceSettings({
             className={inputClass}
             placeholder="Kepada YTH"
             value={invoiceData.toClient || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, toClient: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ toClient: e.target.value })}
           />
           <input
             type="text"
@@ -147,10 +123,9 @@ export default function InvoiceSettings({
             placeholder="Nama Klien"
             value={invoiceData.clientName || ""}
             onChange={(e) =>
-              setInvoiceData((prev) => ({
-                ...prev,
+              setInvoiceData({
                 clientName: e.target.value,
-              }))
+              })
             }
           />
         </div>
@@ -160,9 +135,7 @@ export default function InvoiceSettings({
           className={inputClass}
           placeholder="Email Klien"
           value={invoiceData.clientEmail || ""}
-          onChange={(e) =>
-            setInvoiceData((prev) => ({ ...prev, clientEmail: e.target.value }))
-          }
+          onChange={(e) => setInvoiceData({ clientEmail: e.target.value })}
         />
 
         <textarea
@@ -171,10 +144,9 @@ export default function InvoiceSettings({
           placeholder="Alamat Klien"
           value={invoiceData.clientAddress || ""}
           onChange={(e) =>
-            setInvoiceData((prev) => ({
-              ...prev,
+            setInvoiceData({
               clientAddress: e.target.value,
-            }))
+            })
           }
         />
 
@@ -184,18 +156,14 @@ export default function InvoiceSettings({
             className={inputClass}
             placeholder="No PO"
             value={invoiceData.POnumber || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, POnumber: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ POnumber: e.target.value })}
           />
           <input
             type="text"
             className={inputClass}
             placeholder="Tanggal PO"
             value={invoiceData.POdate || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, POdate: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ POdate: e.target.value })}
           />
         </div>
       </div>
@@ -346,10 +314,9 @@ export default function InvoiceSettings({
                 fixedDecimalScale
                 allowNegative={false}
                 onValueChange={({ floatValue }) =>
-                  setInvoiceData((prev) => ({
-                    ...prev,
+                  setInvoiceData({
                     subTotal: floatValue ?? 0,
-                  }))
+                  })
                 }
               />
             </div>
@@ -365,10 +332,9 @@ export default function InvoiceSettings({
                 fixedDecimalScale
                 allowNegative={false}
                 onValueChange={({ floatValue }) =>
-                  setInvoiceData((prev) => ({
-                    ...prev,
+                  setInvoiceData({
                     dppAmount: floatValue ?? 0,
-                  }))
+                  })
                 }
               />
             </div>
@@ -384,10 +350,9 @@ export default function InvoiceSettings({
                 fixedDecimalScale
                 allowNegative={false}
                 onValueChange={({ floatValue }) =>
-                  setInvoiceData((prev) => ({
-                    ...prev,
+                  setInvoiceData({
                     taxAmount: floatValue ?? 0,
-                  }))
+                  })
                 }
               />
             </div>
@@ -405,10 +370,9 @@ export default function InvoiceSettings({
                 fixedDecimalScale
                 allowNegative={false}
                 onValueChange={({ floatValue }) =>
-                  setInvoiceData((prev) => ({
-                    ...prev,
+                  setInvoiceData({
                     totalPrice: floatValue ?? 0,
-                  }))
+                  })
                 }
               />
             </div>
@@ -427,10 +391,9 @@ export default function InvoiceSettings({
               className={inputClass}
               value={invoiceData.receiver || ""}
               onChange={(e) =>
-                setInvoiceData((prev) => ({
-                  ...prev,
+                setInvoiceData({
                   receiver: e.target.value,
-                }))
+                })
               }
               placeholder="Teks tanda terima..."
             />
@@ -439,10 +402,9 @@ export default function InvoiceSettings({
               className={inputClass}
               value={invoiceData.receiver_name || ""}
               onChange={(e) =>
-                setInvoiceData((prev) => ({
-                  ...prev,
+                setInvoiceData({
                   receiver_name: e.target.value,
-                }))
+                })
               }
               placeholder="Nama Penerima..."
             />
@@ -459,10 +421,9 @@ export default function InvoiceSettings({
                 className="w-16 rounded-md border bg-white px-2 py-1 text-right text-xs shadow-sm outline-none"
                 value={invoiceData.space_best_regards ?? 0}
                 onChange={(e) =>
-                  setInvoiceData((prev) => ({
-                    ...prev,
+                  setInvoiceData({
                     space_best_regards: Number(e.target.value),
-                  }))
+                  })
                 }
               />
             </div>
@@ -473,10 +434,9 @@ export default function InvoiceSettings({
               className={inputClass}
               value={invoiceData.best_regards || ""}
               onChange={(e) =>
-                setInvoiceData((prev) => ({
-                  ...prev,
+                setInvoiceData({
                   best_regards: e.target.value,
-                }))
+                })
               }
               placeholder="Hormat kami..."
             />
@@ -485,10 +445,9 @@ export default function InvoiceSettings({
               className={inputClass}
               value={invoiceData.best_regards_name || ""}
               onChange={(e) =>
-                setInvoiceData((prev) => ({
-                  ...prev,
+                setInvoiceData({
                   best_regards_name: e.target.value,
-                }))
+                })
               }
               placeholder="Nama Hormat Kami..."
             />
@@ -501,9 +460,7 @@ export default function InvoiceSettings({
             rows={2}
             className={inputClass}
             value={invoiceData.notes || ""}
-            onChange={(e) =>
-              setInvoiceData((prev) => ({ ...prev, notes: e.target.value }))
-            }
+            onChange={(e) => setInvoiceData({ notes: e.target.value })}
             placeholder="Catatan untuk klien..."
           />
         </div>

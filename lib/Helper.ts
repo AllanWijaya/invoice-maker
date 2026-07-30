@@ -206,6 +206,19 @@ export const handleChangeState = (
   }));
 };
 
+export const handleChangeStateZustand = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSet: (data: Partial<any>) => void,
+) => {
+  const { name, value, type, checked } = e.target;
+
+  onSet({
+    [name]: type === "checkbox" ? checked : value,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as Partial<any>);
+};
+
 export const roundDown = (value: number, digit = 2) => {
   const factor = 10 ** digit;
   return Math.floor(value * factor) / factor;

@@ -1,42 +1,64 @@
-/* eslint-disable @next/next/no-img-element */
-
-import {
-  calculateTotal,
-  formatCurrency,
-  handleChangeState,
-} from "@/lib/Helper";
-import { BrandData, InvoiceData, PrintOptions } from "../../../types/invoice";
-import { Dispatch } from "react";
-import {
-  Printer,
-  FileText,
-  Info,
-  Check,
-  FileCheck2,
-  PrinterCheck,
-} from "lucide-react";
+import { handleChangeStateZustand } from "@/lib/Helper";
+import { InvoiceData } from "../../../types/invoice";
+import { Printer, Check, FileCheck2, PrinterCheck } from "lucide-react";
 import MyButton from "../form/MyButton";
+import { useAppConfigStore } from "@/hooks/store/appConfigStore";
 
 interface PrintSettingsProps {
-  brandData: BrandData;
   invoiceData: InvoiceData;
   handlePrint: () => void;
-  printOptions: PrintOptions;
-  onPrintOptions: Dispatch<React.SetStateAction<PrintOptions>>;
+  downloadPdf: () => void;
 }
 
-export default function PrintSettings({
-  brandData = {
-    logo: "",
-    companyName: "",
-    companyAddress: "",
-    companyPhone: "",
-    companyEmail: "",
-    footerText: "",
-    taxRate: 0,
-    accentColor: "#0d6efd",
-    jenisTransaksi: "non-ppn",
+type PAGE_CONFIG_TYPE = Record<
+  string,
+  {
+    label: string;
+    width: number;
+    height: number | null;
+    continuous?: boolean;
+    description?: string;
+  }
+>;
+
+export const PAGE_CONFIG: PAGE_CONFIG_TYPE = {
+  a4: {
+    label: "A4",
+    width: 210,
+    height: 297,
   },
+  a5: {
+    label: "A5",
+    width: 148,
+    height: 210,
+  },
+  letter: {
+    label: "Letter",
+    width: 216,
+    height: 279,
+  },
+  continuous: {
+    label: "Continuous Form",
+    width: 241.3, // 9.5 inch
+    height: 279.4, // 11 inch
+    continuous: true,
+    description: "Dot Matrix / Faktur",
+  },
+  thermal58: {
+    label: "Thermal 58 mm",
+    width: 58,
+    height: 0,
+    continuous: true,
+  },
+  thermal80: {
+    label: "Thermal 80 mm",
+    width: 80,
+    height: 0,
+    continuous: true,
+  },
+} as const;
+
+export default function PrintSettings({
   invoiceData = {
     invoiceNo: "",
     date: "",
@@ -47,162 +69,74 @@ export default function PrintSettings({
     notes: "",
   },
   handlePrint,
-  printOptions,
-  onPrintOptions,
+  downloadPdf,
 }: PrintSettingsProps) {
+  const { brandData, printOptions, setPrintOptions } = useAppConfigStore();
+
   return (
     <div className="space-y-6 text-sm text-zinc-700">
-      <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/50 p-4 text-center">
-        <div className="mx-auto max-w-full overflow-hidden rounded-lg border border-zinc-200 bg-white p-3 shadow-sm">
-          <span className="text-xs font-medium text-zinc-400">
-            Preview Ringkas Cetak
-          </span>
-          <div className="mt-2 space-y-2 rounded-md border border-zinc-100 p-3 text-left">
-            <div className="flex items-center gap-2">
-              {brandData.logo && (
-                <img
-                  src={brandData.logo}
-                  alt="Logo"
-                  className="h-6 object-contain"
-                />
-              )}
-              <span className="font-semibold text-zinc-900">
-                {brandData.companyName || "Invoice"}
-              </span>
-            </div>
-            <hr className="border-zinc-200" />
-            <div className="text-xs text-zinc-600">
-              No:{" "}
-              <span className="font-mono font-medium text-zinc-800">
-                {invoiceData.invoiceNo || "-"}
-              </span>
-            </div>
-            <hr className="border-zinc-200" />
-            <div className="rounded-md bg-zinc-50 p-2 text-center">
-              <span className="text-xs font-medium text-zinc-600">
-                Total:{" "}
-                <span className="font-semibold text-zinc-900">
-                  {formatCurrency(
-                    calculateTotal(
-                      invoiceData.items,
-                      brandData.taxRate,
-                      brandData.jenisTransaksi,
-                    ),
-                  )}
-                </span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="space-y-3">
         <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
           Pengaturan Cetak
         </label>
-
-        <div className="flex items-start gap-3 rounded-xl border border-sky-200/60 bg-sky-50/60 p-3.5 text-xs text-sky-900">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" />
-          <div className="space-y-1">
-            <p className="font-medium">
-              Gunakan dialog cetak browser (Ctrl+P / Cmd+P) untuk penyesuaian:
-            </p>
-            <ul className="list-inside list-disc space-y-0.5 text-sky-800">
-              <li>Ukuran kertas (A4, Letter, Continuous, dll.)</li>
-              <li>Orientasi (Portrait / Landscape)</li>
-              <li>Margin cetak dan header/footer browser</li>
-              <li>Jumlah salinan (copies)</li>
-            </ul>
-          </div>
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <label
-          htmlFor="kertasA4"
-          className={`relative flex cursor-pointer flex-col justify-between rounded-xl border-2 p-3.5 transition-all ${
-            printOptions?.pageSize === "a4"
-              ? "border-zinc-900 bg-zinc-900/5"
-              : "border-zinc-200 bg-white hover:border-zinc-300"
-          }`}
-        >
-          <input
-            type="radio"
-            name="pageSize"
-            value="a4"
-            id="kertasA4"
-            className="sr-only"
-            onChange={(e) => handleChangeState(e, onPrintOptions)}
-            checked={printOptions?.pageSize === "a4"}
-          />
-          <div className="mb-2 flex items-center justify-between">
-            <span
-              className={`font-semibold ${
-                printOptions?.pageSize === "a4"
-                  ? "text-zinc-900"
-                  : "text-zinc-700"
-              }`}
-            >
-              Kertas A4
-            </span>
-            <FileText
-              className={`h-5 w-5 ${
-                printOptions?.pageSize === "a4"
-                  ? "text-zinc-900"
-                  : "text-zinc-400"
-              }`}
-            />
-          </div>
-          <span className="text-[11px] text-zinc-500">
-            210 x 297 mm • Standar Laporan
-          </span>
-        </label>
+      <div className="grid grid-cols-2 gap-3">
+        {Object.entries(PAGE_CONFIG).map(([id, paper]) => {
+          const active = printOptions?.pageSize === id;
 
-        <label
-          htmlFor="kertasContinuous"
-          className={`relative flex cursor-pointer flex-col justify-between rounded-xl border-2 p-3.5 transition-all ${
-            printOptions?.pageSize === "continuous"
-              ? "border-zinc-900 bg-zinc-900/5"
-              : "border-zinc-200 bg-white hover:border-zinc-300"
-          }`}
-        >
-          <input
-            type="radio"
-            name="pageSize"
-            value="continuous"
-            id="kertasContinuous"
-            className="sr-only"
-            onChange={(e) => handleChangeState(e, onPrintOptions)}
-            checked={printOptions?.pageSize === "continuous"}
-          />
-          <div className="mb-2 flex items-center justify-between">
-            <span
-              className={`font-semibold ${
-                printOptions?.pageSize === "continuous"
-                  ? "text-zinc-900"
-                  : "text-zinc-700"
+          return (
+            <label
+              key={id}
+              htmlFor={`paper-${id}`}
+              className={`relative flex cursor-pointer flex-col justify-between rounded-xl border-2 p-3.5 transition-all ${
+                active
+                  ? "border-zinc-900 bg-zinc-900/5"
+                  : "border-zinc-200 bg-white hover:border-zinc-300"
               }`}
             >
-              Continuous Form
-            </span>
-            <Printer
-              className={`h-5 w-5 ${
-                printOptions?.pageSize === "continuous"
-                  ? "text-zinc-900"
-                  : "text-zinc-400"
-              }`}
-            />
-          </div>
-          <span className="text-[11px] text-zinc-500">
-            9.5 x 11 inch • Dot Matrix / Faktur
-          </span>
-        </label>
+              <input
+                id={`paper-${id}`}
+                type="radio"
+                name="pageSize"
+                value={id}
+                checked={active}
+                onChange={(e) => handleChangeStateZustand(e, setPrintOptions)}
+                className="sr-only"
+              />
+
+              <div className="mb-2 flex items-center justify-between">
+                <span
+                  className={`font-semibold ${
+                    active ? "text-zinc-900" : "text-zinc-700"
+                  }`}
+                >
+                  {paper.label}
+                </span>
+
+                <Printer
+                  className={`h-5 w-5 ${
+                    active ? "text-zinc-900" : "text-zinc-400"
+                  }`}
+                />
+              </div>
+
+              <span className="text-[11px] text-zinc-500">
+                {paper.description}
+              </span>
+            </label>
+          );
+        })}
       </div>
 
       <div className="space-y-2">
         <MyButton onClick={handlePrint}>
           <PrinterCheck className="h-4 w-4" />
           Cetak Invoice
+        </MyButton>
+        <MyButton onClick={downloadPdf}>
+          <FileCheck2 className="h-4 w-4" />
+          Download PDF
         </MyButton>
         <MyButton onClick={() => window.print()}>
           <FileCheck2 className="h-4 w-4 text-zinc-500" />

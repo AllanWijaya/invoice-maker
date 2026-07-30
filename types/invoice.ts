@@ -59,4 +59,5 @@ export interface BrandData {
 
 export interface PrintOptions {
   pageSize: string;
+  orientation: "portrait" | "landscape";
 }
