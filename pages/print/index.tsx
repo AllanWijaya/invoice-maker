@@ -8,7 +8,7 @@ export default function PrintPage() {
       ? JSON.parse(localStorage.getItem("app-config") ?? "{}")
       : null;
 
-  const invoiceData = appConfig?.state?.brandData;
+  const invoiceData = appConfig?.state?.invoiceData;
 
   const brandData = appConfig?.state?.brandData;
 
