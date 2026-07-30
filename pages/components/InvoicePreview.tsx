@@ -39,12 +39,14 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
     const page = PAGE_CONFIG[printOptions?.pageSize ?? "a4"];
 
     const width =
-      printOptions.orientation === "landscape"
+      (printOptions?.orientation ?? "landscape") === "landscape"
         ? (page.height ?? page.width)
         : page.width;
 
     const height =
-      printOptions.orientation === "landscape" ? page.width : page.height;
+      (printOptions?.orientation ?? "landscape") === "landscape"
+        ? page.width
+        : page.height;
     return (
       <div className="p-4 bg-slate-100 max-h-[calc(100vh-150px)] overflow-y-auto">
         <div
