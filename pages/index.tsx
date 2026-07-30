@@ -9,19 +9,14 @@ import InvoicePreview from "./components/InvoicePreview";
 import { FileText, Building2, Printer } from "lucide-react";
 import { useRouter } from "next/router";
 import { useAppConfigStore } from "@/hooks/store/appConfigStore";
+import Footer from "./components/form/Footer";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("invoice");
   const previewRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-  const {
-    invoiceData,
-    setInvoiceData,
-    resetInvoiceData,
-    brandData,
-    setBrandData,
-    printOptions,
-  } = useAppConfigStore();
+  const { invoiceData, setInvoiceData, brandData, setBrandData, printOptions } =
+    useAppConfigStore();
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -52,7 +47,6 @@ export default function Home() {
       }
     }
 
-    resetInvoiceData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, router.query.id]);
 
@@ -407,6 +401,8 @@ export default function Home() {
           </section>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import { Download, History, Save, ReceiptText } from "lucide-react";
+import { Download, History, Save, ReceiptText, PlusCircle } from "lucide-react";
 import MyButton from "./MyButton";
 import { useRouter } from "next/navigation";
+import { useAppConfigStore } from "@/hooks/store/appConfigStore";
 
 interface HeaderProps {
   onSave: () => void;
@@ -11,9 +12,9 @@ interface HeaderProps {
 export default function Header({
   onSave,
   onDownload,
-  // onShowHistory,
 }: HeaderProps) {
   const router = useRouter();
+  const { resetInvoiceData } = useAppConfigStore();
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-100 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
@@ -33,6 +34,11 @@ export default function Header({
         </div>
 
         <div className="flex items-center gap-2">
+          <MyButton onClick={resetInvoiceData}>
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span>New</span>
+          </MyButton>
+
           <MyButton onClick={onSave}>
             <Save className="h-3.5 w-3.5" />
             <span>Save</span>
@@ -43,7 +49,6 @@ export default function Header({
             <span>Export</span>
           </MyButton>
 
-          {/* <MyButton onClick={onShowHistory}> */}
           <MyButton onClick={() => router.push("/history")}>
             <History className="h-3.5 w-3.5 text-zinc-500" />
             <span className="hidden sm:inline">History</span>
