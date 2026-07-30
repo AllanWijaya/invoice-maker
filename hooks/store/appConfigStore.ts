@@ -24,7 +24,7 @@ interface AppConfigState {
   setHasHydrated: (value: boolean) => void;
 }
 
-const createDefaultInvoice = (): InvoiceData => {
+export const createDefaultInvoice = (): InvoiceData => {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -33,11 +33,34 @@ const createDefaultInvoice = (): InvoiceData => {
   return {
     invoiceNo: `INV-${year}${month}${day}-001`,
     date: now.toISOString().split("T")[0],
+
+    place: "",
+    POnumber: "",
+    POdate: "",
+
     clientName: "",
     clientEmail: "",
     clientAddress: "",
+
     items: [],
+
+    isCustomInputPrice: false,
+    subTotal: 0,
+    dppAmount: 0,
+    taxAmount: 0,
+    totalPrice: 0,
+
     notes: "Terima kasih atas kepercayaan Anda",
+
+    receiver: "Penerima",
+    receiver_name: "",
+
+    best_regards: "Hormat Kami",
+    best_regards_name: "",
+
+    space_best_regards: 4,
+
+    toClient: "",
   };
 };
 

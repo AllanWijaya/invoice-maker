@@ -59,19 +59,11 @@ export const PAGE_CONFIG: PAGE_CONFIG_TYPE = {
 } as const;
 
 export default function PrintSettings({
-  invoiceData = {
-    invoiceNo: "",
-    date: "",
-    clientName: "",
-    clientEmail: "",
-    clientAddress: "",
-    items: [],
-    notes: "",
-  },
   handlePrint,
   downloadPdf,
 }: PrintSettingsProps) {
-  const { brandData, printOptions, setPrintOptions } = useAppConfigStore();
+  const { invoiceData, brandData, printOptions, setPrintOptions } =
+    useAppConfigStore();
 
   return (
     <div className="space-y-6 text-sm text-zinc-700">

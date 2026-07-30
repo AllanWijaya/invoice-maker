@@ -62,7 +62,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
         >
           <div className="border-b-4 border-black pb-1 mb-2">
             <div className="flex justify-between items-start">
-              {brandData.useLetterhead ? (
+              {brandData?.useLetterhead ? (
                 <div className="w-3/4 flex items-center gap-3">
                   {brandData.logo && (
                     <img
@@ -444,7 +444,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     </p>
                   </td>
                 </tr>
-                {brandData.esign ? (
+                {brandData?.esign ? (
                   <tr>
                     <td className="w-1/2"></td>
                     <td className="flex justify-center items-center">
@@ -454,7 +454,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         <br key={index} />
                       ))}
                       <img
-                        src={brandData.esign}
+                        src={brandData?.esign}
                         alt="Company Esign"
                         className="max-h-20 max-w-[180px] object-contain"
                       />

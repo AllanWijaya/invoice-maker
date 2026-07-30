@@ -44,20 +44,20 @@ export default function BrandSettings({
           type="button"
           role="switch"
           id="useLetterheadSwitch"
-          aria-checked={brandData.useLetterhead}
+          aria-checked={brandData?.useLetterhead}
           onClick={() =>
             setBrandData({
               ...brandData,
-              useLetterhead: !brandData.useLetterhead,
+              useLetterhead: !brandData?.useLetterhead,
             })
           }
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-            brandData.useLetterhead ? "bg-zinc-900" : "bg-zinc-200"
+            brandData?.useLetterhead ? "bg-zinc-900" : "bg-zinc-200"
           }`}
         >
           <span
             className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-              brandData.useLetterhead ? "translate-x-5" : "translate-x-0"
+              brandData?.useLetterhead ? "translate-x-5" : "translate-x-0"
             }`}
           />
         </button>
@@ -112,10 +112,10 @@ export default function BrandSettings({
       <div>
         <label className="mb-1.5 block font-medium text-zinc-900">Esign</label>
         <div className="relative flex min-h-[120px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 p-4 text-center transition-all hover:bg-zinc-50">
-          {brandData.esign ? (
+          {brandData?.esign ? (
             <div className="flex flex-col items-center gap-3">
               <img
-                src={brandData.esign}
+                src={brandData?.esign}
                 alt="Company Esign"
                 className="max-h-20 max-w-[180px] object-contain"
               />

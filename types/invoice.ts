@@ -12,28 +12,28 @@ export interface InvoiceItem {
 export interface InvoiceData {
   invoiceNo: string;
   date: string;
-  place?: string;
-  POnumber?: string;
-  POdate?: string;
+  place: string;
+  POnumber: string;
+  POdate: string;
   clientName: string;
   clientEmail: string;
   clientAddress: string;
   items: InvoiceItem[];
 
   //custom value
-  isCustomInputPrice?: boolean;
-  subTotal?: number;
-  dppAmount?: number;
-  taxAmount?: number;
-  totalPrice?: number;
+  isCustomInputPrice: boolean;
+  subTotal: number;
+  dppAmount: number;
+  taxAmount: number;
+  totalPrice: number;
 
   notes: string;
-  receiver?: string;
-  receiver_name?: string;
-  best_regards?: string;
-  best_regards_name?: string;
-  space_best_regards?: number;
-  toClient?: string;
+  receiver: string;
+  receiver_name: string;
+  best_regards: string;
+  best_regards_name: string;
+  space_best_regards: number;
+  toClient: string;
 }
 
 export interface SavedInvoice extends InvoiceData {
