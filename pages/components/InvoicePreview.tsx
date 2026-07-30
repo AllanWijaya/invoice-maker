@@ -36,7 +36,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
     // const brandData = useAppConfigStore((s) => s.brandData);
     // const printOptions = useAppConfigStore((s) => s.printOptions);
 
-    const page = PAGE_CONFIG[printOptions.pageSize ?? "a4"];
+    const page = PAGE_CONFIG[printOptions?.pageSize ?? "a4"];
 
     const width =
       printOptions.orientation === "landscape"
