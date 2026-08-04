@@ -10,9 +10,23 @@ export default async function handler(
     });
   }
 
-  const { no } = req.query;
+  const { invoiceData, brandData, printOptions } = req.body;
 
-  const url = `${process.env.NEXT_PUBLIC_APP_URL}/print`;
+  if (!invoiceData) {
+    return res.status(400).json({
+      message: "invoiceData is required",
+    });
+  }
+
+  const data = encodeURIComponent(
+    JSON.stringify({
+      invoiceData,
+      brandData,
+      printOptions,
+    }),
+  );
+
+  const url = `${process.env.NEXT_PUBLIC_APP_URL}/print?data=${data}`;
 
   try {
     const response = await fetch(
@@ -50,7 +64,10 @@ export default async function handler(
     const pdf = Buffer.from(await response.arrayBuffer());
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `inline; filename=Invoice-${no}.pdf`);
+    res.setHeader(
+      "Content-Disposition",
+      `inline; filename=Invoice-${invoiceData.invoiceNo}.pdf`,
+    );
 
     return res.send(pdf);
   } catch (err) {

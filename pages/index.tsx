@@ -261,7 +261,17 @@ export default function Home() {
   });
 
   const downloadPdf = async () => {
-    const res = await fetch(`/api/pdf?no=${invoiceData.invoiceNo}`);
+    const res = await fetch("/api/pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        invoiceData,
+        brandData,
+        printOptions,
+      }),
+    });
 
     if (!res.ok) {
       alert("Gagal membuat PDF");

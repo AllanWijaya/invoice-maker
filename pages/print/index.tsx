@@ -1,25 +1,33 @@
+import { useRouter } from "next/router";
+import { useMemo, useRef } from "react";
 import InvoicePreview from "@/pages/components/InvoicePreview";
-import { useRef } from "react";
 
 export default function PrintPage() {
   const previewRef = useRef<HTMLDivElement>(null);
-  const appConfig =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("app-config") ?? "{}")
-      : null;
+  const router = useRouter();
 
-  const invoiceData = appConfig?.state?.invoiceData;
+  const data = useMemo(() => {
+    if (!router.isReady || typeof router.query.data !== "string") {
+      return null;
+    }
 
-  const brandData = appConfig?.state?.brandData;
+    try {
+      return JSON.parse(decodeURIComponent(router.query.data));
+    } catch {
+      return null;
+    }
+  }, [router.isReady, router.query.data]);
 
-  const printOptions = appConfig?.state?.printOptions;
+  if (!data) {
+    return null;
+  }
 
   return (
     <InvoicePreview
       previewRef={previewRef}
-      brandData={brandData}
-      invoiceData={invoiceData}
-      printOptions={printOptions}
+      invoiceData={data.invoiceData}
+      brandData={data.brandData}
+      printOptions={data.printOptions}
     />
   );
 }
