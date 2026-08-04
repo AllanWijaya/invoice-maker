@@ -2,7 +2,10 @@ import { Dispatch } from "react";
 import { InvoiceItem } from "../types/invoice";
 
 export const calculateSubtotal = (items: InvoiceItem[]) => {
-  return items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  return (items ?? []).reduce(
+    (sum, item) => sum + item.quantity * item.price,
+    0,
+  );
 };
 export const calculateDPP = (
   items: InvoiceItem[],

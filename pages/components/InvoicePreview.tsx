@@ -64,9 +64,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             <div className="flex justify-between items-start">
               {brandData?.useLetterhead ? (
                 <div className="w-3/4 flex items-center gap-3">
-                  {brandData.logo && (
+                  {brandData?.logo && (
                     <img
-                      src={brandData.logo}
+                      src={brandData?.logo}
                       alt="Logo"
                       className="w-[100px] shrink-0 object-contain"
                     />
@@ -74,12 +74,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <div className="w-full">
                     <h2
                       className="text-lg font-bold m-0"
-                      style={{ color: brandData.accentColor }}
+                      style={{ color: brandData?.accentColor }}
                     >
-                      {brandData.companyName || "INVOICE"}
+                      {brandData?.companyName || "INVOICE"}
                     </h2>
                     <p className="custom-text m-0 text-sm text-gray-700">
-                      {brandData.companyAddress}
+                      {brandData?.companyAddress}
                     </p>
                     <table className="w-full text-xs">
                       <tbody>
@@ -87,9 +87,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                           <td className="w-[19%]">Telp | Email</td>
                           <td className="w-[1%]">: </td>
                           <td className="w-[60%]">
-                            {brandData.companyPhone || ""}
-                            {brandData.companyEmail
-                              ? ` | ${brandData.companyEmail}`
+                            {brandData?.companyPhone || ""}
+                            {brandData?.companyEmail
+                              ? ` | ${brandData?.companyEmail}`
                               : ""}
                           </td>
                         </tr>
@@ -97,7 +97,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                           <td className="w-[19%]">NPWP</td>
                           <td className="w-[1%]">: </td>
                           <td className="w-[60%]">
-                            {brandData.companyNPWP || ""}
+                            {brandData?.companyNPWP || ""}
                           </td>
                         </tr>
                       </tbody>
@@ -112,7 +112,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   INVOICE
                 </span>
                 <p className="m-0 font-semibold text-gray-800">
-                  {invoiceData.invoiceNo || "-"}
+                  {invoiceData?.invoiceNo || "-"}
                 </p>
               </div>
             </div>
@@ -120,48 +120,48 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
           <div className="mb-2">
             <div className="bg-slate-50 p-2 rounded text-xs">
-              {invoiceData.toClient ? (
+              {invoiceData?.toClient ? (
                 <>
                   <div className="flex justify-between items-start font-semibold">
-                    <p className="custom-text my-0">{invoiceData.toClient}</p>
+                    <p className="custom-text my-0">{invoiceData?.toClient}</p>
                     <p className="custom-text my-0">
-                      {invoiceData.place && `${invoiceData.place}, `}
-                      {invoiceData.date ? formatDate(invoiceData.date) : "-"}
+                      {invoiceData?.place && `${invoiceData?.place}, `}
+                      {invoiceData?.date ? formatDate(invoiceData?.date) : "-"}
                     </p>
                   </div>
                   <p className="custom-text font-semibold my-0">
-                    {invoiceData.clientName || "-"}
+                    {invoiceData?.clientName || "-"}
                   </p>
                 </>
               ) : (
                 <div className="flex justify-between items-start font-semibold">
                   <p className="custom-text my-0">
-                    {invoiceData.clientName || "-"}
+                    {invoiceData?.clientName || "-"}
                   </p>
                   <p className="custom-text my-0">
-                    {invoiceData.place && `${invoiceData.place}, `}
-                    {invoiceData.date ? formatDate(invoiceData.date) : "-"}
+                    {invoiceData?.place && `${invoiceData?.place}, `}
+                    {invoiceData?.date ? formatDate(invoiceData?.date) : "-"}
                   </p>
                 </div>
               )}
 
               <p className="custom-text my-0 font-semibold">
-                {invoiceData.clientEmail || ""}
+                {invoiceData?.clientEmail || ""}
               </p>
               <p className="custom-text my-0 font-semibold">
-                {invoiceData.clientAddress || ""}
+                {invoiceData?.clientAddress || ""}
               </p>
               <table className="w-full text-xs mt-1">
                 <tbody>
                   <tr className="custom-text font-semibold">
                     <td className="w-[10%]">No PO</td>
                     <td className="w-[1%]">:</td>
-                    <td className="w-[60%]">{invoiceData.POnumber || ""}</td>
+                    <td className="w-[60%]">{invoiceData?.POnumber || ""}</td>
                   </tr>
                   <tr className="custom-text font-semibold">
                     <td className="w-[10%]">Tanggal PO</td>
                     <td className="w-[1%]">:</td>
-                    <td className="w-[60%]">{invoiceData.POdate || ""}</td>
+                    <td className="w-[60%]">{invoiceData?.POdate || ""}</td>
                   </tr>
                 </tbody>
               </table>
@@ -211,7 +211,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </tr>
               </thead>
               <tbody>
-                {invoiceData.items.map((item) => (
+                {invoiceData?.items.map((item) => (
                   <tr key={item.id}>
                     <td className="p-1 text-center border-t border-b border-black">
                       {item.no}
@@ -236,7 +236,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         <span>Rp.</span>
                         <span>
                           {formatCurrency(
-                            (invoiceData.isCustomInputPrice &&
+                            (invoiceData?.isCustomInputPrice &&
                               item.totalPrice) ||
                               item.quantity * item.price,
                             false,
@@ -267,9 +267,9 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       <span>Rp.</span>
                       <span>
                         {formatCurrency(
-                          (invoiceData.isCustomInputPrice &&
-                            invoiceData.subTotal) ||
-                            calculateSubtotal(invoiceData.items),
+                          (invoiceData?.isCustomInputPrice &&
+                            invoiceData?.subTotal) ||
+                            calculateSubtotal(invoiceData?.items),
                           false,
                           2,
                         )}
@@ -279,11 +279,11 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 </tr>
 
                 {["include-ppn", "exclude-ppn", "dpp-nilai-lain"].includes(
-                  brandData.jenisTransaksi,
+                  brandData?.jenisTransaksi,
                 ) && (
                   <>
                     {["include-ppn", "dpp-nilai-lain"].includes(
-                      brandData.jenisTransaksi,
+                      brandData?.jenisTransaksi,
                     ) && (
                       <tr>
                         <td
@@ -304,12 +304,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             <span>Rp.</span>
                             <span>
                               {formatCurrency(
-                                (invoiceData.isCustomInputPrice &&
-                                  invoiceData.dppAmount) ||
+                                (invoiceData?.isCustomInputPrice &&
+                                  invoiceData?.dppAmount) ||
                                   calculateDPP(
-                                    invoiceData.items,
-                                    brandData.taxRate,
-                                    brandData.jenisTransaksi,
+                                    invoiceData?.items,
+                                    brandData?.taxRate,
+                                    brandData?.jenisTransaksi,
                                   ),
                                 false,
                                 2,
@@ -320,7 +320,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       </tr>
                     )}
 
-                    {brandData.taxRate > 0 && (
+                    {brandData?.taxRate > 0 && (
                       <tr>
                         <td
                           colSpan={4}
@@ -331,9 +331,11 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                           style={{ width: `${column.price}%` }}
                         >
                           PPN{" "}
-                          {["dpp-nilai-lain"].includes(brandData.jenisTransaksi)
-                            ? brandData.taxRate + 1
-                            : brandData.taxRate}
+                          {["dpp-nilai-lain"].includes(
+                            brandData?.jenisTransaksi,
+                          )
+                            ? brandData?.taxRate + 1
+                            : brandData?.taxRate}
                           %
                         </td>
                         <td
@@ -344,12 +346,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                             <span>Rp.</span>
                             <span>
                               {formatCurrency(
-                                (invoiceData.isCustomInputPrice &&
-                                  invoiceData.taxAmount) ||
+                                (invoiceData?.isCustomInputPrice &&
+                                  invoiceData?.taxAmount) ||
                                   calculateTax(
-                                    invoiceData.items,
-                                    brandData.taxRate,
-                                    brandData.jenisTransaksi,
+                                    invoiceData?.items,
+                                    brandData?.taxRate,
+                                    brandData?.jenisTransaksi,
                                   ),
                                 false,
                                 2,
@@ -381,12 +383,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       <span>Rp.</span>
                       <span>
                         {formatCurrency(
-                          (invoiceData.isCustomInputPrice &&
-                            invoiceData.totalPrice) ||
+                          (invoiceData?.isCustomInputPrice &&
+                            invoiceData?.totalPrice) ||
                             calculateTotal(
-                              invoiceData.items,
-                              brandData.taxRate,
-                              brandData.jenisTransaksi,
+                              invoiceData?.items,
+                              brandData?.taxRate,
+                              brandData?.jenisTransaksi,
                             ),
                           false,
                           2,
@@ -411,15 +413,15 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <td className="font-semibold pt-1 w-[2%]">:</td>
                 <td
                   className="pr-2 font-semibold italic pt-1 w-[80%]"
-                  style={{ color: brandData.accentColor }}
+                  style={{ color: brandData?.accentColor }}
                 >
                   {ucwords(
                     formatTerbilang(
-                      invoiceData.totalPrice ||
+                      invoiceData?.totalPrice ||
                         calculateTotal(
-                          invoiceData.items,
-                          brandData.taxRate,
-                          brandData.jenisTransaksi,
+                          invoiceData?.items,
+                          brandData?.taxRate,
+                          brandData?.jenisTransaksi,
                         ),
                     ),
                   )}{" "}
@@ -435,12 +437,12 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <tr>
                   <td className="w-1/2">
                     <p className="text-center uppercas font-semibold p-0 m-0">
-                      {invoiceData.receiver}
+                      {invoiceData?.receiver}
                     </p>
                   </td>
                   <td className="w-1/2">
                     <p className="text-center uppercas font-semibold p-0 m-0">
-                      {invoiceData.best_regards}
+                      {invoiceData?.best_regards}
                     </p>
                   </td>
                 </tr>
@@ -449,7 +451,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <td className="w-1/2"></td>
                     <td className="flex justify-center items-center">
                       {Array.from({
-                        length: invoiceData.space_best_regards || 0,
+                        length: invoiceData?.space_best_regards || 0,
                       }).map((_, index) => (
                         <br key={index} />
                       ))}
@@ -459,7 +461,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                         className="max-h-20 max-w-[180px] object-contain"
                       />
                       {Array.from({
-                        length: invoiceData.space_best_regards || 0,
+                        length: invoiceData?.space_best_regards || 0,
                       }).map((_, index) => (
                         <br key={index} />
                       ))}
@@ -469,7 +471,7 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <tr>
                     <td colSpan={2}>
                       {Array.from({
-                        length: invoiceData.space_best_regards || 0,
+                        length: invoiceData?.space_best_regards || 0,
                       }).map((_, index) => (
                         <br key={index} />
                       ))}
@@ -478,16 +480,16 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 )}
                 <tr>
                   <td className="w-1/2">
-                    {invoiceData.receiver_name && (
+                    {invoiceData?.receiver_name && (
                       <p className="text-center uppercas font-semibold underline m-0">
-                        {invoiceData.receiver_name}
+                        {invoiceData?.receiver_name}
                       </p>
                     )}
                   </td>
                   <td className="w-1/2">
-                    {invoiceData.best_regards_name && (
+                    {invoiceData?.best_regards_name && (
                       <p className="text-center uppercas font-semibold underline m-0">
-                        {invoiceData.best_regards_name}
+                        {invoiceData?.best_regards_name}
                       </p>
                     )}
                   </td>
@@ -496,13 +498,13 @@ const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             </table>
           </div>
 
-          {invoiceData.notes && (
+          {invoiceData?.notes && (
             <div className="border-t border-gray-300 mt-2 pt-1 text-xs">
               <p className="custom-text uppercase font-semibold mb-0">
                 Catatan
               </p>
               <div className="custom-text whitespace-pre-line text-gray-700">
-                {invoiceData.notes}
+                {invoiceData?.notes}
               </div>
             </div>
           )}
