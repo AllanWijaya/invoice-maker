@@ -5,7 +5,7 @@ import Header from "./components/form/Header";
 import InvoiceSettings from "./components/tab/InvoiceSettings";
 import BrandSettings from "./components/tab/BrandSettings";
 import PrintSettings, { PAGE_CONFIG } from "./components/tab/PrintSettings";
-import InvoicePreview from "./components/InvoicePreview";
+import InvoicePreview from "./components/invoice/InvoicePreview";
 import { FileText, Building2, Printer } from "lucide-react";
 import { useRouter } from "next/router";
 import { useAppConfigStore } from "@/hooks/store/appConfigStore";

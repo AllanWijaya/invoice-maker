@@ -61,3 +61,20 @@ export interface PrintOptions {
   pageSize: string;
   orientation: "portrait" | "landscape";
 }
+
+import { RefObject } from "react";
+
+export interface InvoicePreviewProps {
+  previewRef?: RefObject<HTMLDivElement | null>;
+  invoiceData: InvoiceData;
+  brandData: BrandData;
+  printOptions: PrintOptions;
+}
+
+export interface InvoicePageData {
+  page: number;
+  totalPages: number;
+  items: InvoiceData["items"];
+}
+
+export interface InvoicePaginatorProps extends InvoicePreviewProps {}
