@@ -1,9 +1,9 @@
 import { useRouter } from "next/navigation";
-import MyButton from "../components/form/MyButton";
+import MyButton from "@/components/form/MyButton";
 import { ArrowBigLeftDash, Trash } from "lucide-react";
 import { InvoiceData } from "@/types/invoice";
 import { useLocalStorage } from "@/hooks/UseLocalStorage";
-import MyInput from "../components/form/MyInput";
+import MyInput from "@/components/form/MyInput";
 
 export default function HistoryPage() {
   const router = useRouter();

@@ -1,8 +1,8 @@
 import { handleChangeStateZustand } from "@/lib/Helper";
-import { InvoiceData } from "../../../types/invoice";
 import { Printer, Check, FileCheck2, PrinterCheck } from "lucide-react";
 import MyButton from "../form/MyButton";
 import { useAppConfigStore } from "@/hooks/store/appConfigStore";
+import { InvoiceData } from "@/types/invoice";
 
 interface PrintSettingsProps {
   invoiceData: InvoiceData;

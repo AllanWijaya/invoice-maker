@@ -77,4 +77,5 @@ export interface InvoicePageData {
   items: InvoiceData["items"];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InvoicePaginatorProps extends InvoicePreviewProps {}

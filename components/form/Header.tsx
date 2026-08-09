@@ -9,10 +9,7 @@ interface HeaderProps {
   onShowHistory: () => void;
 }
 
-export default function Header({
-  onSave,
-  onDownload,
-}: HeaderProps) {
+export default function Header({ onSave, onDownload }: HeaderProps) {
   const router = useRouter();
   const { resetInvoiceData } = useAppConfigStore();
   return (

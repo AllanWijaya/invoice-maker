@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useMemo, useRef } from "react";
-import InvoicePreview from "@/pages/components/invoice/InvoicePreview";
+import InvoicePreview from "@/components/invoice/InvoicePreview";
 
 export default function PrintPage() {
   const previewRef = useRef<HTMLDivElement>(null);

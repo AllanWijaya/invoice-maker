@@ -14,7 +14,6 @@ export default function InvoiceHeader({
         {brandData?.useLetterhead ? (
           <div className="w-3/4 flex items-center gap-3">
             {brandData?.logo && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={brandData?.logo}
                 alt="Logo"
