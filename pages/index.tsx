@@ -404,14 +404,12 @@ export default function Home() {
                       Preview Invoice
                     </h5>
                   </div>
-                  <div className="p-4 bg-slate-100 max-h-[calc(100vh-150px)] overflow-y-auto">
-                    <InvoicePreview
-                      previewRef={previewRef}
-                      brandData={brandData}
-                      invoiceData={invoiceData}
-                      printOptions={printOptions}
-                    />
-                  </div>
+                  <InvoicePreview
+                    previewRef={previewRef}
+                    brandData={brandData}
+                    invoiceData={invoiceData}
+                    printOptions={printOptions}
+                  />
                 </div>
               </div>
             </div>
